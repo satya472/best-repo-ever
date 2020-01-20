@@ -13,7 +13,7 @@
         <label>myobj Name2</label>
         <type>Text</type>
     </nameField>
-    <pluralLabel>myobjs2</pluralLabel>
+    <pluralLabel>myobjs2Test</pluralLabel>
     <sharingModel>ReadWrite</sharingModel>
 	<label>myobj3</label>
     <nameField>
