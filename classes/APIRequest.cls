@@ -1,6 +1,6 @@
 /********************************************************************************************
      *  Generic class used to represent a request to the API.
-     *
+     * This is the update
      ****/
 public virtual with sharing class APIRequest {
 
