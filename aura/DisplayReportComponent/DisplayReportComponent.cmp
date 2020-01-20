@@ -1,0 +1,58 @@
+<!--
+   Created By : Jens, Phaniram Upalapati
+   Description : Lightning Component to Display the data of a Report on to UI based on the Report API Name and Filter
+                 Parameters provided by the user.
+-->    
+<aura:component Controller="ReportsDisplay_Cont" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+
+    <!-- Handle component initialization in a client-side controller -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!--Design Paramaters -->
+    <aura:attribute name="reportName" type="String" />
+    <aura:attribute name="cardTitle" type="String" default="Card Title"/>
+    <aura:attribute name="filterString" type="String" />
+    <aura:attribute name="useCurrentRecord" type="Boolean" default="false" />
+    
+    
+    <!-- Dynamically load the report rows -->
+    <aura:attribute name="reportResponse" type="Object"/>
+
+    <!-- this is how tabular and matrix reports are displayed -->
+    <!-- Iterate over the list of report rows and display them -->
+    <!-- special case for the header row -->
+    <lightning:card title="{!v.cardTitle}" >
+
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-max-medium-table_stacked">
+                
+                <aura:If isTrue="{!v.reportResponse.reportType == 'summary' ? false : true}">
+                    <thead >
+                        <!-- Row Component Displaying the Headers -->
+                        <c:ReportRowComponent row="{!v.reportResponse.tabResp.reportFields}" isHeader="true"/>
+                    </thead>
+                    <tbody>
+                        <aura:iteration var="row" items="{!v.reportResponse.tabResp.fieldDataList}">
+                            <!-- Row Component Displaying the Data of the Cells -->
+                            <c:ReportRowComponent row="{!row}" isHeader="false"/>
+                        </aura:iteration>
+                    </tbody>
+                    <aura:set attribute="else">
+                        <!-- this is how summary reports are displayed -->
+                        <thead>
+                            <c:ReportRowComponent row="{!v.reportResponse.sumResp.reportFields}" isHeader="true"/>
+                        </thead>
+                        <tbody>
+                            <aura:iteration var="group" items="{!v.reportResponse.sumResp.groupList}">
+                                <c:ReportGroupComponent group="{!group}"/>
+                            </aura:iteration>
+                        </tbody>
+                        
+                    </aura:set>
+                </aura:If>   
+                
+            </table>
+           <lightning:spinner aura:id="mySpinner" variant="brand" class="slds-hide"/>
+    </lightning:card>
+    
+
+</aura:component>

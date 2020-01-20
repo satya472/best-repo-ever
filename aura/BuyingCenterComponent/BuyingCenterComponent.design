@@ -1,0 +1,5 @@
+<design:component>
+    <design:attribute name="objectAPI" label="Object API Name" />
+    <design:attribute name="fieldAPI" label="Field API Name" />
+    <design:attribute name="CardTitle" label="Card Title" />
+</design:component>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuraDefinitionBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>43.0</apiVersion>
+    <description>Visual Maintenance of Buying Center - Table View to see and maintain the relations in the Buying Center.</description>
+</AuraDefinitionBundle>

@@ -1,0 +1,42 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" extends="forceCommunity:navigationMenuBase" access="global">
+
+
+    <aura:Attribute name="menuItems" type="list" default="[Home,Outage,Support]" />
+    <!--<div style="height: 16rem;">
+      <div class="slds-context-bar">
+            <nav class="slds-context-bar__secondary" role="navigation">
+                <ul class="slds-grid">
+                    <li class="slds-context-bar__item slds-is-active">
+                       <lightning:menuItem label="Menu Item 1" value="menuitem1"  />
+                    </li>
+                    <li class="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger_click">
+                        <lightning:menuItem label="Menu Item 1" value="menuitem1"  />
+                    </li>
+                    <li class="slds-context-bar__item">
+                        <lightning:menuItem label="Menu Item 1" value="menuitem1"  />
+                    </li>
+                    <li class="slds-context-bar__item">
+                        <lightning:menuItem label="Menu Item 1" value="menuitem1"  />
+                    </li>
+                    <li class="slds-context-bar__item">
+                        <lightning:menuItem label="Menu Item 1" value="menuitem1"  />
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>-->
+
+    <div>
+    <ul class="slds-list_horizontal">
+     <aura:iteration items="{!v.menuItems}" var="item">
+               <li class="{!item.active ? 'slds-is-active' : ''}">
+                   <a href="javascript:void(0);" data-menu-item-id="{!item.id}" class="slds-navigation-list--vertical__action slds-text-link--reset">
+                       {!item.label}
+                   </a>
+               </li>
+           </aura:iteration>
+
+    </ul>
+    </div>
+
+</aura:component>

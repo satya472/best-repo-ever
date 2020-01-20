@@ -1,0 +1,139 @@
+<aura:component controller="ServiceExpEngine"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <ltng:require styles="{! $Resource.	datatable + '/DataTables-1.10.16/media/css/jquery.dataTables.min.css'}" 
+                  scripts="{!join(',', 
+                           $Resource.jquery224 , 
+                           $Resource.datatable + '/DataTables-1.10.16/media/js/jquery.dataTables.min.js')
+                           }" afterScriptsLoaded="{!c.scriptsLoaded}"/>
+    <!--declare aura attributes-->
+    <aura:attribute name="PriceExperienceList" type="List" />
+    <aura:attribute name="showSaveCancelBtn" type="boolean" default="false" description="flag for rendered save and cancel buttons in aura:if "/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-m-around_medium">        
+        <table id="tableId" class="slds-table slds-table_bordered slds-table_cell-buffer 
+                                   slds-table_col-bordered slds-border_left slds-border_right"
+               		width="80%"
+               
+               cellspacing="0" cellpadding="0" >                
+            <thead>
+                <tr class="slds-text-heading--label slds-truncate" >
+                    <aura:if isTrue="{!v.showSaveCancelBtn}"> 
+                    	<td style="border-top:0px;border-left:0px;" colspan="5">                                                 
+                        <lightning:buttonGroup class="slds-align_absolute-center" >
+                            <lightning:button label="Cancel" onclick="{!c.cancel}" class="slds-button slds-button_brand" /> &nbsp; &nbsp;
+                            <lightning:button label="Save" onclick="{!c.Save}" class="slds-button slds-button_brand "/>
+                        </lightning:buttonGroup>
+                        </td>
+                    </aura:if>
+                </tr>                
+                <tr class="slds-text-heading--label slds-truncate"  cellspacing="0" cellpadding="0">
+                    <th class="slds-cell-shrink" scope="col" style="text-align:left;padding-left: 5px;">Product</th>
+                    <th class="slds-cell-shrink" scope="col" style="text-align:left;padding-left: 5px;">Siemens</th>                   
+                    <aura:iteration items="{!v.PriceExperienceList}" var="priceList" indexVar="sNo">
+						<th>
+                            <c:InlineEditRow singleRec="{!priceList.NewPriceExp}"
+                                             renderPriceSource = "false"
+                                             renderConfidence = "false"
+                                             renderExpLine ="false"
+                                             renderCompetitor="true"
+                                             wrapperRec = "{!priceList}"
+                                             />
+                        </th>
+                    </aura:iteration>
+                </tr>
+            </thead>
+            <tbody cellspacing="0" cellpadding="0">
+             <!--   <tr class="slds-hint-parent">
+                    <td class="slds-grow slds-cell-wrap" 
+                        style="text-align:left;padding-left: 5px;">Price Source</td>
+                    <td class="slds-grow slds-cell-wrap" style="text-align:left;padding-left: 5px;">Quote</td>      
+                    <aura:iteration items="{!v.PriceExperienceList}" var="priceList" indexVar="sNo">  
+                        <td style="padding-left:0px;">
+                            <c:InlineEditRow singleRec="{!priceList.NewPriceExp}"
+                                             showSaveCancelBtn="{!v.showSaveCancelBtn}"
+                                             ExpLineRec="{!priceList.NewExpLine}"
+                                             sNo = "{!priceList.RowID}"
+                                             renderPriceSource = "true"
+                                             renderConfidence = "false"
+                                             renderExpLine ="false"
+                                             renderCompetitor="false"
+                                             />   
+                        </td>
+                    </aura:iteration>                
+                </tr>
+                <tr>
+                    <td class="slds-grow slds-cell-wrap" style="text-align:left;padding-left: 5px;">
+                    	Confidence Level
+                	</td>
+                    <td>N/A</td>
+                    <aura:iteration items="{!v.PriceExperienceList}" var="priceList" indexVar="sNo">  
+                        <td style="padding-left:0px;" >
+                            <c:InlineEditRow singleRec="{!priceList.NewPriceExp}"
+                                             showSaveCancelBtn="{!v.showSaveCancelBtn}"
+                                             ExpLineRec="{!priceList.NewExpLine}"
+                                             sNo = "{!priceList.RowID}"
+                                             renderPriceSource = "false"
+                                             renderConfidence = "true"
+                                             renderExpLine ="false"
+                                             renderCompetitor="false"
+                                             />   
+                        </td>
+                    </aura:iteration> 
+                </tr>-->
+                <tr>
+                   <td colspan="1" style="height: 30px;"></td>
+                   <td colspan="1" style="height: 30px;"></td> 
+                   <aura:iteration items="{!v.PriceExperienceList}" var="priceList" > 
+                        <td colspan="1" style="height: 30px;"></td>
+                    </aura:iteration>
+                </tr>        
+               <tr>
+                   <td style="border-top:0px;text-align: Left;width:30%;padding-left:0px;
+                          padding-top:0px; border-top:0px">
+                       <tr>
+                            <aura:iteration items="{!v.PriceExperienceList[0].NewExpLineWrapper}" 
+                                            var="expLine" indexVar="index">
+                                <tr class="slds-cell-wrap size-xx-large">
+                                    <td style="text-align: Left;width:30%;padding-left:0px;
+                          padding-top:0px;">
+                                    <ui:outputText value="{!expLine.NewProductLine.ProductName__c}"/>
+                                    </td>
+                                    </tr>                           
+                            </aura:iteration>
+                       </tr>
+                   </td>
+                   <td style="border-top:0px;text-align: Left;width: 190rem;padding-left:0px;
+                          padding-top:0px; border-top:0px;">                  	
+                        <aura:iteration items="{!v.PriceExperienceList[0].NewExpLineWrapper}" 
+                                        var="expLine" indexVar="index">
+                            <div class="slds-size_1-of-2">
+                                <ui:outputText value="{!expLine.RelatedProductPrice}"/>
+                            </div>     
+                        </aura:iteration>
+                   </td>
+                   
+                <!--
+               <aura:iteration items="{!v.PriceExperienceList}" var="priceList" indexVar="sNo">
+                <td style="border-top:0px;text-align: Left;width: 190rem;padding-left:0px;
+                          padding-top:0px; border-top:0px;" >
+                    <c:InlineEditRow singleRec="{!priceList.NewPriceExp}"
+                                         showSaveCancelBtn="{!v.showSaveCancelBtn}"
+                                         ExpLineRec="{!priceList.NewExpLineWrapper}"
+                                         sNo = "{!priceList.RowID}"
+                                         renderPriceSource = "false"
+                                         renderConfidence = "false"
+                                         renderExpLine ="true"
+                                     renderCompetitor="false"
+                                         />
+                   
+                   </td>
+                </aura:iteration>
+                  -->
+                   </tr>                   
+            </tbody>
+        </table>
+        
+    </div>
+</aura:component>

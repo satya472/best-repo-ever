@@ -1,0 +1,14 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+
+    <div class="container">
+     <lightning:layout horizontalAlign="center" multipleRows="true">
+        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+            <c:CEP_NewsComponent />
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+            <c:CEP_EventsComponent />
+        </lightning:layoutItem>
+     </lightning:layout>
+    </div>
+
+</aura:component>

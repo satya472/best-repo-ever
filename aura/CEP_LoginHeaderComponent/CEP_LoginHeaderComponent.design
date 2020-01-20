@@ -1,0 +1,4 @@
+<design:component>
+	<design:attribute name="url_access" label="URL Access" />
+    <design:attribute name="url_support" label="URL Support" />
+</design:component>

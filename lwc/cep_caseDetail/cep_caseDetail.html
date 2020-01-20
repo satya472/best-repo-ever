@@ -1,0 +1,87 @@
+<template>
+   <div class="overlay"> 
+     <div class="modal" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Case ID: {ticketNo}</h4>
+                    <button type="button" class="close" data-dismiss="modal" onclick={closeModalBox}>&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="spinner_class" if:false={loaded}>
+                        <div class="demo-only slds-is-relative" style="height: 6rem;">
+                            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                <span class="slds-assistive-text">Loading</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered">
+                    <tbody>
+                        <template for:each={caseDetailArr} for:item="caseDetail">
+                            <tr key={getKey}>
+                                <td>Case #</td>
+                                <td>{caseDetail.euid}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Opened Date</td>
+                                <td>{caseDetail.submittedbat}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>System</td>
+                                <td>{caseDetail.system}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Product</td>
+                                <td>{caseDetail.product}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Title</td>
+                                <td>{caseDetail.mrtitle}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Plant Part</td>
+                                <td>{caseDetail.plant_part}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Contract</td>
+                                <td>{caseDetail.contract}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Source</td>
+                                <td>{caseDetail.source}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Worked Start</td>
+                                <td>{caseDetail.workStart}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Status</td>
+                                <td>{caseDetail.mrstatus}</td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Problem Description</td>
+                                <td>
+                                    <lightning-formatted-rich-text value={caseDetail.description}>
+                                    </lightning-formatted-rich-text>
+                                </td>
+                            </tr>
+                            <tr key={getKey}>
+                                <td>Comments</td>
+                                <td>
+                                    <lightning-formatted-rich-text value={caseDetail.mralldescriptions}>
+                                    </lightning-formatted-rich-text>
+                                </td> 
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+   </div> 
+</template>

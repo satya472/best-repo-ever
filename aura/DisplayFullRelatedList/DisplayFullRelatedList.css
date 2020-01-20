@@ -1,0 +1,18 @@
+.THIS .slds-card__body{
+    margin-bottom: 23px !important;
+}
+.THIS .slds-card__header{    
+    font-family: 'Salesforce Sans',Arial,sans-serif;
+    font-weight: 700;
+}
+.THIS .slds-text-heading_small{
+    font-size: 1.3rem;   
+}
+.THIS .count{
+    margin-left: 21px !important; 
+    font-family: 'Salesforce Sans',Arial,sans-serif;
+}
+.THIS .slds-background{
+   height:420px !important;
+    background: #f3f2f2 !important;
+}

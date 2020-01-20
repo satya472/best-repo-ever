@@ -1,0 +1,80 @@
+<template>
+    <div class="slds-m-top_medium slds-m-bottom_x-large">
+        <h2 class="slds-text-heading_medium">
+            List of Tickets for your Plant !!
+        </h2>
+        <div class="slds-grid slds-wrap">
+	        <div onkeyup={handleKeyUp} onchange={handleKeyUp} class="slds-float_right slds-col slds-size_3-of-12"> 
+	        	<lightning-input name="enter-search" placeholder="Search this list" type="search" ></lightning-input> 
+	        </div>
+	        <div class="slds-col slds-size_5-of-12">
+	        </div>
+
+			<div class="slds-col slds-size_2-of-12">
+				<lightning-combobox
+			            name="status"
+			            value={value}
+			            placeholder="Select Status"
+			            options={status}
+			            onchange={handleDropdownChange} >
+			   	</lightning-combobox>
+			</div>
+			<div class="slds-col slds-size_2-of-12">
+				<lightning-combobox
+			            name="plant_part"
+			            value={value}
+			            placeholder="Select Plant Part"
+			            options={plantPart}
+			            onchange={handleDropdownChange} >
+			    </lightning-combobox>
+			</div>
+
+		</div>
+	    <div class="slds-grid slds-wrap">
+	    	<div class="slds-col slds-size_3-of-12">
+	    		<lightning-input type="date" name="sd" class="sd" placeholder="Enter start date" onchange={clearEndDate}></lightning-input>
+	    	</div>	
+	    	<div class="slds-col slds-size_3-of-12">
+	    		<lightning-input type="date" name="ed" class="ed" placeholder="Enter end date" onchange={filterByDate}></lightning-input>
+	    	</div>	
+	    	<div class="slds-col slds-size_2-of-12">
+	    	</div>
+	    	<div class="slds-col slds-size_2-of-12">
+				<lightning-combobox
+			            name="system"
+			            value={value}
+			            placeholder="Select System"
+			            options={system}
+			            onchange={handleDropdownChange} >
+			    </lightning-combobox>
+			</div>
+			<div class="slds-col slds-size_2-of-12">
+				<lightning-combobox
+			            name="product"
+			            value={value}
+			            placeholder="Select Product"
+			            options={product}
+			            onchange={handleDropdownChange} >
+			    </lightning-combobox>
+			</div>
+	    </div>
+
+        <div class="slds-p-around_medium lgc-bg" style="height: 500px;">
+            <lightning-datatable
+                key-field="id"
+                data={filteredData}
+                show-row-number-column
+                row-number-offset={rowOffset}
+                sorted-by={sortedBy}
+                sorted-direction={sortedDirection}
+                hide-checkbox-column
+                columns={columns}
+                onsort={updateColumnSorting}
+                onrowaction={handleRowAction}
+                is-loading={tableLoadingState}>
+            </lightning-datatable>
+        </div>
+    </div>
+    <c-cep_case-detail record-id={recordId}></c-cep_case-detail>
+  	<c-cep_case-update record-id={recordId}></c-cep_case-update>
+</template>

@@ -1,0 +1,32 @@
+<!--
+   Created By :
+   Description : Components Displays the Data of a report in Group format Where Grouping is present i.e.
+                 Summary and Matrix format reports.
+
+-->
+<aura:component >
+	<aura:attribute name="group" type="Object"/>
+    
+    <tr>
+        <td class="group cell slds-cell-wrap" colspan="{!v.group.fieldsInGroup}">
+            <b>{!v.group.fieldName}: </b>
+            <aura:If isTrue="{!v.group.isHyperLink}">
+                <c:sObjectHyperLink sObjectId="{!v.group.fieldValue}" hyperlinkLabel="{!v.group.fieldLabel}"/>
+                <aura:set attribute="else">{!v.group.fieldLabel}</aura:set>                        
+            </aura:If>            
+        </td>
+    </tr>
+    
+    <aura:iteration var="row" items="{!v.group.fieldDataList}">  
+        <tr>
+            <aura:iteration var="cell" items="{!row}">
+                <td class="cell slds-cell-wrap">
+                    <aura:If isTrue="{!cell.isHyperLink}">
+                        <c:sObjectHyperLink sObjectId="{!cell.fieldValue}" hyperlinkLabel="{!cell.fieldLabel}"/>
+                        <aura:set attribute="else">{!cell.fieldLabel}</aura:set>                        
+                    </aura:If>                            
+                </td>
+            </aura:iteration>
+        </tr>
+    </aura:iteration>
+</aura:component>

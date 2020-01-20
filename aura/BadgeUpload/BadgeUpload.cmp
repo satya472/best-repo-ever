@@ -1,0 +1,94 @@
+<!--
+  Created By : Alexander Thiem, Phaniram Upalapati
+  Description : Component is used to upload a file to a record and also delete the old Document if exists anything related
+                to this record based on the Field Provided as input.
+-->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    
+    <aura:attribute name="recordId" type="String" />
+    
+    <!--Design Attributes -->
+    <aura:attribute name="cardTitle" type="String" default="File Upload" />
+    <aura:attribute name="buttonTitle" type="String" default="Select Files" />
+    <aura:attribute name="fileTypes" type="String" default=".jpg, .png" />
+    <aura:attribute name="fieldName" type="String" />
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="fieldsArray" type="String[]" />
+    
+    <!-- Document Details -->
+    <aura:attribute name="documentId" type="string" default=""/>
+    <aura:attribute name="documentRecord" type="Object" default="{}"/>
+ 
+    <!-- Displaying the Uploaded Image -->
+    <aura:attribute name="uploadedImage" type="string" access="private" />
+    <aura:attribute name="loadImageData" type="Aura.component" />
+    
+    <aura:attribute name="spinner" type="boolean" default="false" access="private"/>
+    
+    <!-- Event Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="render" value="{!this}" action="{!c.onRender}"/>
+   <!-- <aura:handler event="force:refreshView" action="{!c.dataLoaded}" /> -->
+    
+    <div class="slds-is-relative"> 
+        
+        <lightning:card title="{!v.cardTitle}" >
+            
+            <aura:set attribute="actions">
+              <aura:if isTrue="{!!empty(v.uploadedImage)}" > 
+                <lightning:button label="Remove Image" variant="brand" onclick="{!c.deleteImageFile}"/>
+              </aura:if>    
+            </aura:set>
+            
+            <!-- Displaying the Image -->
+            <lightning:avatar aura:id="uplImg" src="{!v.uploadedImage}"
+                 fallbackIconName="standard:user" alternativeText="Image" variant="circle" class="slds-align_absolute-center slds-m-top_x-small" size="large"/>
+            
+            <div class="slds-align_absolute-center slds-m-top_xx-small" style="text-align:center;">
+                <lightning:fileUpload label="{!v.buttonTitle}"
+                                      aura:id="lightningFileUpload"
+                                      name="fileUploader" 
+                                      multiple="false" 
+                                      accept="{!v.fileTypes}"
+                                      recordId="{!v.recordId}" 
+                                      onuploadfinished="{!c.handleUploadFinished}" />
+
+            </div>
+
+        </lightning:card>
+        
+        <!-- Force record Data to update the Document Id i.e. reference of the Saved file to a field on the record -->
+        <aura:if isTrue="{!!empty(v.fieldsArray)}">
+            <force:recordData aura:id="editRecord" 
+                              recordId="{!v.recordId}"
+                              fields="{!v.fieldsArray}"
+                              mode="EDIT"
+                              targetFields="{!v.record}"
+                              recordUpdated="{!c.dataLoaded}"
+                              />
+        </aura:if> 
+       
+        <!-- Code to display/delete the existing record when new file is uploaded -->
+       <aura:if isTrue="{!!empty(v.documentId)}">
+            <force:recordData aura:id="deleteDocRecord" 
+                              recordId="{!v.documentId}"
+                              fields="Id,LatestPublishedVersionId"
+                              mode="EDIT"
+                              targetFields="{!v.documentRecord}"
+                              recordUpdated="{!c.documentRecordData}"
+                              />
+       </aura:if>
+        
+       <!-- <div aura:id="fileLoad">
+           {!v.loadImageData}
+        </div> -->
+        
+         
+        <!-- Spinner -->   
+        <aura:if isTrue="{!v.spinner}">
+            <lightning:spinner variant="brand" aura:id="loadspinner" alternativeText="Loading.."/>
+        </aura:if>     
+    </div>
+    
+</aura:component>

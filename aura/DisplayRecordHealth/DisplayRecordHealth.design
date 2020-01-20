@@ -1,0 +1,5 @@
+<design:component>
+    <design:attribute name="cardTitle" label="Card Title" />
+    <design:attribute name="subTitle" label="Sub Title" />
+	
+</design:component>

@@ -1,0 +1,16 @@
+/**
+ * Created by
+ */
+.THIS
+
+.slds-modal__container {
+    margin: 0 auto;
+    width: 95% important;
+    max-width: 81rem important;
+    min-width: 140rem important;
+}
+
+.THIS
+.slds-is-relative {
+    position: absolute;
+}

@@ -1,0 +1,12 @@
+.THIS .searchStyle{
+    margin-top : -9.6%;
+}
+
+.THIS .cardStyle{
+    text-align : centre;
+}
+
+.THIS .slds-table td{
+    word-wrap: break-word;
+    white-space: normal;
+}

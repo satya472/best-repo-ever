@@ -1,0 +1,66 @@
+.cCenterPanel {
+	max-width:0 !important;
+}
+
+h1 {
+    font-size: 72px;
+    color: rgb(255, 255, 255);
+}
+p.middle-content{
+	font-size: 26px; 
+	color: rgb(255, 255, 255);
+}
+p.last-content{
+	font-size: 20px; 
+	color: rgb(255, 255, 255);
+}
+button.btn.btn-warning {
+    color: #fff;
+    font-weight: bold;
+}
+@media only screen and (max-width: 767px) {
+  h1 {
+    font-size: 25px;
+    color: rgb(255, 255, 255);
+  }
+  p.middle-content{
+	font-size: 16px; 
+	color: rgb(255, 255, 255);
+  }
+  p.last-content{
+	font-size: 14px; 
+	color: rgb(255, 255, 255);
+  }
+}
+@media screen and (max-width: 359px) {
+  h1 {
+    font-size: 21px;
+    color: rgb(255, 255, 255);
+  }
+  p.middle-content{
+    font-size: 14px; 
+    color: rgb(255, 255, 255);
+  }
+  p.last-content{
+    font-size: 12px; 
+    color: rgb(255, 255, 255);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  
+  h1 {
+    font-size: 50px;
+    color: rgb(255, 255, 255);
+  }
+
+  p.middle-content{
+    font-size: 24px; 
+    color: rgb(255, 255, 255);
+  }
+
+}
+
+.login-button {
+  color: white;
+}

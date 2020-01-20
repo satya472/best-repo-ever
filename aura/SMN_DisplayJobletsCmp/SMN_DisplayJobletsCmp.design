@@ -1,0 +1,6 @@
+<design:component>
+	<design:attribute name="fieldSetName" label="Field Set API Name for Worklet Table" description="API Name of the worklet fieldset (columns to display)" required="true"/>
+    <design:attribute name="fieldSetNameWorkPackage" label="Field Set API Name for Work Package Table" description="API Name of the work package fieldset (columns to display)" required="true"/>
+    <design:attribute label="Related Record Context" name="contextRelatedRecordName" description="Select a related object containing a field of the context records" dataSource="apex://LightningDesignRelatedObjectSelection" />
+    <design:attribute label="Parent Field API on the related object" name="parentChildRelatedFieldAPI" description="Provide the Parent field API Name on the related object" />
+</design:component>

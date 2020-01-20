@@ -1,0 +1,11 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" extends="cms:LightningTemplateController" description="Article summary content template" access="global">
+
+  <!-- attributes provided by parent component -->
+  <!--<aura:attribute name="contentComponents" type="Aura.Component[]" access="global" description="Rendered content components" />
+  <aura:attribute name="contentBundles" type="ContentBundle[]" access="global" description="Raw contentBundle objects representing rendered content" />
+  <aura:attribute name="contentSiteBundle" type="SiteBundle" access="global" description="SiteBundle object representing the OrchestraCMS site the content is pulled from" />
+  <aura:attribute name="hostSiteBundle" type="SiteBundle" access="global" description="SiteBundle object representing the community being viewed" />
+  <aura:attribute name="componentHeading" type="String" access="global" description="Heading text specified in the core component" />
+  -->
+  <h1>This is Testing</h1>
+</aura:component>

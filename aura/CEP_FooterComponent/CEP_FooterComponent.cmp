@@ -1,0 +1,13 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <div class="slds-docked-form-footer slds-grid overflow-auto">
+        <ul class="footer">
+    		<li><a class="slds-m-right_small" href="https://new.siemens.com/global/en.html" target="_blank">siemens.com Global Website</a></li>
+        	<li><span class="slds-m-right_small slds-m-left_small">© Siemens 1996 – 2019</span></li> 
+        	<li><a class="slds-m-right_small slds-m-left_small" href="https://new.siemens.com/global/en/general/legal.html"  target="_blank">Corporate Information</a></li>
+        	<li><a class="slds-m-right_small slds-m-left_small" href="https://new.siemens.com/global/en/general/privacy-notice.html" target="_blank">Privacy Notice</a></li>
+        	<li><a class="slds-m-right_small slds-m-left_small" href="https://new.siemens.com/global/en/general/cookie-notice.html" target="_blank">Cookie Notice</a></li>
+        	<li><a class="slds-m-right_small slds-m-left_small" href="https://new.siemens.com/global/en/general/terms-of-use.html" target="_blank">Terms of Use</a></li>
+        	<li class="last"><a class="slds-m-left_small" href="https://new.siemens.com/global/en/general/digital-id.html" target="_blank">Digital ID</a></li>
+        </ul>
+        </div>
+</aura:component>

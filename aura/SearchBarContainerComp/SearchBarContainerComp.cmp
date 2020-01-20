@@ -1,0 +1,35 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+
+   <aura:registerEvent type="c:CEP_SearchFilterEvt" name="cepSearchEvt" />
+    <div onkeyup="{! c.filterData }">
+        <lightning:layout horizontalAlign="spread" multipleRows="true">
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4" mediumDeviceSize="2">
+                <!--<lightning:input aura:id="start" type="date" name="startDate" label="Start Date" placeholder="Start Date.."/>-->
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4" mediumDeviceSize="2">
+                <!--<lightning:input aura:id="end" type="date" name="endDate" label="End Date" placeholder="End Date.."/>-->
+            </lightning:layoutItem>
+           <!-- <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="2" mediumDeviceSize="1">
+                <div class="{!$Browser.formFactor == 'PHONE'? 'slds-text-align_left':'slds-text-align_center'}">
+                    <label class="slds-form-element__label" for="checkbox">All Dates
+                        <lightning:input aura:id="allDateCheck" type="checkbox" name="allDates" checked="" label="" class="slds-m-top_x-small slds-m-left_medium"/>
+                    </label>
+                </div>
+            </lightning:layoutItem>-->
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4" mediumDeviceSize="2">
+                <lightning:select aura:id="typeSelect" name="typeSelect" label="View By" value="">
+                    <option value="">Select</option>
+                    <option value="Spare Parts">Spare Parts</option>
+                    <option value="Repair">Repair</option>
+                </lightning:select>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="9" mediumDeviceSize="4">
+                <lightning:input aura:id="inputTxt" type="search" name="searchPlaceholder" label="Enter Search Term" placeholder="Search By PO Number or Sales Order Number"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="3" mediumDeviceSize="2">
+                <lightning:button variant="brand" label="Search" class="searchButton" title="Search" onclick="{!c.filterData}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+    
+</aura:component>

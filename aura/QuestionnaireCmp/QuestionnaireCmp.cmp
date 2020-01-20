@@ -1,0 +1,66 @@
+<!--
+@name   SMN_QuestionnaireCmp
+@author Sara elalaoui (selalaoui@salesforce.com) + jens.becker
+@since  02/07/2018  
+@desc   Used to display the questionnaires modal
+  
+@history
+-->
+<aura:component controller="Questionnaire_Cont" implements="flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,force:hasRecordId" description="QuestionnaireComponent">
+
+    <aura:attribute name="currentRecord" type="sObject"></aura:attribute>
+    <aura:attribute name="isdisplayQuestionnaire" type="boolean" ></aura:attribute>    
+    <aura:attribute name="isLoading" type="boolean" default="false" /> 
+  
+    <aura:attribute name="questionObjects" type="Map" />
+    <aura:attribute name="questionObjectStructure" type="Map" />
+    <aura:attribute name="Questionnaire" type="sObject" />
+    <aura:attribute name="AnswerQuestionsRelation" type="List" />
+    <aura:attribute name="PMReport_Id" type="String" />
+    <aura:attribute name="PMReport" type="PMReport__c" />
+    <aura:attribute name="BusinessPartner" type="List" />
+    <aura:attribute name="RiskClassId" type="String"  />
+    <aura:attribute name="thirdPartyRecordTypeMap" type="Map" />
+    <aura:attribute name="loaMap" type="Map" default="{}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <force:recordData layoutType="FULL"
+                      mode="VIEW"
+                      aura:id = "PMReport"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.PMReport}"
+    />
+
+
+    <div class="slds-modal slds-fade-in-open slds-modal_large" role="dialog">
+        <div class='slds-modal__container'>
+            
+            <header class="slds-modal__header">
+                <lightning:buttonIcon iconName="utility:close" variant="bare" size="large" onclick="{!c.close}"
+                                      class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />                
+                <h2 class="title slds-text-heading__medium">{!v.Questionnaire.Name + ' Questionnaire'}</h2>
+                <aura:if isTrue="{!v.PMReport.Stage__c=='Business Risk Evaluation'}" >
+                    <lightning:button name="mark_all_baseline" label="All Baseline" variant="neutral" />
+                </aura:if>
+            </header>
+            
+            <div class="scrollableModal slds-modal__content slds-p-around_large slds-scrollable_y" >                
+                <lightning:spinner variant="brand" size="medium" class="{!(v.isLoading?'slds-show':'slds-hide')}"/>
+                <p class="slds-p-horizontal_small">
+                    <aura:iteration items="{!v.questionObjects}" var="q" indexVar="i" >
+                             <c:QuestionComponent aura:id="{!q.QuestionRecord.Id}" PMReportId="{!v.recordId}" questionObject="{!q}" recordId="{!q.AnswerGiven.Id}" RiskClassRecordId="{!v.RiskClassId}" loaMap="{!v.loaMap}" questionnaireName="{!v.Questionnaire.Name}" thirdPartyRecordTypeMap="{!v.thirdPartyRecordTypeMap}"/>
+                    </aura:iteration>
+                </p>
+            </div>
+            
+            <footer class="slds-modal__footer">
+                <lightning:button label="Cancel" title="Cancel" onclick="{! c.close }"/>        
+                <lightning:button variant="brand" label="Close" title="Close" onclick="{! c.close }" />
+            </footer>
+            
+        </div>
+    </div>
+    
+    <div class="slds-backdrop slds-backdrop_open" ></div>    
+
+</aura:component>

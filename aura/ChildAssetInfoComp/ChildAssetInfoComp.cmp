@@ -1,0 +1,29 @@
+<aura:component implements="flexipage:availableForAllPageTypes" controller="CEP_AccountAssetRelatedDetails" access="public">
+    <aura:handler event="c:ChildAssetRecordEvent" action="{!c.handleAssetRecordEvent}" />
+    <!--<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
+    <aura:attribute name="childAssetList" type="List" default="[]"/>
+    <aura:attribute name="selectedAssetList" type="List" default="[]"/>
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="parentAssetIds" type="List" default="[]"/>
+    
+    
+    <lightning:layout>
+        <lightning:layoutItem class="slds-page-header" size="12">
+            <lightning:layoutItem size="6">
+                <c:GenericLookupComp aura:id="selectedSObjectRecord" objectAPIName="Contact" IconName="standard:contact" selectedRecord="{!v.selectedLookUpRecord}" label="* Contact Name"
+                                     parentAssetIds="{!v.parentAssetIds}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6">
+                <lightning:dualListBox name="relatedChildAssets" 
+                                       aura:id="relatedChildAssets"
+                                       label="* Related Child Assets" 
+                                       sourceLabel="Available Values"
+                                       selectedLabel="Selected Values"
+                                       options="{!v.childAssetList}"
+                                       value="{!v.selectedAssetList}"/>
+            </lightning:layoutItem>
+            <lightning:button label="Assign Assets to Selected Contact" onclick="{!c.createContactAssets}" class="slds-m-top_medium" />
+        </lightning:layoutItem>        
+        
+    </lightning:layout>
+</aura:component>

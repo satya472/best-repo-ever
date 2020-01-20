@@ -1,0 +1,230 @@
+<!--
+@name   SMN_QuestionComponent
+@author Sara elalaoui (selalaoui@salesforce.com) + jens.becker
+@since  02/07/2018  
+@desc   Used to display the question and the answer options if they exist
+  
+@history
+-->
+<aura:component controller="Questionnaire_Cont" description="QuestionComponent" implements="force:hasRecordId">
+    
+    <!--Attributes-->
+    <aura:attribute name="question" type="Question__c" />
+    <aura:attribute name="questionObject" type="Map" />
+    <aura:attribute name="questionFields" type="Question__c" />
+    <aura:attribute name="QuestionId" type="String" />
+    <aura:attribute name="answersMap" type="Map"  default="{}"/>
+    <aura:attribute name="answerOptions" type="List" />
+    <aura:attribute name="answersGiven" type="List" />
+    <aura:attribute name="answersGivenText" type="string" />
+    <aura:attribute name="ShowQuestion" type="boolean" default="true" />
+    
+    
+    <aura:attribute name="AnswerRecord" type="RiskTopic__c" description="The Answer record, which is either filled from the controller, if an answer has been given previously" />
+    <aura:attribute name="AnswerRecordObject" type="RiskTopic__c" />
+    <aura:attribute name="ShowAddInfo" type="boolean" default="false" description="Controls the visualisation of the add info box. Is set by the selected answerOption " />
+    <aura:attribute name="AddInfoHelpText" type="string" />
+    <aura:attribute name="recordError" type="String" description="An error message bound to force:recordData"/>
+    <aura:attribute name="RiskClassRecordId" type="string" />
+    <aura:attribute name="PMReportId" type="string" />
+    
+    <!--Added by Phani-->
+    <aura:attribute name="answerSubQueMap" type="map" default="{}" />
+    <aura:attribute name="fieldOnAnswerOption" type="boolean" default="false"/>
+    <aura:attribute name="showMitigationPopup" type="boolean" default="false" />
+    <aura:attribute name="saved" type="boolean" default="false" />
+    <aura:attribute name="msg" type="string" default="" />
+    <aura:attribute name="isLoading" type="boolean" default="true" />
+    <aura:attribute name="mitigationFields" type="String[]" default="['Name','Responsible__c','RiskDescription__c','MitigationMeasure__c','DueDate__c']" />
+    <aura:attribute name="loaMap" type="Map" default="{}" />
+    <aura:attribute name="questionnaireName" type="string" />
+    <aura:attribute name="prepopulate" type="list" />
+    <aura:attribute name="autoPopulateList" type="list" />
+    <aura:attribute name="thirdPartyRecordTypeMap" type="Map" />
+    <aura:attribute name="recordId" type="string" />
+    
+    <aura:attribute name="thirdPartyRecordTypeId" type="String" />
+    
+    <aura:attribute type="boolean" name="showAddThirdParty" default="false" />
+    
+    <aura:attribute name="spinner" type="boolean" default="false" />
+    
+    <!--Event Register -->
+    <!--Added by Phani-->
+    <aura:registerEvent name="subQueDisplay" type="c:DisplaySubQuestions" />
+    
+    <!--handlers-->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <!--Added by Phani-->
+    <aura:handler event="c:DisplaySubQuestions" action="{!c.displayQuestion}" />
+    
+    
+    <force:recordData targetRecord="{!v.AnswerRecordObject}"
+                      aura:id = "answerRecord"
+                      mode="EDIT"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.AnswerRecord}"
+                      layoutType="FULL"
+                      targetError="{!v.recordError}"
+                      recordUpdated="{!c.recordUpdated}"
+                      />
+    
+    <!--body recordUpdated="{!c.recordUpdated}" -->
+    
+    <!-- <div aura:id="{!v.questionObject.QuestionRecord.Id}" class="{!v.ShowQuestion?'slds-show':'slds-hide'}"> -->
+    <aura:if isTrue="{!v.ShowQuestion}"> 
+        <lightning:card class="slds-card_boundary slds-is-relative" footer=""  title="{!v.questionObject.QuestionRecord.Sequence__c + '. ' + v.questionObject.QuestionRecord.Name}" >
+            <aura:set attribute="actions">
+                
+                <lightning:buttonStateful
+                                          state="{!v.AnswerRecord.FlagthisQuestion__c}"
+                                          variant="text"
+                                          labelWhenOff="Flag this question"
+                                          labelWhenOn="Question flagged"
+                                          iconNameWhenOff="utility:pin"
+                                          iconNameWhenOn="utility:pinned"
+                                          onclick="{!c.handleAnswerRecordChange}"
+                                          />
+            </aura:set>
+            
+            <!--<p class="slds-p-horizontal_small"> -->
+            <aura:if isTrue="{!not(empty(v.recordError))}">
+                <div class="recordError">
+                    {!v.recordError}</div>
+            </aura:if>
+            <!-- Show Addinfo -->
+            
+            
+            <p class="slds-p-horizontal_small">
+                <lightning:formattedText linkify="true" class="slds-text-heading_small" value="{!v.questionObject.QuestionRecord.Question__c}" />
+                <aura:if isTrue="{!v.questionObject.QuestionRecord.QuestionHelpText__c}">
+                    <lightning:helptext content="{!v.questionObject.QuestionRecord.QuestionHelpText__c}"/>
+                </aura:if>
+                
+                <aura:if isTrue="{!!v.questionObject.QuestionRecord.HideAnswerOptions__c}" >
+                    <!-- If the answer is a picklist -->
+                    <aura:if isTrue="{!v.questionObject.QuestionRecord.AnswerType__c == 'Picklist'}">
+                        <div class="slds-form-element__control">
+                            <fieldset  >
+                                <legend ></legend>
+                                <aura:iteration var="item" items="{!v.answerOptions}" indexVar="i">
+                                    <div class="{!(item.value == v.AnswerRecord.AnsweroptionId__c?(item.ProcessControlStatus?item.ProcessControlStatus:'Default-Option'):'Default-Option')}" >
+                                        <lightning:input   value="{!v.AnswerRecordObject.AnsweroptionId__c}" class="slds-text-heading--medium block"  label="" type="radio" checked="{!item.value == v.AnswerRecord.AnsweroptionId__c}"   id="{!item.value}"   name="{!v.questionObject.QuestionRecord.Id}"   onchange="{!c.handleSelect}" />
+                                        <label   >{!item.label}</label>
+                                        <aura:if isTrue="{!item.helpText}">
+                                            <lightning:helptext  iconName="utility:light_bulb" content="{!item.helpText}"/>
+                                        </aura:if>
+                                    </div>
+                                </aura:iteration>
+                                <br/>
+                                <aura:if isTrue="{!v.ShowAddInfo}" >
+                                    <!--<lightning value="{!v.AddInfoHelpText}" /> -->
+                                    <lightning:textarea  label="{!v.AddInfoHelpText}" value="{!v.AnswerRecord.AdditionalNotes__c}" fieldName="AdditionalNotes__c" onblur="{!c.handleAnswerRecordChange}" />
+                                </aura:if>
+                            </fieldset>
+                            
+                        </div>
+                    </aura:if>
+                    
+                </aura:if>
+                
+                <aura:if isTrue="{!and(v.questionObject.QuestionRecord.PreDefineFrom__c == 'Field',
+                                 or(and(v.fieldOnAnswerOption,v.questionObject.QuestionRecord.WhenToDisplayField__c == 'Based On Answer Option'),
+                                 v.questionObject.QuestionRecord.WhenToDisplayField__c == 'Always'))}">
+                    <lightning:recordEditForm  recordId="{!v.PMReportId}" objectApiName="PMReport__c">
+                        <div class="c-container">
+                            <lightning:layout multipleRows="true">
+                                <lightning:layoutItem padding="around-small" size="4">
+                                    <lightning:inputField fieldName="{!v.questionObject.QuestionRecord.PreDefinedFieldName__c}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem padding="around-small">
+                                    <lightning:button aura:id="submit" type="submit"  label="Update" class="slds-m-top_medium"/>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </lightning:recordEditForm>
+                    <!-- <lightning:outputField label=" " fieldName="" value="{!v.PMReport.Value__c}"   onblur="{!c.handleTextOrNumberAnswer}"/> -->
+                </aura:if>
+                
+                <aura:if isTrue="{!and(v.questionObject.QuestionRecord.PreDefineFrom__c == 'Object',
+                                 or(and(v.fieldOnAnswerOption,v.questionObject.QuestionRecord.WhenToDisplayField__c == 'Based On Answer Option'),
+                                 v.questionObject.QuestionRecord.WhenToDisplayField__c == 'Always'))}">
+                    <c:DisplayRelatedList createNewRecord="false"   object="{!v.questionObject.QuestionRecord.PreDefinedFieldName__c}" ParentObjectId="{!v.PMReportId}" AdditionalFilter="{!'RecordType.DeveloperName = \''+ v.questionObject.QuestionRecord.RecordTypeFieldsetIdentifier__c + '\''}"  ParentObjectRelation="PMLoAProjectId__c" fieldSetName="{!v.questionObject.QuestionRecord.RecordTypeFieldsetIdentifier__c}" CardTitle="{!v.questionObject.QuestionRecord.Name}"  />
+                    <aura:if isTrue="{!v.questionObject.QuestionRecord.PreDefineFrom__c == 'Object'}">
+                        <div class="slds-text-align_right">
+                            <lightning:button class="slds-m-right_small" name="ThirdParty" variant="base" label="Add Third Party" onclick="{!c.addThirdParty}" />
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.questionObject.QuestionRecord.RecordTypeFieldsetIdentifier__c == 'Business_Partner'}" >
+                        <aura:iteration var="item" items="{!v.BusinessPartner}" >
+                            <c:LightningIframe BPRecord="{!item}" recordId="{!item.Id}" url="{!item.BPCDDURL__c}" />
+                        </aura:iteration>
+                    </aura:if>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.questionObject.QuestionRecord.ShowMitigationActionButton__c}">
+                    <div class="slds-text-align_right"> 
+                        <lightning:button class="slds-m-right_small" name="mitigation" variant="brand" label="Add Mitigation" onclick="{!c.addMitigation}" />
+                    </div>
+                </aura:if>
+            </p>
+            
+            <aura:if isTrue="{!v.showMitigationPopup}">
+                <div class="slds-modal slds-fade-in-open" role="dialog">
+                    <div class='slds-modal__container'>
+                        
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close" variant="bare" size="large" onclick="{!c.close}"
+                                                  class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />                
+                            <h2 class="title slds-text-heading--medium">New Mitigation Action</h2>                
+                        </header>
+                        
+                        <div class="scrollableModal slds-modal__content slds-p-around_large slds-scrollable_y" >                
+                            <p class="slds-p-horizontal_small">
+                                <aura:if isTrue="{!!v.saved}">
+                                    <lightning:spinner variant="brand" size="medium" class="{!(v.isLoading?'slds-show':'slds-hide')}"/>
+                                    <lightning:recordForm aura:id="recCreate"
+                                                          objectApiName="MitigationAction__c" 
+                                                          fields="{!v.mitigationFields}"
+                                                          columns="{! or($Browser.isPhone,$Browser.isTablet)?'1':'2'}"
+                                                          mode="edit"
+                                                          onload = "{!c.loadRecord}"                  
+                                                          onsuccess = "{!c.success}" 
+                                                          onsubmit = "{!c.submit}"
+                                                          onerror="{!c.error}"/>
+                                </aura:if>  
+                            </p>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="slds-backdrop slds-backdrop_open" ></div> 
+            </aura:if>
+            
+            <aura:if isTrue="{!v.showAddThirdParty}" >
+                <div class="slds-modal slds-fade-in-open" role="dialog">
+                    <div class='slds-modal__container'>
+                        
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close" variant="bare" size="large" onclick="{!c.close}"
+                                                  class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />
+                            <h2 class="title slds-text-heading--medium">New Record</h2>
+                        </header>
+                        
+                        <div class="scrollableModal slds-modal__content slds-p-around_large slds-scrollable_y" >
+                            <p class="slds-p-horizontal_small">
+                                <c:CreateNewRecord autoPopulate="{!v.autoPopulateList}" sObjectName="ThirdPartyInvolved__c" layoutType="Full"  column="2" closeModalPopup="{!v.showAddThirdParty}" 
+                                                   recordTypeId = "{!v.thirdPartyRecordTypeId}" showToast="true"/>
+                            </p>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop_open" ></div>
+            </aura:if>
+            <lightning:spinner variant="brand" class="{!v.spinner?'slds-show':'slds-hide'}" alternativeText="loading..."/>
+        </lightning:card>
+    </aura:if>
+    
+</aura:component>

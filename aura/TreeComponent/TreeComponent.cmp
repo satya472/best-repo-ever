@@ -1,0 +1,41 @@
+<!--
+  Created By: Phaniram Upalapati
+  Description: Component to display the data in tree hierarchy. We are having standard Tree Hierarchy Component but
+               that does not fullfill our complete requirement So we have opted to build the same using the HTML format
+               of SLDS Tree hierarchy
+-->
+<aura:component>
+
+<!-- Attributes for storing the details-->
+ <aura:attribute name="node" type="Object" />
+ <aura:attribute name="expanded" type="Boolean" default="{!false}" />
+ <aura:attribute name="ariaLevel" type="Integer" default="1" />
+ <aura:attribute name="selectedItem" type="string" />
+    
+    <!--Each Tree item Code -->
+          <li role="treeitem" class="{!v.node.name == v.selectedItem?'selectedItem':''}" onclick="{!c.itemSelect}" aria-level="{!v.ariaLevel}" data-item="{!v.node.name}">
+             <div class="slds-tree__item">
+                <aura:if isTrue="{!v.node.items.length>0}">
+                    <lightning:buttonIcon onclick="{!c.toggle}" class="slds-m-right_small" iconName="{!v.expanded ? 'utility:down':'utility:right'}" variant="bare-inverse" size="medium" alternativeText="View More" />
+                </aura:if> 
+                <span class="{!v.node.items.length>0?'slds-m-right_small':'slds-m-left_large slds-m-right_small'}">
+                    <img class="slds-icon slds-icon_small" src="{!$Resource.CEPImages+'/images/'+v.node.icon}" alternativeText="{!v.node.recordTypeName}"/>
+                </span>    
+              <span class="slds-has-flexi-truncate">
+                <span class="slds-tree__item-label slds-truncate" title="{!v.node.label}">{!v.node.label}</span>
+                <span class="slds-tree__item-meta slds-truncate" title="{!v.node.metatext}">
+                <span class="slds-assistive-text">:</span>{!v.node.metatext}</span>
+              </span>
+
+            </div>
+          </li>
+        <!--Child Components are displayed only onclick of the expand button -->
+        <aura:if isTrue="{!v.expanded}">
+            <ul role="group">
+                <!--Loop for displaying the child elements -->
+                <aura:iteration items="{!v.node.items}" var="node">
+                    <c:TreeComponent node="{!node}" ariaLevel="{!v.ariaLevel+1}" selectedItem="{!v.selectedItem}"/>
+                </aura:iteration>
+            </ul>
+        </aura:if>
+</aura:component>

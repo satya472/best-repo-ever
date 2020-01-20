@@ -1,0 +1,55 @@
+<aura:component>
+
+ <aura:attribute name="orderStatusList" type="list" />
+
+ <aura:attribute name="currentStatus" type="string" />
+
+ <aura:attribute name="currentIndex" type="integer" />
+
+ <aura:attribute name="order" type="object" />
+
+ <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+ <!--<lightning:progressIndicator variant="base" currentStep="Goods Issued" class="slds-m-around_xx-large">
+                                          <aura:iteration items="{! v.orderStatusList }" var="step">
+                                                <lightning:progressStep label="{! step }" value="{! step }"/>
+                                          </aura:iteration>
+                                       </lightning:progressIndicator>-->
+
+<div class="slds-progress slds-m-around_large">
+ <ol class="slds-progress__list">
+       <aura:iteration items="{! v.orderStatusList }" var="step" indexVar="index">
+                <li style="position:relative;" class="{!(index == v.currentIndex)?'slds-progress__item slds-is-completed active':'slds-progress__item slds-is-completed'}">
+                 <aura:if isTrue="{!(index &lt; v.currentIndex)}">
+                   <lightning:buttonIcon iconName="{!(index &lt; v.currentIndex) ? 'utility:check':''}" size="medium" class="slds-button slds-button_icon slds-progress__marker slds-progress__marker_icon" variant="bare"  title="{!step.label}" alternativeText="{!step}" />
+                   <aura:set attribute="else">
+                         <div class="slds-button slds-button__icon slds-progress__marker slds-progress__marker_icon imagePadding"></div>
+                   </aura:set>
+                  </aura:if>
+
+
+                   <div class="statusDetails">
+                     <div style="text-align: center">{!step}</div>
+                  </div>
+                  <div class="statusDetails txtColor">
+                        <lightning:formattedDateTime class="{!index == 0?'slds-show':'slds-hide'}" value="{!v.order.OrderEntryDate__c}"  day="2-digit" month="short"/>
+                        <lightning:formattedDateTime class="{!index == 1?'slds-show':'slds-hide'}" value="{!v.order.OrderConfirmedDate__c}"  day="2-digit" month="short"/>
+                        <lightning:formattedDateTime class="{!index == 2?'slds-show':'slds-hide'}" value="{!v.order.InitiationOfDelivery__c}"  day="2-digit" month="short"/>
+                        <lightning:formattedDateTime class="{!index == 3?'slds-show':'slds-hide'}" value="{!v.order.ReadyToShip__c}"  day="2-digit" month="short"/>
+                        <lightning:formattedDateTime class="{!index == 4?'slds-show':'slds-hide'}" value="{!v.order.GoodsIssueDate__c}"  day="2-digit" month="short"/>
+                        <lightning:formattedDateTime class="{!index == 5?'slds-show':'slds-hide'}" value="{!v.order.ReceiptByForwarder__c}"  day="2-digit" month="short"/>
+                        <lightning:formattedDateTime class="{!index == 6?'slds-show':'slds-hide'}" value="{!v.order.MaterialAtDestination__c}"  day="2-digit" month="short"/>
+                  </div>
+               </li>
+        </aura:iteration>
+  </ol>
+   <div class="slds-progress-bar slds-progress-bar_x-small" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" role="progressbar">
+         <span class="slds-progress-bar__value" style="width:0%">
+              <span class="slds-assistive-text">Progress: 0%</span>
+         </span>
+   </div>
+</div> 
+<div>
+</div>
+
+</aura:component>

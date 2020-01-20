@@ -1,0 +1,16 @@
+.THIS.overflow-auto {
+    overflow: auto;
+    font-size: 12px;
+}
+
+.THIS ul.footer li{
+    display: inline;
+}
+
+.THIS ul.footer li:after{
+    content: '|';
+}
+
+.THIS ul.footer li.last{
+    content: none;
+}

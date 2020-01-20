@@ -1,0 +1,37 @@
+<aura:component  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:appHostable" access="global">
+	
+    <aura:attribute name="worklet" type="Worklet_Item__c" description="the worklet in the chosen row"></aura:attribute>
+    <aura:attribute name="openWorkletModal" type="boolean" default="false" />    
+    
+    <div class="slds-modal slds-fade-in-open" role="dialog">
+        <div class='slds-modal__container'>
+            <header class="slds-modal__header">
+                <lightning:buttonIcon iconName="utility:close" variant="bare" size="large" onclick="{!c.close}"
+                                      class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />
+                <div class="slds-page-header">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                                <lightning:icon iconName="custom:custom25" size="medium" alternativeText="Worklet"/>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <p class="slds-text-body_small slds-line-height_reset">Worklet</p>
+                            <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="{!v.worklet.Name}">{!v.worklet.Name}</h1>
+                            
+                        </div>
+                    </div>
+                </div>
+              
+            </header>
+            <div class="scrollableModal slds-modal__content slds-p-around_large slds-scrollable_y" >
+                
+                <force:recordView recordId="{!v.worklet.Id}" type="FULL"/>
+
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="slds-backdrop slds-backdrop_open" ></div>    
+</aura:component>

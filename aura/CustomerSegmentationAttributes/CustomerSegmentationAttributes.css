@@ -1,0 +1,13 @@
+.THIS .slds-progress{
+    max-width:100%;
+}
+.THIS .isDisabled{
+    cursor: not-allowed;
+    opacity: 0.2;
+}
+.THIS .disableSelect {
+  color: currentColor;
+  display: block;  
+  pointer-events: none;
+  text-decoration: none;
+}

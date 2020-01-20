@@ -1,0 +1,6 @@
+<design:component >
+    <design:attribute name="varLessonId" label="Lesson RecordId"/>
+    <design:attribute name="varControllerName" label="Controller Name"/>
+    <design:attribute name="CardTitle" label="Card Title"/>
+    <design:attribute name="varCardTitleIcon" label="Card Title Icon"/>
+</design:component>

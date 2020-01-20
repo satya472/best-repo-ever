@@ -1,0 +1,9 @@
+.THIS .btn_status button{
+    display: block;
+    width: 9em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+  
+}

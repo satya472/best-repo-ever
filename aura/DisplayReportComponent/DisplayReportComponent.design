@@ -1,0 +1,6 @@
+<design:component >
+    	<design:attribute name="cardTitle" label="Title" description="Value to be displayed at the top of the component" />
+        <design:attribute name="reportName" label="Report API Name" required="true" description="Value that will be used by the component to identify the report" />
+        <design:attribute name="useCurrentRecord" label="Filter By Current Record" description="If the component should automatically filter the report according to the record Id of the currently displayed record" />
+        <design:attribute name="filterString" label="Filter List" description="Provide additional filter values to the report. Filter values are to be separated by ';' and the entry order must be same as filters mentioned in Report" />
+</design:component>

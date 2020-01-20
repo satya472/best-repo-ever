@@ -1,0 +1,145 @@
+<template>
+
+    <div>
+
+        <div class="slds-text-heading_large">Support</div>
+        <div>
+            <lightning-icon class="slds-p-right_x-small slds-p-bottom_xx-small slds-p-top_small slds-current-color" icon-name='utility:filterList'
+                    variant="inverse" size="x-small" alternative-text="filter Image"></lightning-icon>
+            <span>Narrow your results</span>
+        </div>
+
+        <div class="slds-m-top_small slds-m-bottom_small  slds-p-bottom_large slds-border_bottom">
+            <c-cep_case-filter onfilterchange={filterData}></c-cep_case-filter>
+    
+        </div>
+    
+        <div class="slds-m-top_medium slds-is-relative">
+             <!--Header Details -->
+             <div style="padding: .25rem;">
+                    <lightning-layout horizontal-align="spread" multiple-rows="true">
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="1">
+                            <div class="hoverclass" onclick={sortRecords} data-name="CustomerPONumber__c">
+                                <b>Ticket Number</b>
+                                <lightning-icon class="slds-p-left_xx-small slds-p-bottom_xx-small slds-current-color" icon-name='utility:chevrondown'
+                                    variant="inverse" size="xx-small" alternative-ext="View More" ></lightning-icon>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                            <div class="hoverclass" onclick={sortRecords} data-name="SalesOrderNumber__c">
+                                <b>Account Name</b>
+                                <lightning-icon class="slds-p-left_xx-small slds-p-bottom_xx-small slds-current-color" icon-name='utility:chevrondown'
+                                    variant="inverse" size="xx-small" alternative-ext="View More" ></lightning-icon>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                            <div class="hoverclass" onclick={sortRecords} data-name="SalesOrderNumber__c">
+                                <b>Contact Name</b>
+                                <lightning-icon class="slds-p-left_xx-small slds-p-bottom_xx-small slds-current-color" icon-name='utility:chevrondown'
+                                    variant="inverse" size="xx-small" alternative-ext="View More" ></lightning-icon>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                            <div class="hoverclass" onclick={sortRecords} data-name="SalesOrderNumber__c">
+                                <b>Subject</b>
+                                <lightning-icon class="slds-p-left_xx-small slds-p-bottom_xx-small slds-current-color" icon-name='utility:chevrondown'
+                                    variant="inverse" size="xx-small" alternative-ext="View More" ></lightning-icon>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="1">
+                            <div class="hoverclass" onclick={sortRecords} data-name="CurrentStatusOrder__c">
+                                <b>Status</b>
+                                <lightning-icon class="slds-p-left_xx-small slds-p-bottom_xx-small slds-current-color" icon-name='utility:chevrondown'
+                                    variant="inverse" size="xx-small" alternative-ext="View More" ></lightning-icon>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="1">
+                            <div class="hoverclass" onclick={sortRecords} data-name="CurrentStatusOrder__c">
+                                <b>Ticket Type</b>
+                                <lightning-icon class="slds-p-left_xx-small slds-p-bottom_xx-small slds-current-color" icon-name='utility:chevrondown'
+                                    variant="inverse" size="xx-small" alternative-ext="View More" ></lightning-icon>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                            <div class="hoverclass" onclick={sortRecords} data-name="CurrentStatusOrder__c">
+                                <b>Related Unit</b>
+                                <lightning-icon class="slds-p-left_xx-small slds-p-bottom_xx-small slds-current-color" icon-name='utility:chevrondown'
+                                    variant="inverse" size="xx-small" alternative-ext="View More" ></lightning-icon>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="1">
+                            <div class="hoverclass" onclick={sortRecords} data-name="LastConfirmedDeliveryDate__c">
+                                <b> Created Date</b>
+                                <lightning-icon class="slds-p-left_xx-small slds-p-bottom_xx-small slds-current-color" icon-name='utility:chevrondown'
+                                    variant="inverse" size="xx-small" alternative-ext="View More" ></lightning-icon>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+
+            <template if:true={filteredList}>
+                <!-- Data in accordion Format-->
+                <template for:each={filteredList} for:item="ticket">
+                    <div key={ticket.Id} class="slds-box slds-box_xx-small slds-m-top_small ticketList" data-id={ticket.Id} onclick={showDetails}>
+                        <lightning-layout horizontal-align="spread" multiple-rows="true">
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="1">
+                                {ticket.ticketNumber}
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                                {ticket.AccountName}
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                                {ticket.contactName}
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                                {ticket.subject}
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="1">
+                                {ticket.status}
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="1">
+                                {ticket.ticketType}
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                                {ticket.relatedUnit}
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="1">
+                                {ticket.createdDate}
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </template>
+            </template>
+            <template if:false={filteredList}>
+                <!--Below details will be displayed if there is no data available for display -->
+                    <div class="slds-box slds-theme_shade">
+                        No Records Available to Display
+                    </div>
+            </template>
+            <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </template>
+        </div>
+
+        <!--Modal Window Display Seelcted Ticket Details -->
+        <template if:true={displayDetails}>
+                <div class="slds-modal slds-fade-in-open slds-modal_large" role="dialog">
+                    <div class='slds-modal__container'>
+                        <header class="slds-modal__header">
+                            <lightning-button-icon icon-name="utility:close" variant="bare" size="large" onclick={close}
+                            icon-class="slds-current-color" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"></lightning-button-icon>
+                            <h2 class="slds-text-heading_medium slds-hyphenate">Ticket Details</h2>
+                        </header>
+                        <div class="scrollableModal slds-modal__content slds-p-around_large slds-scrollable_y">
+
+                            <c-cep_ticket-details ticket={selectedTicket}></c-cep_ticket-details>
+    
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+     </div>   
+
+</template>

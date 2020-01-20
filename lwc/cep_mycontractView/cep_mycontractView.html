@@ -1,0 +1,69 @@
+<template>
+    <div>
+       <div class="slds-text-heading_large">my Contract</div>
+
+    <div class="slds-m-top_medium slds-is-relative">
+             <!--Header Details -->
+            <div>
+                <lightning-layout horizontal-align="spread" multiple-rows="true">
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                                <div class="hoverclass" onclick={sortRecords}>
+                                    <b>Contract Type</b>
+                                    
+                                </div>
+                            </lightning-layout-item>   
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                                <div class="hoverclass" onclick={sortRecords}>
+                                    <b>Start Date</b>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                                <div class="hoverclass" onclick={sortRecords}>
+                                    <b>End Date</b>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                                <div class="hoverclass" onclick={sortRecords}>
+                                    <b>Holder Account</b>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="3">
+                                <div  class="hoverclass" onclick={sortRecords}>
+                                    <b>Related Asset</b>
+                                </div>
+                            </lightning-layout-item>
+                            
+             </lightning-layout> 
+                       
+                        
+            </div>
+            <template if:true={myContracts.data}>
+                            <!-- Data in accordion Format-->
+                <template for:each={myContracts.data} for:item="contract">
+                    <div key={contract.Id} class="slds-box slds-box_xx-small slds-m-top_small contractlist" data-id={contract.Id}>
+                    <lightning-layout horizontal-align="spread" multiple-rows="true">
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                            {contract.ContractId__r.Name}
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                            {contract.startDate__c}
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                            {contract.endDate__c}
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                            {contract.Account__c}
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="3">
+                            {contract.AssetId__r.Name}
+                        </lightning-layout-item>
+                   
+                    </lightning-layout>
+                    </div>
+                </template>
+            </template>
+
+
+    </div>
+</div>
+</template>

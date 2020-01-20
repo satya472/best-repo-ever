@@ -1,0 +1,37 @@
+<!--
+   Created By : Phaniram Upalapati
+   Description : Component for Displaying the details of the records in Edit mode using lightning:recordEditForm component
+                 which needs recordId and ObjectName as inputs. We are passing the Fields list to loop and display in Edit Mdoe.
+-->
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    
+    <!--Attributes that needs input from Parent Component -->
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="objectApiName" type="String"/>
+    <aura:attribute name="fieldsList" type="list"/>
+    <aura:attribute name="cardTitle" type="string" />
+    
+   <div class="slds-box slds-m-top_xxx-small slds-is-relative"> 
+        <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="{!v.objectApiName}" onsuccess="{!c.recUpdated}" onsubmit="{!c.formSubmit}" onerror="{!c.errorReturned}">
+                      
+                <!-- Error Messages -->
+                <lightning:messages />
+    
+                <div class="c-container">
+                    <lightning:layout horizontalAlign="space" multipleRows="true">
+                       <lightning:layoutItem flexibility="auto" size="12">
+                             <lightning:button label="Save" variant="brand" type="submit" name="update" class="slds-align_absolute-center"/>
+                       </lightning:layoutItem> 
+                       <aura:iteration items="{!v.fieldsList}" var="item">
+                            <lightning:layoutItem padding="around-small" flexibility="auto" size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6">
+                                <lightning:inputField fieldName="{!item}" />
+                            </lightning:layoutItem>
+                       </aura:iteration>    
+                    </lightning:layout>
+                </div>
+        </lightning:recordEditForm>
+           
+        <!-- Spinnner -->  
+        <lightning:spinner aura:id="mySpinner" class="slds-hide" variant="brand"/>
+    </div>
+</aura:component>

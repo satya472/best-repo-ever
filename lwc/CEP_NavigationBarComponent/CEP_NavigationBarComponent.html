@@ -1,0 +1,37 @@
+<template>
+    <nav class="topnav">
+        <ul class="mainMenu">
+               <template for:each={menuItems} for:item="item">
+                 <li key={item.Name}>
+                       <a href="javascript:void(0);" data-menu-item-id={item.Name} onclick={handleMenuSelect}>
+                             <span>{item.Name}</span> 
+                       </a>
+                       <template if:true={item.hasSubMenu}>
+                           <div class="dropdownContain">
+                                   <div class="dropOut">
+                                       <div class="triangle"></div>
+                                       <ul>
+                                         <template for:each={item.subMenuList} for:item="subMenuItem">
+                                               <li key={subMenuItem}>
+                                                       <a  href="javascript:void(0);" data-menu-item-id={subMenuItem}>
+                                                               {subMenuItem}
+                                                       </a>
+                                               </li>
+                                         </template>
+                                       </ul>
+                                   </div>
+                           </div>
+                    </template> 
+                 </li>
+               </template>
+              <li class="icon" onclick={addResponsive}> 
+                 <a href="javascript:void(0);">
+                    &#9776;
+                 </a>
+              </li>
+        </ul>
+
+   </nav>
+      
+
+</template>

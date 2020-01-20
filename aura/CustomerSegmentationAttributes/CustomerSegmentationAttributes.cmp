@@ -1,0 +1,36 @@
+<!--
+  Created By: Phaniram Upalapati
+  Description : Component Displays Each Segmentation Attribute Value record
+-->
+
+<aura:component >
+    
+    <aura:attribute name="attributeRec" type="object" />
+    <aura:attribute name="objName" type="string" />
+
+    <aura:attribute name="sliderValues" type="list" access="private" />
+    <aura:attribute name="currentStep" type="string" />
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-box slds-box_xx-small slds-theme_default">
+        <div class="c-container">
+            <lightning:layout horizontalAlign="space" multipleRows="true">
+                <lightning:layoutItem flexibility="auto" padding="around-small" size="12" >
+                    {!v.attributeRec.segAtt.MasterLabel}
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" padding="around-small" size="12"  class="{!and(v.objName == 'Product2',!v.attributeRec.productSegmentationEditable)?'isDisabled':''}">
+                    <lightning:progressIndicator currentStep="{!v.currentStep}" variant="shaded" class="{!and(v.objName == 'Product2',!v.attributeRec.productSegmentationEditable)?'disableSelect':''}">
+                        <aura:iteration items="{!v.sliderValues}" var="item" >
+                            <lightning:progressStep label="{!item}" value="{!item}" class="{!v.currentStep == item? 'slds-progress__item slds-is-active':'slds-progress__item'}" onclick="{!c.progressStep}"/>
+                        </aura:iteration>
+                    </lightning:progressIndicator>
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" size="12" class="slds-align_absolute-center">
+                    {!v.currentStep}
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+    </div>
+</aura:component>

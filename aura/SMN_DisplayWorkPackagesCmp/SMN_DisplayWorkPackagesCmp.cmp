@@ -1,0 +1,83 @@
+<aura:component  controller="SMN_DisplayJobletsController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:appHostable" access="global">
+    
+    <aura:attribute name="openWorkPackageModal" type="boolean" default="false" />
+    
+    <aura:attribute name="workPackageData" type="Object"/>
+    <aura:attribute name="workPackageColumns" type="List"/>
+    
+    <aura:attribute name="selectedRows" type="List" />
+    <aura:attribute name="selectedRowsList" type="List" /> 
+    
+    <aura:attribute name="recordId" type="string" /> 
+    <aura:attribute name="currentRecord" type="string" /> 
+    
+    
+     <!--sorting attributes-->
+    <aura:attribute name="sortedBy" type="string" default="Name" />
+    <aura:attribute name="sortedDirection" type="string" default="desc"  />
+    
+    <!--event-->
+    <aura:registerEvent name="reloadWorklets" type="c:SMN_ReloadWorkletsListEVT"/>
+    
+    <div class="slds-modal slds-fade-in-open slds-modal_large" role="dialog">
+        <div class='slds-modal__container'>
+            <header class="slds-modal__header">
+                <lightning:buttonIcon iconName="utility:close" variant="bare" size="large" onclick="{!c.close}"
+                                      class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />
+                <div class="slds-page-header">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                                <lightning:icon iconName="custom:custom18" size="medium" alternativeText="Work Packages"/>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Work Packages">Work Packages ({!v.workPackageData.length})</h1>    
+                            <p class="slds-text-body_small slds-line-height_reset">CheckList</p>
+                        </div>
+                    </div>
+                </div>
+              
+            </header>
+            <div class="scrollableModal slds-modal__content slds-p-around_large slds-scrollable_y" >
+                <p class="slds-p-horizontal_small">
+                    <aura:if isTrue="{!v.workPackageData != null}">
+                        <aura:if isTrue="{!v.workPackageData.length != 0}">
+                            <lightning:datatable
+                                                 columns="{! v.workPackageColumns }"
+                                                 data="{! v.workPackageData }"
+                                                 selectedRows="{! v.selectedRows }"
+                                                 onrowselection="{! c.updateSelectedText }"
+                                                 keyField="id"
+                                                 sortedBy="{! v.sortedBy }"
+                                                 sortedDirection="{! v.sortedDirection }"
+                                                 onsort="{! c.updateColumnSorting }"
+                                                 />
+                            
+                            <aura:set attribute="else">
+                                No work Package is available.
+                            </aura:set>
+                        </aura:if>
+                        <aura:set attribute="else">
+                            No work Package is available.
+                        </aura:set>
+                    </aura:if>
+                </p>
+            </div>
+            
+            <footer class="slds-modal__footer">
+                <lightning:button label="Cancel" title="Cancel" onclick="{! c.close }"/>
+                
+                <aura:if isTrue="{!v.workPackageData != null}">
+                    <aura:if isTrue="{!v.workPackageData.length != 0}">
+                        <lightning:button variant="brand" label="Confirm" title="Confirm" onclick="{! c.confirm }" />
+                    </aura:if>
+                </aura:if>
+                
+            </footer>
+
+        </div>
+    </div>
+    
+    <div class="slds-backdrop slds-backdrop_open" ></div>    
+</aura:component>

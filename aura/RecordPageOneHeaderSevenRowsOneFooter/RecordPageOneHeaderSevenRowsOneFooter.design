@@ -1,0 +1,18 @@
+<design:component label="One Header, 7 Rows, One Footer">
+    <flexipage:template >
+        <flexipage:region name="header" defaultWidth="MEDIUM" />
+        <flexipage:region name="column1" defaultWidth="SMALL" />                
+        <flexipage:region name="column2" defaultWidth="SMALL" />                
+        <flexipage:region name="column3" defaultWidth="SMALL" />
+        <flexipage:region name="column4" defaultWidth="SMALL" />                
+        <flexipage:region name="column5" defaultWidth="SMALL" />                
+        <flexipage:region name="column6" defaultWidth="SMALL" />
+        <flexipage:region name="column7" defaultWidth="SMALL" />                
+        <flexipage:region name="column8" defaultWidth="SMALL" />
+        <flexipage:region name="row1" defaultWidth="SMALL" />                
+        <flexipage:region name="row2" defaultWidth="SMALL" />                
+        <flexipage:region name="row3" defaultWidth="SMALL" />
+        <flexipage:region name="row4" defaultWidth="SMALL" /> 
+        <flexipage:region name="footer" defaultWidth="SMALL" />
+    </flexipage:template>
+</design:component>

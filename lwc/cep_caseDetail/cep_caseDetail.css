@@ -1,0 +1,29 @@
+.table, .modal-content{
+	font-size: 14px !important;
+}
+.overlay{
+	position: fixed;
+    width: 100%; 
+    height: 100%;
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 9; 
+    display: none;
+}
+.modal-dialog,
+.modal-content {
+    /* 80% of window height */
+    height: 90% !important;
+}
+.modal-header{
+    height: 10% !important;
+}
+
+.modal-body {
+    /* 100% = dialog height, 120px = header + footer */
+    max-height: 90% !important;
+    overflow-y: auto !important;
+}

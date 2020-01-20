@@ -1,0 +1,36 @@
+<!--
+ - Created by jens.becker on 09.04.18.
+ -->
+
+<aura:component implements="lightning:availableForFlowScreens" description="LoAApproverSelectionList">
+
+    <aura:attribute name="mydata" type="LOAReportTeam__c[]"/>
+    <aura:attribute name="selectedRows" type="String[]"/>
+    <aura:attribute name="selectedRowsNew" type="String[]"/>
+    <aura:attribute name="approverIds" type="String[]"/>
+
+    <aura:attribute name="mycolumns" type="List"/>
+
+    <aura:attribute name="column1_label" type="String"/>
+    <aura:attribute name="column1_fieldName" type="String"/>
+    <aura:attribute name="column1_type" type="String"/>
+
+    <aura:attribute name="column2_label" type="String"/>
+    <aura:attribute name="column2_fieldName" type="String"/>
+    <aura:attribute name="column2_type" type="String"/>
+
+    <aura:attribute name="column3_label" type="String"/>
+    <aura:attribute name="column3_fieldName" type="String"/>
+    <aura:attribute name="column3_type" type="String"/>
+
+    <aura:attribute name="column4_label" type="String"/>
+    <aura:attribute name="column4_fieldName" type="String"/>
+    <aura:attribute name="column4_type" type="String"/>
+
+
+    <aura:handler name="init" value="{!this}" action="{! c.init }"/>
+    <lightning:datatable data="{!v.mydata}" aura:id="ApproverList"
+                         columns="{! v.mycolumns }"
+                         keyField="Id"
+                         onrowselection="{!c.getSelectedName}"/>
+</aura:component>

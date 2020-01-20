@@ -1,0 +1,43 @@
+<aura:component implements="forceCommunity:themeLayout" access="global" description="Sample Custom Theme Layout">
+<aura:attribute name="search" type="Aura.Component[]" required="false"/>
+<aura:attribute name="profileMenu" type="Aura.Component[]" required="false"/>
+<aura:attribute name="navBar" type="Aura.Component[]" required="false"/>
+<aura:attribute name="newHeader" type="Aura.Component[]" required="false"/>
+<div>
+   <div class="c-container">
+        <lightning:layout horizontalAlign="center" multipleRows="true">
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4">
+                 <a href="https://dcube11-siemensconcierge.cs108.force.com/JEP/s/">
+                    <img class="cardClass" src="{!$Resource.CEPImages+'/images/SiemensLogo.gif'}" />
+                </a>
+           </lightning:layoutItem> 
+           <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4">
+                    <div class="searchRegion">
+                        {!v.search}
+                    </div>
+           </lightning:layoutItem> 
+           <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4">
+                    <div class="profileMenuRegion">
+                        {!v.profileMenu}
+                    </div>
+           </lightning:layoutItem> 
+           <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12">
+                    <div class="navigation">
+                        <!--<c:NavigationBarComponent />-->
+                        <c:CEP_NavigationBarComponent />
+                    </div>
+           </lightning:layoutItem>
+           <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12">
+                   <div class="mainContentArea">
+                        {!v.body}
+                    </div>
+           </lightning:layoutItem>
+           <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12">
+                    <div class="footer">
+                        <c:FooterComponent />
+                    </div>
+           </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</div>
+</aura:component>

@@ -1,0 +1,37 @@
+.notification{
+	border: 1px solid rgb(23, 157, 158, 0.5) !important;
+    border-radius: 3% !important;
+}
+.notificationCss{
+    z-index: 2000;
+    margin-top: 9em;
+    width:100%;
+}
+div.card-body{
+  padding: 0px !important;
+}
+
+.scroll_notification {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.dropdown-menu a.all_notification {
+    display: inline-block;
+    font-weight: 400;
+    color: #fff !important;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #0066cc;
+    border: 1px solid #0066cc;
+    padding: 5px;
+    font-size: 12px;
+    border-radius: 5%;
+}
+.notification.show{
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 4000 !important;
+}
+.ponitor{
+	cursor: pointer;
+}

@@ -1,0 +1,40 @@
+<!--
+ - Created by jens.becker on 11.04.18.
+ -->
+
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+                description="PriceExperienceRecord component is used as a child component in the PriceExperienceCapture component">
+    <aura:attribute type="String" name="ExperienceRecordId" />
+    <aura:attribute name="priceExperienceRecord" type="Object" description="Keeps the record to be created or shown" />
+    <aura:attribute type="String" name="OpportunityId" />
+    <aura:attribute name="parentpriceExperienceRecord" type="Object" description="If the record is/or shall be a child of an existing PE record, please add the parent record as a parameter" />
+    <aura:attribute name="TypeOfPriceExperienceRecord" type="String" description="Keeps the record type to be created or shown" />
+    <aura:attribute name="Opportunity" type="Opportunity" />
+    <!--
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.priceExperienceRecord}"
+                      layoutType="FULL"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.simpleRecord}"
+                      targetError="{!v.recordError}"
+                      mode="EDIT"
+                      recordUpdated="{!c.handleRecordUpdated}"
+    />
+    -->
+
+    {!v.Opportunity.Id}
+    <lightning:layout horizontalAlign="spread" multipleRows="true" class="slds-box">
+        <lightning:layoutItem flexibility="grow" size="8">
+        <lightning:recordEditForm objectApiName="Price_Experience__c" aura:id="recordEditForm" recordId="{!v.ExperienceRecordId}" >
+            <lightning:messages />
+            <lightning:inputField fieldName="Name" />
+            <lightning:inputField fieldName="Id" />
+            <lightning:inputField fieldName="Competitor_Account__c" />
+            <lightning:inputField fieldName="Frame_Type__c" />
+
+            <lightning:inputField fieldName="Opportunity__c" value="{!v.OpportunityId}" class="hide" />
+            <lightning:button class="slds-m-top_small" variant="brand" type="submit" name="update" label="Update" />
+        </lightning:recordEditForm>
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

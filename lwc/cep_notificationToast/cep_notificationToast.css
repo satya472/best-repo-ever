@@ -1,0 +1,12 @@
+.slds-notify_container{
+    z-index:9999 !important;
+}
+.slds-notify_toast{
+    margin:0;
+}
+@media (max-width:499px){
+    .slds-notify_toast{
+        min-width:95%!important;
+        max-width: 95%;
+    }
+}

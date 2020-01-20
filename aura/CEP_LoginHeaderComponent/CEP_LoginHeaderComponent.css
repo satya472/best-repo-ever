@@ -1,0 +1,10 @@
+.THIS a{
+   background: #248f8f !important; 
+   color: #FFFFFF!important;
+   border: 0px !important;
+   font-size: 13px; 
+   padding: 0 6px; 
+}
+.THIS a:hover{
+    background-color:#00b3b3 !important;
+}

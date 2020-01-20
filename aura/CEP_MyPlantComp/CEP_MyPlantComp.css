@@ -1,0 +1,22 @@
+.THIS .treebackground{
+    background-color:#263238;
+    color:#FFF;
+    min-height:100vh;
+    height: auto !important;
+    height: 100%;
+}
+.THIS .slds-tree__item a{
+    color:#FFF;
+} 
+.THIS .slds-tree__item{
+   border-bottom: 0.1px solid lightgray;
+   height: 4em;
+   padding-top: 1em;
+}
+.THIS .slds-tree__item:hover{
+    background-image: linear-gradient(to left,rgb(16, 139, 168),#5DBCD2);
+}
+
+.THIS .iconColor{
+    color:#FFF;
+}

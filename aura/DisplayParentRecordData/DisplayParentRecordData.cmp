@@ -1,0 +1,27 @@
+<!--
+   Created By : Phaniram Upalapati
+   Description : Component for Displaying the details of the Fields related to the Parent Record i.e. parent's Parent etc.
+-->
+<aura:component controller="DisplayRelatedList_Cont" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes" access="global">
+
+    <aura:attribute name="parentRecordId" type="string" />
+    <aura:attribute name="fieldLst" type="String[]" />
+    <aura:attribute name="viewBody" type="object[]" />
+    <aura:attribute name="errorMsg" type="string" />
+    
+ <!-- design Attributes -->
+ <aura:attribute name="CardTitle" type="string" default="Card Title" />
+ <aura:attribute name="object" type="string"/>
+ <aura:attribute name="ParentObjectRelation" type="String" default="" />
+ <aura:attribute name="fieldSetName" type="String" />
+    
+    <!-- Handler function for init Event -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!-- Load the Lightning:recordViewForm component to Display the data -->
+    <lightning:card title="{!v.CardTitle}">
+      {!v.errorMsg}
+      {!v.viewBody}
+    </lightning:card>    
+    
+</aura:component>

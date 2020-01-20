@@ -1,0 +1,32 @@
+<!--
+   Created By : Phaniram Upalapati
+   Description : Component for Displaying the data taking ObjectName, Record Id and List of fields that needs to be displayed
+                 and showing the same onto Screen.
+-->
+<aura:component >
+    <!-- Input Attributes -->
+    <aura:attribute name="RecordId" type="string" />
+    <aura:attribute name="fieldDetails" type="String[]" />
+    <aura:attribute name="objApiName" type="string" />
+    <aura:attribute name="hyperLinkToRecord" type="boolean" default="false" />
+    
+        <aura:if isTrue="{!!empty(v.RecordId)}">
+                <lightning:recordViewForm recordId="{!v.RecordId}" objectApiName="{!v.objApiName}" >    
+                    <div class="c-container">
+                        <lightning:layout horizontalAlign="spread" multipleRows="true">
+                            <aura:iteration items="{!v.fieldDetails}" var="item">
+                                <lightning:layoutItem padding="horizontal-small" flexibility="auto" size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6">
+                                    <lightning:outputField fieldName="{!item}" />
+                                </lightning:layoutItem>
+                            </aura:iteration>    
+                             <!-- Displaying HyperLink to the current Record -->
+                           <aura:if isTrue="{!v.hyperLinkToRecord}">
+                                <lightning:layoutItem padding="horizontal-small" flexibility="auto" size="12">
+                                    <c:sObjectHyperLink sObjectId="{!v.RecordId}" hyperlinkLabel="Click here for more details" />
+                                </lightning:layoutItem>
+                           </aura:if>    
+                        </lightning:layout>
+                    </div>
+                </lightning:recordViewForm>
+         </aura:if>    
+</aura:component>

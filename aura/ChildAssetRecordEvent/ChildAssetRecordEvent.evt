@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="List of parent Asset ids" >
+    <aura:attribute name="parentAssetIds" type="List"/>
+    <aura:attribute name="selectedContactId" type="Id"/>
+</aura:event>

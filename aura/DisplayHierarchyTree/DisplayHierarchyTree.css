@@ -1,0 +1,19 @@
+.THIS .slds-truncate{
+    overflow:unset;
+    white-space: pre-wrap;
+}
+
+.THIS .slds-tree_container{
+    max-width: 100%;
+}
+
+.THIS .slds-tree__item-label{
+    display:inline;    
+    margin-right: 0.5em;
+}
+
+.THIS .slds-tree__item-meta{ 
+    font-weight: bold;
+    color: black;
+    display:inline;
+}

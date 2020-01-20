@@ -1,0 +1,214 @@
+<aura:component controller="GenericRecordSelectorController" access="global" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction">
+    
+    <!--Aura Attributes-->
+    <aura:attribute name="isOpen" type="boolean"/>
+    <aura:attribute name="controllerName" type="String"/>
+    <aura:attribute name="modalName" type="String"/>   
+    <aura:attribute name="ModalTitle" type="String" default="Add Records"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    <!--Sort-->
+    <aura:attribute type="String" name="sortField" />
+    <aura:attribute type="Boolean" name="sortAsc" />
+    
+    <!--Search-->
+    <aura:attribute name="searchScope" type="List"/>
+    <aura:attribute name="searchKey" type="String"/>
+    <aura:attribute name="selectedValue" type="String" access="PRIVATE"/>
+    <aura:attribute name="isCreateNewRec" type="boolean" default="false"/>
+    
+    <!--Table-->
+    <aura:attribute name="tableData" type="List"/> 
+    <aura:attribute name="tableRecords" type="List"/>   
+    <aura:attribute name="fieldSetValues" type="List"/> 
+    <aura:attribute name="arrfieldNames" type="List"/> 
+    
+    <!--Add Records-->
+    <aura:attribute name="AddRecordList" type="sObject[]"/>    
+    
+    <!--Create New Record Modal-->
+    <aura:attribute name="createContact" type="boolean" default="false"/>        
+    <aura:attribute name="contactFields" type="List" default="['Name', 'AccountId', 'Phone', 'Title', 'Email']" />    
+    
+    <!-- Pagination -->
+    <aura:attribute name="selectedCount" type="integer" default="0"/>
+    <aura:attribute name="currentPageNumber" type="integer" default="1"/>
+    <aura:attribute name="maxPageNumber" type="Integer" />
+    <aura:attribute name="currentList" type="List" />
+    <aura:attribute name="recordsPerPage" type="Integer" default="5"/>
+    <aura:attribute name="resultSize" type="Integer"  default="0"/>
+    
+    <!--Aura Handlers--> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="pageChange" event="c:PaginationEvent" action="{!c.handlePageChange}" />
+    
+    <!--loading spinner start... style=Brand Medium-->
+    <aura:if isTrue="{!v.Spinner}">
+        <lightning:spinner alternativeText="Loading" size="large" />
+    </aura:if>
+    <!-- Loading spinner end--> 
+    
+    <!--Modal Begins-->    
+    <div class="demo-only">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" 
+                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close" title="Close" onclick="{!c.closeModal}" 
+                                          class="slds-float_right"/>
+                    <h2 id="modal-heading" class="slds-text-heading_medium slds-hyphenate">{!v.ModalTitle}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium slds-grid--align-center" id="modal-content-id">                            
+                    
+                    <!--Content Begins-->
+                    <div class="slds">
+                        <!--search begins-->
+                        <lightning:layout multipleRows="true" horizontalAlign="center">
+                            <lightning:layoutItem size="12" largeDeviceSize="2" padding="around-small">
+                                <lightning:input aura:id="searchBoxText" type="search" variant="label-hidden" placeholder="Search"
+                                                 value="" class="form-control" onkeyup="{!c.searchKeyChangeInput}"/>
+                            </lightning:layoutItem>
+                            
+                            <!--Search Scope-->
+                            <lightning:layoutItem size="12" largeDeviceSize="2" padding="around-small">                                               
+                                <lightning:select label="Search Scope" name="selectSearchScope" aura:id="searchScopeId" value="{!v.selectedValue}" 
+                                                  onchange="{!c.refreshScopeData}" class="{!$Browser.formFactor == 'PHONE' ? '':'searchStyle'}">
+                                    <aura:iteration items="{!v.searchScope}" var="item">
+                                        <option text="{!item.label}" value="{!item.value}"/>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </lightning:layoutItem>
+                            
+                            <!--Create New Record button-->                                
+                            <lightning:layoutItem size="12" largeDeviceSize="2" padding="around-small">
+                                <aura:if isTrue="{!v.isCreateNewRec}">
+                                    <lightning:button variant="brand" label="Create New" onclick="{!c.openNewRecordModal}"/>
+                                </aura:if>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                        
+                        <!--Table begins-->
+                        <lightning:layout multipleRows="true" horizontalAlign="spread">
+                            <lightning:layoutItem size="12" smallDeviceSize="12" largeDeviceSize="2" padding="around-small">
+                                <div class="slds-badge">Selected Records: {!v.selectedCount}</div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12" smallDeviceSize="12" largeDeviceSize="2" padding="around-small">                                
+                                <lightning:select aura:id="recPerPage" name="perPage" value="{!v.recordsPerPage}" label="Records Per Page" onchange="{!c.recordsPerPageChange}">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>          
+                                    <option value="30">30</option>
+                                </lightning:select>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                        
+                        <aura:if isTrue="{!v.currentList.length == 0}"> 
+                            <div style="color:red;">No records available!</div> 
+                            <aura:set attribute="else">
+                                <!--Table Begins-->
+                                <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-max-medium-table_stacked slds-table_fixed-layout"> 
+                                    <thead>
+                                        <tr class="slds-text-title--caps">
+                                            <th style="width:3.25rem;" class="slds-text-align--right">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <label class="slds-checkbox">
+                                                            <!--header checkbox for select all-->
+                                                            <ui:inputCheckbox aura:id="box3" change="{!c.selectAll}"/>
+                                                            <span class="slds-checkbox--faux"></span>
+                                                            <span class="slds-form-element__label text"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <aura:iteration items="{!v.fieldSetValues}" var="field">
+                                                <th class="slds-text-title_caps">
+                                                    <div onclick="{!c.sortByCol}" title="{!field.label}" data-type="{!field.type}" data-name="{!field.name}">{!field.label}
+                                                        <aura:if isTrue="{!v.sortField == field.name}">
+                                                            <span>
+                                                                <aura:if isTrue="{!v.sortAsc}"> &#8593;
+                                                                    <aura:set attribute="else"> &#8595;</aura:set>
+                                                                </aura:if>
+                                                            </span>
+                                                        </aura:if>
+                                                    </div>
+                                                </th>
+                                            </aura:iteration>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!v.currentList}" var="con">
+                                            <tr id="{!con.Id}">
+                                                <td  data-label="Select Row" scope="row" class="slds-text-align--right">
+                                                    <div class="slds-form-element">
+                                                        <div class="slds-form-element__control">
+                                                            <label class="slds-checkbox">
+                                                                <ui:inputCheckbox text="{!con.Id}" aura:id="boxPack" value="{!con.check}" 
+                                                                                  change="{!c.checkboxSelect}"/>
+                                                                <span class="slds-checkbox--faux"></span>
+                                                                <span class="slds-form-element__label text"></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <aura:iteration items="{!v.fieldSetValues}" var="field">
+                                                    <td scope="row" data-label="{!field.label}">
+                                                        <c:DisplayCell record="{!con}" field="{!field}"/>
+                                                    </td>
+                                                </aura:iteration>
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                                <!--Table ends-->   
+                                <br/>            
+                            </aura:set>                            
+                        </aura:if>                      
+                        <!--Pagination-->
+                        <aura:if isTrue="{!!empty(v.currentList)}">
+                            <span class="slds-badge">Results: {!v.resultSize}</span>
+                            <c:PaginationComponent currentPageNumber="{!v.currentPageNumber}" maxPageNumber="{!v.maxPageNumber}" />
+                        </aura:if>
+                    </div>
+                    <!--Content Ends-->
+                </div>
+                
+                <!--Footer Begins-->
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="neutral" label="Cancel" onclick="{! c.closeModal}"/>
+                    <lightning:button variant="brand" label="Add Record" onclick="{! c.createSelectedMember }"/>                    
+                </footer>
+                <!--Footer Ends-->
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>  
+    <!--Modal Ends-->    
+    
+    <!--Create new Contact Form-->
+    <aura:if isTrue="{!v.createContact}">
+        <div class="demo-only">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-con" aria-modal="true" 
+                     aria-describedby="modal-content-id-con" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" title="Close" onclick="{!c.closeNewRecordModal}" 
+                                              class="slds-float_right"/>
+                        <h2 id="modal-heading-con" class="slds-text-heading_medium slds-hyphenate">Create New Record</h2>
+                    </header>
+                    <div class="modal-con slds-modal__content slds-p-around_medium" id="modal-content-id-con">                            
+                        <lightning:recordForm 
+                                              objectApiName="Contact"
+                                              mode="edit"
+                                              fields="{!v.contactFields}"
+                                              onload="{!c.handleLoad}"
+                                              onsubmit="{!c.handleSubmit}"
+                                              onsuccess="{!c.createNewContactRec}" />                           
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>        
+    </aura:if>
+</aura:component>

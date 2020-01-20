@@ -1,0 +1,139 @@
+<!--
+  Created By: Phaniram Upalapati
+  Description : Component Displays the details of the Products based on the SegmentationAttributeValues associated to the currentRecord
+                and the related Products by calculating Relevance of the products.
+-->
+<aura:component controller="CustomerSegmentation_Cont" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSobjectName,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <!-- Design Attributes -->
+    <aura:attribute name="segCategory" type="String" />
+    <aura:attribute name="recordId" type="String" />
+    
+    <aura:attribute name="ProductList" type="list" />
+    <aura:attribute name="dataWrapper" type="object" />
+    <aura:attribute name="dataColumns" type="list" />
+    <aura:attribute name="assetList" type="list" />
+    <aura:attribute name="outageList" type="list" />
+    <aura:Attribute name="currencyCode" type="string" default="Eur"/>
+    <aura:attribute name="blackListedRow" type="object" />
+    <aura:attribute name="opportunityRecordTypeId" type="string" />
+    <aura:attribute name="fieldLst" type="string[]" />
+    
+    <aura:attribute name="selectedRowList" type="list" /> 
+    <!-- Attribute for displaying the Loading spinner -->
+    <aura:attribute name="load" type="boolean" default="false" />
+    
+    <aura:attribute name="errorMsg" type="string" />
+    <aura:attribute name="reasonPopup" type="boolean" default="false" />
+    <aura:attribute name="createOpportunityPopup" type="boolean" default="false" />
+    <aura:attribute name="recCreateSpinner" type="boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+  <div class="slds-is-relative">
+    <lightning:card >
+            <div class="slds-text-color_error">
+                {!v.errorMsg}
+            </div>    
+        
+           <!-- Displaying button and filter lists -->
+            <lightning:layout horizontalAlign="spread" multipleRows="true">
+                <lightning:layoutItem padding="around-small"  size="12" smallDeviceSize="4" mediumDeviceSize="4">
+                    <aura:if isTrue="{!v.ProductList.length > 0}">
+                         <lightning:button label="Convert to Opportunity" variant="brand" onclick="{!c.handleSave}" class="slds-m-top_medium"/>
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="8">
+                    <lightning:layout horizontalAlign="end" multipleRows="true">
+                        <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4" mediumDeviceSize="4">  
+                            <lightning:select aura:id="assetVal" name="assetSelect" label="Trains" onchange="{!c.filterAssetsOutages}">
+                                <option value="All">All</option>
+                                <aura:iteration items="{!v.assetList}" var="asset">
+                                    <option value="{!asset.label}" text="{!asset.value}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4" mediumDeviceSize="4">  
+                            <lightning:select aura:id="outageVal" name="outageSelect" label="Outage Type" onchange="{!c.filterAssetsOutages}">
+                                <option value="All">All</option>
+                                <aura:iteration items="{!v.outageList}" var="outage">
+                                    <option value="{!outage.label}" text="{!outage.value}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4" mediumDeviceSize="4">
+                            <lightning:input aura:id="blackListToggle" type="toggle" label="Show BlackListed" checked="false" onchange="{!c.showBlacklisted}" class="slds-m-top_medium"/>
+                        </lightning:layoutItem> 
+                    </lightning:layout>   
+                </lightning:layoutItem>    
+            </lightning:layout>  
+
+        <!-- Data Table for displaying the Data -->
+            <lightning:datatable class="slds-max-medium-table_stacked"
+                                 data="{!v.ProductList}" 
+                                 columns="{!v.dataColumns}"
+                                 onrowaction="{! c.handleRowAction }"
+                                 onrowselection="{! c.getSelectedRow }"
+                                 keyField="Id"/>
+
+        <!-- Modal Popup for Catching Blacklisting Reason -->
+            <aura:if isTrue="{!v.reasonPopup}">  
+                <div class="demo-only" style="height: 24rem;">
+                    <section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header slds-theme_error slds-theme_alert-texture">
+                                <h2 class="slds-text-heading_medium" id="prompt-heading-id">Reason for BlackListing</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">
+                                <lightning:input type="text" aura:id="blackListReason" label="Reason"/>
+                            </div>
+                            <footer class="slds-modal__footer slds-theme_default">
+                                <lightning:button label="Cancel"  variant="brand" onclick="{!c.closePopup}"/>
+                                <lightning:button label="Continue" variant="brand" onclick="{!c.rowBlackList}"/>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </aura:if>
+
+
+             <!-- Modal Popup for Opportunity Record Creation -->
+            <aura:if isTrue="{!v.createOpportunityPopup}">  
+                <div class="demo-only slds-is-relative">
+                   <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <lightning:buttonIcon iconName="utility:close" variant="bare" size="large" onclick="{!c.closePopup}"
+                                      class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />
+                                <h2 class="slds-text-heading_medium" id="prompt-heading-id">New Opportunity</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">
+
+                                 <lightning:recordForm aura:id="recCreate"
+                                    objectApiName="Opportunity"
+                                    recordTypeId="{!v.opportunityRecordTypeId}" 
+                                    fields="{!v.fieldLst}"
+                                    columns="{! or($Browser.isPhone,$Browser.isTablet)?'1':'2'}"
+                                    mode="edit"
+                                    onsuccess = "{!c.success}" 
+                                    onsubmit = "{!c.submit}"
+                                    onerror="{!c.error}"/>
+
+                                    <lightning:spinner class="{!v.recCreateSpinner?'slds-show':'slds-hide'}" variant="brand" alternativeText="Loading.." />                            
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </aura:if>
+        
+    </lightning:card>
+      
+     <!-- Spinner -->
+    <aura:if isTrue="{!v.load}" >
+     <lightning:spinner aura:id="prodLoad" variant="brand" alternativeText="Loading.."/>
+    </aura:if>   
+  </div>      
+    
+</aura:component>

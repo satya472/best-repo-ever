@@ -1,0 +1,116 @@
+<!--
+ Created By : Jens, Phaniram Upalapati,Rupinder Kaur
+ Description : Component used to display the details of any child records related to the Parent of the currently Displayed record
+               i.e. related list format but can navigate to any child Object that belongs to the parent record as well.
+-->
+<aura:component controller="DisplayRelatedList_Cont"  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:appHostable" access="global" >
+    <!-- Full List of Data -->
+    <aura:attribute name="fullListData" type="list" />
+    <!-- Data for Displaying -->
+    <aura:attribute name="mydata" type="list" />
+    <aura:attribute name="mycolumn" type="list" />
+    <aura:attribute name="ParentObjectId" type="String" default=""  />
+    <aura:attribute name="fieldsLst" type="list" />
+    <aura:attribute name="optionsLst" type="list" />
+    <aura:attribute name="pckValuesLst" type="list" />
+    
+    <aura:attribute name="relatedSpinner" type="boolean" default="false" />
+    <aura:attribute name="showPopup" type="boolean" default="false" />
+    <aura:attribute name="onHover" type="boolean" default="false" />
+    <aura:attribute name="showModel" type="boolean" default="false" />
+    <aura:attribute name="currentRecordTypeId" type="String" default=""/>
+    <aura:attribute name="recordTypeLst" type="list" />
+    <aura:attribute name="showRecordTypeSelection" type="boolean" default="false" />
+
+    <!-- design Attributes -->
+    <aura:attribute name="editMode" type="Boolean" default="false" />
+    <aura:attribute name="CardTitle" type="string" default="Card Title" />
+    <aura:attribute name="object" type="String"/>
+    <aura:attribute name="RecordType" type="String"/>
+    <aura:attribute name="iconName" type="String"/>
+    <aura:attribute name="ParentObjectIdField" type="String" default="" />
+    <aura:attribute name="hyperlinkFieldsName" type="String" default="" />    
+    <aura:attribute name="ParentObjectRelation" type="String" default="" />
+    <aura:attribute name="AdditionalFilter" type="String" default="" />
+    <aura:attribute name="selectable" type="Boolean" default="false" />
+    <aura:attribute name="fieldSetName" type="String" />
+    <aura:attribute name="filterBy" type="String"/>
+    <aura:attribute name="recordDisplayLimit" type="Integer" default="2"/>
+    <aura:attribute name="sortedBy" type="String" default="Name" />
+    <aura:attribute name="sortedDirection" type="String" default="" />
+    <aura:attribute name="createNewRecord" type="Boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />  
+    
+    <div class="{! v.createNewRecord == true? 'slds-is-relative slds-box' : 'slds-is-relative'}">
+        <div class="c-container">
+            <lightning:card title="{!(v.CardTitle)+' ('+(v.fullListData.length)+')'}"  iconName="{!v.iconName}" class="slds_subTittle">
+                
+                <aura:set attribute="actions" >
+                    <aura:if isTrue="{!v.createNewRecord}">
+                        <lightning:button label="New" onclick="{!c.createRecord}" class="slds_button"/>
+                    </aura:if> 
+                </aura:set>
+                <aura:set attribute="footer">
+                    <aura:if isTrue="{!v.fullListData.length > v.recordDisplayLimit}">
+                        <a onclick="{!c.showAll}" class="slds-font">View All</a>
+                    </aura:if>   
+                </aura:set>
+                
+                
+                <aura:if isTrue="{!v.mydata.length > 0}" >
+                    <div class="">
+                        <lightning:datatable data="{!v.mydata}" columns="{!v.mycolumn}" hideCheckboxColumn="{!!v.selectable}"
+                                             onsort="{!c.updateColumnSorting}" sortedBy="{!v.sortedBy}"
+                                             sortedDirection="{!v.sortedDirection}" onrowselection="{!c.editRecord}" 
+                                             keyField="Id" />
+                    </div>
+                </aura:if>
+            </lightning:card>
+        </div>
+
+        <!--RecordType Selection popup -->
+       <aura:if isTrue="{!v.showRecordTypeSelection}">
+            <div class="demo-only">
+              <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New {!v.object}</h2>
+                        <lightning:buttonIcon iconName="utility:close" size="medium" onclick="{!c.close}"
+                        class="slds-button slds-button_icon slds-modal__close" />
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="c-container">
+                                    <lightning:layout verticalAlign="start" multipleRows="true">
+                                        <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="4" class="slds-text-align_right">
+                                                    Select a record Type
+                                        </lightning:layoutItem>
+                                        <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="8">
+                                            <aura:iteration items="{!v.recordTypeLst}" var="item">
+                                                <div class="slds-m-bottom_medium">
+                                                    <lightning:input type="radio" label="{!item.Name}" name="options" value="{!item.Id}" onclick="{!c.radioChange}"/>
+                                                    <div class="slds-p-left_xx-large" style="word-wrap: break-word;">
+                                                        {!item.Description}
+                                                    </div>
+                                                </div>
+                                            </aura:iteration>
+                                        </lightning:layoutItem>
+                                    </lightning:layout>
+                            </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                            <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{! c.close }" />
+                            <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.handleNext }" />
+                    </footer>
+                </div>
+             </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </aura:if>
+        
+        <!-- Spinner -->
+        <aura:if isTrue="{!v.relatedSpinner}">
+            <lightning:spinner variant="brand" class="slds-hide" alternativeText="Loading.."/>
+        </aura:if>    
+    </div>
+    
+</aura:component>

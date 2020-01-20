@@ -1,0 +1,30 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+<footer class="footerCmp">
+   <div class="slds-grid slds-wrap slds-grid_align-spread slds-p-top_small slds-m-left_medium">
+     <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-12">
+        <div class="slds-grid slds-wrap slds-grid_align-center">
+            <div class="slds-col slds-shrink slds-grow slds-size_4-of-12 slds-medium-size_4-of-12">
+                <a class="slds-card__footer-action" href="/error">Terms
+                    <span class="slds-assistive-text">Terms</span>
+                </a>
+            </div>
+            <div class="slds-col slds-shrink slds-grow slds-size_4-of-12 slds-medium-size_4-of-12">
+                <a class="slds-card__footer-action" href="javascript:void(0);">Privacy
+                    <span class="slds-assistive-text">Privacy</span>
+                </a>
+            </div>
+            <div class="slds-col slds-shrink slds-grow slds-size_4-of-12 slds-medium-size_4-of-12">
+                <a class="slds-card__footer-action" href="javascript:void(0);">About
+                    <span class="slds-assistive-text">About</span>
+                </a>
+            </div>
+        </div>
+      </div>
+      <div class="slds-col slds-size_0-of-1 slds-small-size_7-of-12 slds-col_bump-right">
+      </div>
+      <div class="slds-col slds-size_1-of-1 slds-small-size_3-of-12 slds-align-middle slds-m-top_xx-small">
+             <p class="copyright">&copy; Siemens AG, 1996 - 2018</p>
+      </div>
+    </div>  
+</footer>
+</aura:component>

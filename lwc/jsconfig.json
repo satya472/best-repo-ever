@@ -1,0 +1,143 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "baseUrl": ".",
+        "paths": {
+            "c/CEP_NavigationBarComponent": [
+                "CEP_NavigationBarComponent/CEP_NavigationBarComponent.js"
+            ],
+            "c/MainComponent": [
+                "MainComponent/MainComponent.js"
+            ],
+            "c/TrackAndTraceComponent": [
+                "TrackAndTraceComponent/TrackAndTraceComponent.js"
+            ],
+            "c/TrackAndTraceOrderComponent": [
+                "TrackAndTraceOrderComponent/TrackAndTraceOrderComponent.js"
+            ],
+            "c/TrackAndTraceSearchComponent": [
+                "TrackAndTraceSearchComponent/TrackAndTraceSearchComponent.js"
+            ],
+            "c/body": [
+                "body/body.js"
+            ],
+            "c/cep_GenericFileUploader": [
+                "cep_GenericFileUploader/cep_GenericFileUploader.js"
+            ],
+            "c/cep_TicketFilter": [
+                "cep_TicketFilter/cep_TicketFilter.js"
+            ],
+            "c/cep_assetNotifications": [
+                "cep_assetNotifications/cep_assetNotifications.js"
+            ],
+            "c/cep_case": [
+                "cep_case/cep_case.js"
+            ],
+            "c/cep_caseCreate": [
+                "cep_caseCreate/cep_caseCreate.js"
+            ],
+            "c/cep_caseDetail": [
+                "cep_caseDetail/cep_caseDetail.js"
+            ],
+            "c/cep_caseFilter": [
+                "cep_caseFilter/cep_caseFilter.js"
+            ],
+            "c/cep_caseList": [
+                "cep_caseList/cep_caseList.js"
+            ],
+            "c/cep_caseListDT": [
+                "cep_caseListDT/cep_caseListDT.js"
+            ],
+            "c/cep_caseUpdate": [
+                "cep_caseUpdate/cep_caseUpdate.js"
+            ],
+            "c/cep_fileDownload": [
+                "cep_fileDownload/cep_fileDownload.js"
+            ],
+            "c/cep_genericFileUplaoder": [
+                "cep_genericFileUplaoder/cep_genericFileUplaoder.js"
+            ],
+            "c/cep_lightningnNav": [
+                "cep_lightningnNav/cep_lightningnNav.js"
+            ],
+            "c/cep_loader": [
+                "cep_loader/cep_loader.js"
+            ],
+            "c/cep_loginBody": [
+                "cep_loginBody/cep_loginBody.js"
+            ],
+            "c/cep_loginFooter": [
+                "cep_loginFooter/cep_loginFooter.js"
+            ],
+            "c/cep_loginHeader": [
+                "cep_loginHeader/cep_loginHeader.js"
+            ],
+            "c/cep_logoutIdp": [
+                "cep_logoutIdp/cep_logoutIdp.js"
+            ],
+            "c/cep_myPlantsInfo": [
+                "cep_myPlantsInfo/cep_myPlantsInfo.js"
+            ],
+            "c/cep_myTools": [
+                "cep_myTools/cep_myTools.js"
+            ],
+            "c/cep_mycontractView": [
+                "cep_mycontractView/cep_mycontractView.js"
+            ],
+            "c/cep_notificationItem": [
+                "cep_notificationItem/cep_notificationItem.js"
+            ],
+            "c/cep_notificationToast": [
+                "cep_notificationToast/cep_notificationToast.js"
+            ],
+            "c/cep_notificationToastList": [
+                "cep_notificationToastList/cep_notificationToastList.js"
+            ],
+            "c/cep_plantBreadCrumb": [
+                "cep_plantBreadCrumb/cep_plantBreadCrumb.js"
+            ],
+            "c/cep_pubsubSample": [
+                "cep_pubsubSample/cep_pubsubSample.js"
+            ],
+            "c/cep_ticketComments": [
+                "cep_ticketComments/cep_ticketComments.js"
+            ],
+            "c/cep_ticketDetails": [
+                "cep_ticketDetails/cep_ticketDetails.js"
+            ],
+            "c/cep_ticketTrackingLWC": [
+                "cep_ticketTrackingLWC/cep_ticketTrackingLWC.js"
+            ],
+            "c/footer": [
+                "footer/footer.js"
+            ],
+            "c/header": [
+                "header/header.js"
+            ],
+            "c/pubsub": [
+                "pubsub/pubsub.js"
+            ],
+            "c/testComponent": [
+                "testComponent/testComponent.js"
+            ],
+            "c/testServerInteraction": [
+                "testServerInteraction/testServerInteraction.js"
+            ],
+            "c/Auth0_v2": [
+                "../staticresources/Auth0_v2/Auth0_v2.js"
+            ],
+            "c/D3": [
+                "../staticresources/D3/D3.js"
+            ]
+        }
+    },
+    "include": [
+        "**/*",
+        "../../../../.sfdx/typings/lwc/**/*.d.ts"
+    ],
+    "typeAcquisition": {
+        "include": [
+            "jest"
+        ]
+    }
+}

@@ -1,0 +1,17 @@
+<template>
+    <div class="col-sm-12 text-left"> 
+	  <h1>Customer Energy Portal</h1>
+        <template if:true={showSpinner}>
+            <c-cep_loader></c-cep_loader>
+        </template>
+    	<p class="middle-content">Explore your personalized access to Siemens Power Generation for Operating Gas Turbines, Steam Turbines, Generators and Compressors.</p>
+    	<p class="last-content">Provide personalized connection to our portfolio, Fleet Maintenance insights and the Digital Service Suite</p>
+    </div>
+    <div class="col-sm-12 text-center">
+		<template if:true={showLogin}>
+            <p>
+            	<a href={LOGIN_URL} class="btn btn-warning login-button">Login</a>
+            </p>
+        </template>
+    </div> 
+</template>

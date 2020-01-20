@@ -1,0 +1,3 @@
+<design:component>
+   <design:attribute name="ifaNumber" label="IFA Number" description="Fetches Ifa Numbers from the URL" />
+</design:component>

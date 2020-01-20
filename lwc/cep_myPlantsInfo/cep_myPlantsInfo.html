@@ -1,0 +1,29 @@
+<template>
+
+        <div class="c-container">
+                <lightning-layout>
+                    <lightning-layout-item size={size}>
+                        <!--Tree Hierarchy Display -->
+                        <div class="treebackground">
+                                <div class={updatedCss}>                              
+                                        <lightning-button-icon  icon-name={icon} size="large" variant="bare" onclick={expandAndCollapse}></lightning-button-icon>
+                                </div>
+                                <div class={showHideTree}>
+                                    <lightning-tree items={plantsList} header="Plants" onselect={handleSelect}></lightning-tree>
+                                </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="1" small-device-size="2"></lightning-layout-item>
+                    <lightning-layout-item size={mainPageSize}>
+                        <template if:true={selectedItem}>
+                            <div class="slds-m-top_medium">
+                                <lightning-record-form record-id={selectedItem} object-api-name="Asset" layout-type="Full" mode="readonly" columns="2"></lightning-record-form>
+                            </div>
+                        </template>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+       </div>
+                   
+    
+</template>

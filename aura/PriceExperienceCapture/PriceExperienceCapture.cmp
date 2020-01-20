@@ -1,0 +1,43 @@
+<!--
+ - Created by jens.becker on 11.04.18.
+ -->
+
+<aura:component controller="PriceExperienceCapture" implements="lightning:actionOverride,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickAction"
+                description="This component is used to capture Price Experience records related to an opportunity. Used as an action modal">
+    <!-- get the opportunity record to prepopulate values into the PriceExperience records-->
+    <aura:attribute name="oppRecord" type="Object" />
+    <aura:attribute name="startingObjectId" type="String" description="keeps the id of the object, where we are calling the component from." />
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="simpleRecord" type="Object"/>
+    <aura:attribute name="recordError" type="String"/>
+
+    <aura:attribute name="CompetitionRecords" type="Object[]" description="Keeps the records for the competition of the opportunities to use them in tabs"  />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.simpleRecord}"
+                      targetError="{!v.recordError}"
+    />
+
+
+    <!-- <div class="slds-modal__container" style="width: 100%;max-width: 160rem;!important"> -->
+
+        <lightning:tabset aura:id="MainTabSet" variant="vertical" >
+            <lightning:tab label="SIEMENS Price"  tabindex="0">
+                <c:PriceExperienceRecord priceExperienceRecord="" Opportunity="{!v.simpleRecord}" OpportunityId="{!v.recordId}" />
+            </lightning:tab>
+
+            <!-- iterate over the competitor records, to display for each a tab -->
+            <aura:iteration items="{!v.CompetitionRecords}" var="item" indexVar="i" >
+                <lightning:tab label="{!item.AccountName__c}" tabindex="-1" >
+                    <c:PriceExperienceRecord />
+                </lightning:tab>
+            </aura:iteration>
+
+        </lightning:tabset>
+
+</aura:component>

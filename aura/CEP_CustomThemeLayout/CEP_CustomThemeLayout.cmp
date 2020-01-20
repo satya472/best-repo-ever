@@ -1,0 +1,17 @@
+<aura:component implements="forceCommunity:themeLayout">
+    <aura:attribute name="search" type="Aura.Component[]"/>
+    <aura:attribute name="Footer" type="Aura.Component[]"/>
+    <aura:attribute name="Header" type="Aura.Component[]"/>
+    <aura:attribute name="Content" type="Aura.Component[]"/>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-1">
+             {!v.Header}
+        </div>
+        <div class="slds-col slds-size_1-of-1">
+            {!v.Content}
+        </div>
+        <div class="slds-col slds-size_1-of-1">
+            {!v.Footer}
+        </div>
+    </div> 
+</aura:component>

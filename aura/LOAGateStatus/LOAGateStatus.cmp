@@ -1,0 +1,27 @@
+<!--
+ - Created by jens.becker on 17.04.18.
+ -->
+
+<aura:component description="LOAGateStatus" controller="LOAGateStatusController" 
+                implements="flexipage:availableForRecordHome,force:hasRecordId" access="public">
+    <aura:attribute name="statusList" type="List" default="PS PG BRC2,Test LOA gate" 
+                    description="This list keeps the LoA gates from the related approval topics gates in sequencual order" />
+    <aura:attribute name="loARecord" type="LOAReport__c" description="The record of the object to show" access="public"/>
+    <aura:attribute name="record" type="LOAReport__c"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    
+    <force:recordData aura:id="recordLoaderLoA" recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetFields="{!v.loARecord}"
+                      targetRecord="{!v.record}"
+                      />
+    
+    
+   <div class="pa-card slds-card  large branding-path runtime_sales_pathassistantPathAssistantCard runtime_sales_pathassistantPathAssistantCardDesktop" >
+        <lightning:progressIndicator aura:id="ProgressLoa" type="path" currentStep="{!v.loARecord.Current_Gate__c}"  
+                                     title="LoA Approval Steps" class="slds-m-right--medium">
+            <lightning:progressStep label="In Review" value="In Review"/>
+        </lightning:progressIndicator>
+   </div>
+</aura:component>

@@ -1,0 +1,86 @@
+<!--
+  Created By: Rupinder Kaur
+  Description: Componetn displays the health of a record based on few Parameters.
+-->
+<aura:component controller="DisplayRecordHealth_Cont" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" access="global" >
+    
+    <!--Design Attributes -->
+    <aura:attribute name="cardTitle" type="String" default="Card Title"/>
+    <aura:attribute name="subTitle" type="String" />
+    <!--Design Attributes -->
+    <aura:attribute name="theme" type="String" default="green"/>
+    <aura:attribute name="size" type="String" default="small"/>
+    <aura:attribute name="healthList" type="list" />
+    <aura:attribute name="greatProg" type="boolean" default="false" />
+    <aura:attribute name="goodProg" type="boolean" default="false" />
+    <aura:attribute name="Prog" type="boolean" default="false" />
+    <aura:attribute name="healthSpinner"  type="boolean" default="false" />
+    <aura:attribute name="value" type="Integer" default="0" />
+    <aura:attribute name="actualCount" type="Integer" default="0" />
+    <aura:attribute name="totalCount" type="Integer" default="0" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:attribute name="showDetails" type="boolean" default="false" />
+    
+    
+    <div class="slds-is-relative"> 
+        <lightning:card title="{!v.cardTitle}" class="slds-item_label"> 
+            <div class="slds-grid slds-wrap">
+                <div class=" slds-align--absolute-center">
+                    
+                    <div class="{! ( v.value > 179 ) ? 'container p50plus '+v.theme+' '+v.size : 'container '+v.theme +' '+v.size }">
+                        <div class="slice">
+                            <div class="bar" style="{! '-webkit-transform: rotate('+v.value+'deg); -moz-transform: rotate('+v.value+'deg); 
+                                                    -ms-transform: rotate('+v.value+'deg); -o-transform: rotate('+v.value+'deg); 
+                                                    transform: rotate('+v.value+'deg); -ms-transform: rotate('+v.value+'deg);'}">
+                            </div>
+                            
+                            <div class="fill">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-size_8-of-12 slds-item_label1 slds-m-left_medium ">
+                    
+                    <aura:if isTrue="{!v.Prog}">
+                        {!$Label.c.Keepgoing}
+                    </aura:if>
+                    <aura:if isTrue="{!v.goodProg}">
+                        {!$Label.c.GoodProgress} 
+                    </aura:if>
+                    <aura:if isTrue="{!v.greatProg}">
+                        {!$Label.c.GreatJob}
+                    </aura:if>
+                    <div class="slds-item_label"> {!v.actualCount}&nbsp;{!$Label.c.OutOf}&nbsp; {!v.totalCount}&nbsp;{!$Label.c.StepsAreCompleted} </div> 
+                </div>
+                
+                <div class="{! v.showDetails == true? 'slds-section slds-is-open': 'slds-section'}">
+                    <h3 class="slds-section__title">
+                        <lightning:buttonIcon iconName="{! v.showDetails == true?'utility:chevronup':'utility:chevrondown'}" variant="bare" size="large" onclick="{! c.expand }" alternativeText="Show/Hide Details" class="slds-iconShow"/>
+                    </h3>
+                    <div aria-hidden="{! v.showDetails == true? 'false':'true'}" class="slds-section__content" id="expando-unique-id">
+                        
+                        <dl class="slds-grid slds-wrap">
+                            <aura:iteration items="{!v.healthList}" var="item">
+                                <dt class="slds-size_1-of-12 slds-icon_margin">
+                                    <lightning:icon iconName="{!item.completed==true?'utility:success':'utility:note'}" alternativeText="Connected" size="x-small" />
+                                </dt>
+                                <dd class="slds-size_10-of-12 slds-truncate" title="{!item.information}">
+                                    <span class="slds-hyphenate">{!item.information}</span>    
+                                </dd>
+                            </aura:iteration>
+                        </dl>
+                        
+                    </div>    
+                </div>
+                
+                
+                
+            </div>
+        </lightning:card> 
+        <!-- Spinner -->   
+        <aura:if isTrue="{!v.healthSpinner}">
+            <lightning:spinner variant="brand" alternativeText="Loading.."/>
+        </aura:if>   
+    </div>    
+</aura:component>

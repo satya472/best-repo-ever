@@ -1,0 +1,22 @@
+.THIS .itemClass{
+   border-bottom: 0.1px solid lightgray;
+   height: 4em;
+}
+.THIS .node{
+    margin-left: 2em;
+}
+.THIS .slds-m-left_large{
+    margin-left: 1.8rem;
+}
+.THIS .slds-tree__item-meta{
+    color:#FFF;
+}
+.THIS .slds-has-flexi-truncate{
+    margin-top:-0.9em;
+}
+.THIS.selectedItem{
+    background-image: linear-gradient(to left,rgb(16, 139, 168),#5DBCD2);
+}
+.THIS .slds-tree__item-label{
+    font-size:1.2em;
+}

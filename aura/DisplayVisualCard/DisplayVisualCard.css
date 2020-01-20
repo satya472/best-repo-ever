@@ -1,0 +1,15 @@
+.THIS .myLegend {
+    display: block;
+    text-align: center;
+    /*margin-top:-18%;*/
+}
+.THIS .mediumInteraction{
+    background: orange;
+}
+.THIS .lowInteraction{
+    background: red;
+}
+.THIS .unknownInteraction{
+    border : thick red dashed;
+    background: white;
+}

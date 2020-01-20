@@ -1,0 +1,24 @@
+<aura:component access="global" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction">
+    
+    <aura:if isTrue="{!$Browser.formFactor != 'PHONE'}">
+        <ltng:require styles="{!$Resource.ModalWindowExpand}" /> 
+    </aura:if>
+    
+    <!--Aura Attributes--> 
+    <aura:attribute name="isOpen" type="boolean" default="true"/>
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    <aura:attribute name="meetingRecord" type="Object" description="A simplified view record object to be displayed"/>
+    
+    <force:recordData aura:id="forceRecord"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.meetingRecord }"
+                      mode="VIEW"/>
+    
+    <aura:if isTrue="{!v.isOpen}">        
+        <c:GenericRecordSelector isOpen="{!v.isOpen}" controllerName="MeetingReportOpportunityController" modalName="MRO"  
+                                 record="{!v.meetingRecord}" ModalTitle="Add Opportunities"/> 	
+    </aura:if>
+</aura:component>

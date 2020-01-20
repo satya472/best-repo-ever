@@ -1,0 +1,100 @@
+<!--
+ Created By : Naveen Kumar G
+ Description : Components to fecth matched Deviations applicable for the quote and display them and allows us to 
+      select Deviation and create Approval topics
+-->
+<aura:component controller="FetchDeviationRecords" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:appHostable" access="global" >
+    <!-- Full List of Data -->
+    <aura:attribute name="existList" type="list" />
+    <aura:attribute name="nonExistingList" type="list" />
+    <aura:attribute name="mydata" type="object" />
+    <aura:attribute name="mycolumn" type="object" />
+    <aura:attribute name="optionsLst" type="list" />
+    <aura:attribute name="fieldsLst" type="list" />
+    <aura:attribute name="selectedLst" type="object[]" />
+    <aura:attribute name="targetParent" type="object" />
+    <aura:attribute name="fetchValue" type="string" />
+    <aura:attribute name="frameQuery" type="string" />
+    <aura:attribute name="recObject" type="object" />
+    <aura:attribute name="recordId" type="string" />
+    <aura:attribute name="sObjectName" type="string" />
+    <!-- Attribute for displaying the Loading spinner -->
+    <aura:attribute name="load" type="boolean" default="false" />
+    <aura:attribute name="recCreateSpinner" type="boolean" default="false" />
+    
+    <!-- design Attributes -->
+    <aura:attribute name="CardTitle" type="string" default="Card Title" />
+    <aura:attribute name="object" type="string"/>
+    <aura:attribute name="AdditionalFilter" type="String" default="" />
+    <aura:attribute name="fieldSetName" type="String" />
+    <aura:attribute name="filterBy" type="string"/>
+    <aura:attribute name="filterById" type="string"/>
+    <aura:attribute name="TargetFieldId" type="string"/>
+    <aura:attribute name="TargetParentField" type="string"/>
+    <aura:attribute name="TargetReportField" type="string"/>
+    <aura:attribute name="SuccessMessage" type="string"/>
+    <aura:attribute name="DisplayList" type="string"/>
+    <aura:attribute name="WithTargetRecords" type="string"/>
+    <aura:attribute name="WithOutTargetRecords" type="string"/>
+    <aura:attribute name="ButtonLabel" type="string"/>
+    <aura:attribute name="QueryString" type="string"/>
+    <aura:attribute name="RecordFilters" type="string"/>
+    
+    
+    
+	<aura:handler name="init" value="{!this}" action="{!c.init}" />    
+    
+    <lightning:card title="{!v.CardTitle}" >  
+        <div class="slds-is-relative">
+            <div class="c-container" name="test">
+                <lightning:layout horizontalAlign="space" multipleRows="true">
+                    <lightning:layoutItem flexibility="auto" size="10" padding="around-small">
+                        <aura:if isTrue="{!!empty(v.filterBy)}"> 
+                            <lightning:layout horizontalAlign="end" multipleRows="true">
+                                <aura:iteration items="{!v.optionsLst}" var="item"> 
+                                    <lightning:layoutItem flexibility="auto" size="6" smallDeviceSize="3" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small"> 
+                                        {!item.columnName}
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" size="6" smallDeviceSize="3" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small"> 
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-select_container">
+                                                <select id="{!item.apiName}" class="slds-select" name="selectList" onchange="{!c.filterRecords}">
+                                                    <option value="All">All</option>
+                                                    <aura:iteration items="{!item.fieldByFieldPickList}" var="pickItem">
+                                                        <option text="{!pickItem.label}" value="{!pickItem.value}" />
+                                                    </aura:iteration>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </lightning:layoutItem>
+                                </aura:iteration> 
+                            </lightning:layout>     
+                        </aura:if>
+                    </lightning:layoutItem>    
+                    <lightning:layoutItem flexibility="auto" size="2" padding="around-small">
+                        <aura:if isTrue="{!v.mydata.length > 0}" > 
+                            <lightning:button variant="brand" label="{!v.ButtonLabel}" iconPosition="Right" onclick="{! c.handleClick }" />
+                        </aura:if>
+                    </lightning:layoutItem>                     
+                </lightning:layout>
+            </div>   
+            
+            <!-- Spinner -->
+            <lightning:spinner aura:id="relatedSpinner" variant="brand" class="slds-hide"/>
+        </div>
+
+        <lightning:card title="{!v.WithOutTargetRecords}">
+            <lightning:datatable data="{!v.mydata}" columns="{!v.mycolumn}"  
+                                 onrowselection="{!c.editRecord}" keyField="Id" />
+            <lightning:spinner class="{!v.recCreateSpinner?'slds-show':'slds-hide'}" variant="brand" alternativeText="Loading.." />
+        </lightning:card>
+        
+        <aura:if isTrue="{!v.DisplayList}" > 
+            <lightning:card title="{!v.WithTargetRecords}">
+                <lightning:datatable data="{!v.existList}" columns="{!v.mycolumn}"  
+                                     hideCheckboxColumn="true" keyField="Id" />
+            </lightning:card>
+        </aura:if> 
+        
+    </lightning:card>     
+</aura:component>

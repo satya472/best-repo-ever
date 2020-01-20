@@ -1,0 +1,21 @@
+<!--Lightning Component for Pagination-->
+<aura:component >
+    
+    <!--Aura Attributes-->  
+    <aura:attribute name="currentPageNumber" type="Integer" />
+    <aura:attribute name="maxPageNumber" type="Integer" />
+    
+    <!--Aura Event--> 
+    <aura:registerEvent name="pageChange" type="c:PaginationEvent" />
+    
+    <!--Pagination begins-->
+    <div class="slds-align_absolute-center slds-m-top_small">
+        <lightning:buttonGroup>
+            <lightning:button value="First" label="&lt;&lt;" onclick="{!c.paginationClick}" disabled = "{!v.currentPageNumber == 1}" />
+            <lightning:button value="Prev" label="&lt;" onclick="{!c.paginationClick}" disabled = "{!v.currentPageNumber == 1}"/>
+            <lightning:button label="{! 'Page '+v.currentPageNumber + ' of '+ v.maxPageNumber}" />
+            <lightning:button value="Next" label="&gt;" onclick="{!c.paginationClick}" disabled = "{!v.currentPageNumber == v.maxPageNumber}"/>
+            <lightning:button value="Last" label="&gt;&gt;" onclick="{!c.paginationClick}" disabled = "{!v.currentPageNumber == v.maxPageNumber}"/>
+        </lightning:buttonGroup>
+    </div>
+</aura:component>

@@ -1,0 +1,38 @@
+<template>
+        <div class="slds-m-top_small slds-m-bottom_small  slds-p-bottom_large slds-border_bottom">
+            <lightning-layout horizontal-align={spread} multiple-rows>
+                    <lightning-layout-item flexibility="auto"  padding="around-small" size="12"  large-device-size="3" medium-device-size="3" small-device-size="3">
+                            <lightning-combobox
+                                name="ticketType"
+                                label="Type" 
+                                options={typeOptions}       
+                                variant = "label-hidden"      
+                                onchange={handleChange}                  
+                                placeholder="Filter tickets by type"  >
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="around-small" size="12" large-device-size="3" medium-device-size="3"  small-device-size="3" >
+                           
+                        <lightning-combobox
+                            name="status"
+                            label="Status" 
+                            options={statusOptions} 
+                            variant = "label-hidden"                        
+                            placeholder="Filter tickets by status">
+                        </lightning-combobox>
+            
+                       </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small" size="12" large-device-size="4" medium-device-size="4" small-device-size="4">
+                    <lightning-input type="search" 
+                        label="Search"   
+                        variant = "label-hidden"                 
+                        placeholder="Search Name, Created Date, Unit"
+                        name="search"> </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small" size="12" medium-device-size="2"  small-device-size="2">
+                    <lightning-button class="slds-m-top_medium" variant="brand" label="Create Ticket"
+                     title="Create Ticket" ></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </template>

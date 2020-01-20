@@ -1,0 +1,50 @@
+<template>
+  <div class="conent" style="margin-top: 25px;">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <template for:each={columns} for:item="column">
+              <th key={column.id}>{column.label}</th>
+            </template>
+          </tr>
+        </thead>
+        <tbody>
+          <template for:each={caseListArr} for:item="caseList">
+            <tr key={caseList.euid}>
+              <td>{caseList.euid}</td>
+              <td>{caseList.plant_part}</td>
+              <td>{caseList.mrtitle}</td>
+              <td>{caseList.system}</td>
+              <td>{caseList.product}</td>
+              <td>{caseList.contract}</td>
+              <td>{caseList.submittedbat}</td>              
+              <td>{caseList.mrstatus}</td>
+              <td>
+                <a href="#" onclick={editCaseDetail} data-id={caseList.mrid} if:true={caseList.displayEditButton}>
+                <i class="fas fa-edit"></i>
+                </a>
+                <a href="#" onclick={getCaseDetail} data-id={caseList.mrid}>
+                <i class="fas fa-eye"></i>
+                </a>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <template if:false={loaded}>
+    <div class="overlay slds-is-relative">
+      <div class="demo-only" style="height: 10rem;">
+        <div role="status" class="slds-spinner slds-spinner_large slds-spinner_brand">
+          <span class="slds-assistive-text">Loading</span>
+          <div class="slds-spinner__dot-a"></div>
+          <div class="slds-spinner__dot-b"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <c-cep_case-detail record-id={recordId}></c-cep_case-detail>
+  <c-cep_case-update record-id={recordId}></c-cep_case-update>
+</template>

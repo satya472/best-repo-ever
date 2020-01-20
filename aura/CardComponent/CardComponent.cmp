@@ -1,0 +1,19 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+<div class="c-container">
+        <lightning:layout horizontalAlign="center" multipleRows="true">
+            <!--<lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4">
+               <c:LinkCardComponent linkTo = "https://qa-siemens.cs17.force.com/cep/CEP_NewLandingPage" imageName="CEP1.jpg" linkName="CEP OLD" />
+            </lightning:layoutItem> 
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4">
+                <c:LinkCardComponent linkTo = "https://dcs-services.mindsphere.siemens.com/" imageName="CEP1.jpg" linkName="One Energy Portal" />
+            </lightning:layoutItem> 
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4">
+                <c:LinkCardComponent linkTo = "https://wwwtest-cp4ic.siemens.com" imageName="CEP1.jpg" linkName="PSCD Portal" />
+            </lightning:layoutItem>-->
+             <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="4">
+                <c:LinkCardComponent linkTo = "/JEP/s/track-and-trace" imageName="Track_Trace.jpg" linkName="Track &amp; Trace" />
+            </lightning:layoutItem> 
+        </lightning:layout>
+    </div>
+</aura:component>

@@ -1,0 +1,10 @@
+.hoverclass{
+    cursor: pointer;
+}
+.mainCls{
+    background-color: rgb(235, 240, 245);
+    padding:2em;
+}
+.secondaryCls{
+    background-color: #FFF;
+}

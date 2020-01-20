@@ -1,0 +1,7 @@
+<aura:component extends="cms:LightningTemplateController" access="global">
+	<div>
+        <div>This is static text</div>
+        <div>{!v.contentAttrs.title}</div>
+        <div>{!v.contentProperties.Name}</div>
+    </div>
+</aura:component>

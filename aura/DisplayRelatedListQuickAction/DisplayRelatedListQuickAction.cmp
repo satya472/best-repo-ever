@@ -1,0 +1,49 @@
+<!--
+  Created By: Phaniram Upalapati
+  Description : ReusableWrapper Component for DisplayRelatedList component in QuickActions So that the DisplayRelatedList
+                Component can be show in Mobile.
+-->
+<aura:component controller="CustomMetadataFetch_Cont">
+	
+    <!-- For Expanding the modal window and displaying (overriding existing quickaction window size) -->
+    <ltng:require styles="{!$Resource.ModalWindowExpand}" />
+    
+    <aura:attribute name="metaDataName" type="String" required="true"/>
+    <aura:Attribute name="recordId" type="string" required="true"/>
+    <aura:Attribute name="sObjectName" type="string" required="true"/>
+    
+    <aura:attribute name="metaDataDetails" type="object" />
+    <aura:attribute name="errorMsg" type="string" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!!empty(v.metaDataDetails)}">
+        
+        <!-- Cancel button on the component in Mobile So that onclick of that Cancel button it will re-direct
+             to record on which it is invoked -->
+        <aura:if isTrue="{! or($Browser.isPhone,$Browser.isTablet)}">
+              <lightning:button label="Cancel" onclick="{!c.navigateToSObject}"/>
+        </aura:if>
+
+        <c:DisplayRelatedList CardTitle="{!v.metaDataDetails.CardTitle__c}"
+                              editMode="{!v.metaDataDetails.EditMode__c}"
+                              object="{!v.metaDataDetails.ChildObjectAPIName__c}"
+                              createNewRecord="{!v.metaDataDetails.CreateNewRecord__c}"
+                              ParentObjectIdField="{!v.metaDataDetails.ParentFieldAPINameOfCurrentRecord__c}"
+                              ParentObjectRelation="{!v.metaDataDetails.ParentFieldAPINameOnChildObject__c}"
+                              sortedBy="{!v.metaDataDetails.SortByFieldAPIName__c}"
+                              sortedDirection="{!v.metaDataDetails.SortDirection__c}"
+                              fieldSetName="{!v.metaDataDetails.FieldSetName__c}"
+                              filterBy="{!v.metaDataDetails.FilterBy__c}"
+                              AdditionalFilter="{!v.metaDataDetails.FilterTargetObjectRecordsBy__c}"
+                              hyperlinkFieldsName="{!v.metaDataDetails.RelatedListFieldId__c}"
+                              recordDisplayLimit="{!v.metaDataDetails.DisplayRecordsLimit__c}"
+                              selectable="{!v.metaDataDetails.RowsSelectable__c}"
+                              recordId = "{!v.recordId}"
+                              sObjectName = "{!v.sObjectName}"/>
+        <aura:set attribute="else">
+          <p>{!v.errorMsg}</p>
+        </aura:set>
+    </aura:if>
+	
+</aura:component>

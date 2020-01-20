@@ -1,0 +1,30 @@
+<!--
+   Created By : Jens, Phaniram upalapati
+   Description : Component Displays the Details received in a tabular Row format.
+                 If the details belongs to Header of a Table then its related CSS are added
+                 or if the Cell must be hyperLinked then corresponding component 
+                 is loaded. If nothing is mentioned then the data is displayed as
+                 plain cell value.
+-->  
+<aura:component >
+	<aura:attribute name="row" type="Object[]"/>
+    <aura:attribute name="isHeader" type="Boolean"/>
+
+    <tr>
+        <aura:iteration var="cell" items="{!v.row}">
+            <aura:If isTrue="{!v.isHeader}">
+                <th scope="col" class="cell slds-cell-wrap">{!cell.fieldLabel}</th>
+                <aura:set attribute="else">
+                    <td  class="cell slds-cell-wrap">
+                    	<aura:If isTrue="{!cell.isHyperLink}">
+                            <c:sObjectHyperLink sObjectId="{!cell.fieldValue}" hyperlinkLabel="{!cell.fieldLabel}"/>
+                        	<aura:set attribute="else">{!cell.fieldLabel}</aura:set>                        
+						</aura:If>                        
+                    </td>  
+                </aura:set>
+            </aura:If>
+            
+        </aura:iteration>
+    </tr>       
+
+</aura:component>

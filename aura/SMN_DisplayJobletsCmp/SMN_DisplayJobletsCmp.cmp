@@ -1,0 +1,102 @@
+<!--
+@name   SMN_DisplayJobletsCmp
+@author Sara elalaoui (selalaoui@salesforce.com)
+@since  26/06/2018  
+@desc   Used to display worklets list in a record page
+  
+@history
+-->
+<aura:component controller="SMN_DisplayJobletsController"  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:appHostable" access="global">
+	
+    <!--Attributes-->
+    <aura:attribute name="recordId" type="string"></aura:attribute>
+    <aura:attribute name="sObjectName" type="String" />
+    <aura:attribute name="currentRecord" type="sObject"></aura:attribute>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="workPackageData" type="Object"/>
+    <aura:attribute name="workPackageColumns" type="List"/>
+    <aura:attribute name="isLoading" type="boolean" default="false" /> 
+    <aura:attribute name="contextRelatedRecordName" type="String" description="Select a related record containing a field of the context records" />
+    <aura:attribute name="parentChildRelatedFieldAPI" type="string" description="Field API name on Child Object related to Parent" />
+
+    <!--to open the worklet view modal-->
+    <aura:attribute name="openWorkletModal" type="boolean" default="false" />
+    <aura:attribute name="worklet" type="Worklet_Item__c" description="the worklet in the chosen row"></aura:attribute>
+    
+    <!--Field set for columns to display in the table-->
+    <aura:attribute name="fieldSetName" type="String" description="The field set for the records co call for worklets"  default="WorkletFields" required="true" />
+    <aura:attribute name="fieldSetNameWorkPackage" type="String" description="The field set for the records co call for work packages"  default="WorkPackageFields" required="true" />
+    
+    <!--sorting attributes-->
+    <aura:attribute name="sortedBy" type="string" default="Name" />
+    <aura:attribute name="sortedDirection" type="string" default="desc"  />
+    
+    <!--attribute to display the modal for work packages-->
+    <aura:attribute name="openWorkPackageModal" type="boolean" default="false" />
+    
+    <aura:handler name="reloadWorklets" event="c:SMN_ReloadWorkletsListEVT" action="{!c.doInit}"/>
+    
+    <!--Lightning Metadata Service to get current record fields-->
+    <aura:if isTrue="{!v.sObjectName=='Opportunity'}">
+        <force:recordData aura:id="loader"
+                          fields="Id,Name,CreatedById,CreatedBy.Name,StageName,OwnerId"
+                          layoutType="FULL"
+                          mode="EDIT"
+                          recordId="{!v.recordId}"
+                          targetFields="{!v.currentRecord}"
+                          recordUpdated="{!c.doInit}"/>
+        
+        <aura:set attribute="else">
+            <force:recordData aura:id="loader"
+                              fields="Id,Name,CreatedById,CreatedBy.Name"
+                              layoutType="FULL"
+                              mode="EDIT"
+                              recordId="{!v.recordId}"
+                              targetFields="{!v.currentRecord}"
+                              recordUpdated="{!c.doInit}"/>
+        </aura:set>
+    </aura:if>
+    
+    <lightning:card iconName="custom:custom25">
+        <lightning:spinner variant="brand" size="medium" class="{!(v.isLoading?'slds-show':'slds-hide')}"/>
+        <!--Title -->
+        <aura:set attribute="title">
+            <p class="slds-card__header-link">Worklets ({!v.data.length})</p>
+        </aura:set>
+        <!--The worklets checklist -->
+        <p class="slds-p-horizontal_small">
+            <aura:if isTrue="{!v.data != null}">
+                <aura:if isTrue="{!v.data.length != 0}">
+                    <lightning:datatable
+                                         columns="{! v.columns }"
+                                         data="{! v.data }"
+                                         keyField="id"
+                                         hideCheckboxColumn="true"
+                                         onrowaction="{! c.handleRowAction }"
+                                         sortedBy="{! v.sortedBy }"
+                                         sortedDirection="{! v.sortedDirection }"
+                                         onsort="{! c.updateColumnSorting }"
+                                         />
+                    <aura:set attribute="else">
+                        No worklet is available.
+                    </aura:set>
+                </aura:if>
+                <aura:set attribute="else">
+                    No worklet is available.
+                </aura:set>
+            </aura:if>
+            
+            <br/>
+            <lightning:buttonIcon iconName="utility:add"  alternativeText="Add worklets" onclick="{!c.openWorkpackagesListModal}" />
+        </p>
+    </lightning:card>
+    
+    <aura:if isTrue="{!v.openWorkletModal}">
+       <c:SMN_DisplayJobletDetails worklet="{!v.worklet}" openWorkletModal="{!v.openWorkletModal}" ></c:SMN_DisplayJobletDetails>
+    </aura:if>
+    
+     <aura:if isTrue="{!v.openWorkPackageModal}">
+       <c:SMN_DisplayWorkPackagesCmp currentRecord="{!v.currentRecord}"  recordId="{!v.recordId}" workPackageColumns="{!v.workPackageColumns}" workPackageData="{!v.workPackageData}" openWorkPackageModal="{!v.openWorkPackageModal}" ></c:SMN_DisplayWorkPackagesCmp >
+    </aura:if>
+</aura:component>

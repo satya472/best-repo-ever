@@ -1,0 +1,6 @@
+<design:component>
+    <design:attribute name="showIcons" label="showIcons" description="Show Icons on Card"/>	
+    <design:attribute name="showOTMRole" label="showOTMRole" description="Show OTM Role"/>	
+    <design:attribute name="showCategory" label="showCategory" description="Show Category Card"/>	
+    <design:attribute name="showEditOptions" label="showEditOptions" description="Show Edit Icons on Card"/>	    
+</design:component>

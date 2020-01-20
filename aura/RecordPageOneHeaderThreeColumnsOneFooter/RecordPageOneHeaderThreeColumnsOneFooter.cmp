@@ -1,0 +1,36 @@
+<aura:component implements="lightning:recordHomeTemplate" description="One header, three columns, one footer">
+    <aura:attribute name="header" type="Aura.Component[]" />
+    <aura:attribute name="column1" type="Aura.Component[]" />
+    <aura:attribute name="column2" type="Aura.Component[]" />
+    <aura:attribute name="column3" type="Aura.Component[]" />
+    <aura:attribute name="footer" type="Aura.Component[]" />
+    <div>
+        <lightning:layout verticalAlign="stretch">
+            <lightning:layoutItem flexibility="grow">
+                {!v.header}
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout pullToBoundary="small" multipleRows="true" verticalAlign="stretch">
+            <lightning:layoutItem padding="around-small" mediumDeviceSize="4" size="12">
+              <div class="slds-scrollable_y ItemClass">
+                {!v.column1}
+              </div>  
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" mediumDeviceSize="4" size="12">
+                <div class="slds-scrollable_y ItemClass">
+                {!v.column2}
+                </div>  
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" mediumDeviceSize="4" size="12">
+                <div class="slds-scrollable_y ItemClass">
+                {!v.column3}
+                </div>    
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout verticalAlign="stretch">
+            <lightning:layoutItem flexibility="grow">
+                {!v.footer}
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>

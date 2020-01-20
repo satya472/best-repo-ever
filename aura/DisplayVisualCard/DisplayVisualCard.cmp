@@ -1,0 +1,209 @@
+<!--
+  Description : Component displays the Buying Center member or Opportunity Team Member details in Card format.
+                This Component will be used as part of Buying Center member Component for displaying the details.
+                The component takes recordId and ObjectName as input parameters.
+-->
+<aura:component controller="BuyingCenterController" access="global" 
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome" >
+    
+    <!-- Buying Center Member Details -->
+    <aura:attribute name="member" type="object" default="{}"/>
+    <aura:attribute name="role" type="string"  access="private" />
+    <aura:attribute name="adaptability" type="string"  access="private"/>
+    <aura:attribute name="status" type="string"  access="private"/>
+    <aura:attribute name="coverage" type="string"  access="private" />
+    <aura:attribute name="picture" type="string" default="" />
+    <aura:attribute name="isEdit" type="boolean" default="false"/>   
+    <aura:attribute name="isDelete" type="boolean" default="false"/>   
+    <aura:attribute name="delMemberId" type="String"/>   
+    <aura:attribute name="errorMessage" type="String"/>   
+    <aura:attribute name="selectedBCM" type="String"/>
+    <aura:attribute name="ParentType" type="String" default="Buying_Center_Member__c"/>
+    <aura:attribute name="attributeFields" type="List"/>
+    
+    <!-- Attributes for fetching the record Details -->   
+    <aura:attribute name="recordId" type="string" required="true"/>
+    <aura:attribute name="objName" type="string" required="true"/>
+    <aura:attribute name="contactImageDocId" type="string" />
+    <aura:attribute name="documentRecord" type="Object" />
+    
+    <aura:attribute name="errorObj" type="string" access="private"/>
+    
+    <!--data Attributes-->
+    <aura:attribute name="showIcons" type="boolean" default="false"/>  
+    <aura:attribute name="showOTMRole" type="boolean" default="false"/>
+    <aura:attribute name="showCategory" type="boolean" default="true"/>
+    <aura:attribute name="showEditOptions" type="boolean" default="true"/>
+    
+    <force:recordData aura:id="teamMemData"
+                      recordId="{!v.recordId}"
+                      fields="Id,Name,Buying_Role__c, Adaptability__c, Our_Status__c, Category__c, Status__c,
+                              Contact_Coverage__c, Contact__c, Contact__r.Name, Contact__r.Picture__c, User__r.Name,
+                              User__r.SmallPhotoUrl, User__r.FullPhotoUrl"
+                      targetFields="{!v.member}"
+                      targetError="{!v.errorObj}"
+                      mode="VIEW"
+                      recordUpdated="{!c.doInit}"
+                      />
+    <aura:if isTrue="{!!empty(v.contactImageDocId)}">            
+        <force:recordData aura:id="documentVersion" 
+                          recordId="{!v.contactImageDocId}"
+                          fields="Id,LatestPublishedVersionId"
+                          mode="VIEW"
+                          targetFields="{!v.documentRecord}"
+                          recordUpdated="{!c.filesRecordData}"
+                          />
+        
+    </aura:if>
+    
+    <div class="slds-card slds-box slds-box_xx-small">
+        <div class="c-container">               
+            <lightning:layout multipleRows="true">
+                
+                <!--Show Picture-->
+                <lightning:layoutItem size="2">
+                    <aura:if isTrue="{!!empty(v.picture)}">
+                        <lightning:avatar src="{!v.picture}" alternativeText="Member Picture" variant="circle" 
+                                          size="large"/>
+                        <aura:set attribute="else">
+                            <lightning:icon iconName="standard:avatar" size="large" alternativeText="Default Picture"
+                                            class="slds-avatar_circle"/>
+                        </aura:set>
+                    </aura:if>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="10">
+                    <lightning:layout multipleRows="true">
+                        
+                        <!--Show Edit Options-->       
+                        <lightning:layoutItem size="9">
+                            <aura:if isTrue="{!v.member.Contact__c != undefined}">{!v.member.Contact__r.Name}
+                                <aura:set attribute="else">{!v.member.User__r.Name}</aura:set>
+                            </aura:if>
+                        </lightning:layoutItem>  
+                        
+                        <aura:if isTrue="{!v.showEditOptions}">
+                            <lightning:layoutItem size="2">
+                                <div onclick="{!c.confirmDeleteBCM}" id="{!v.member.Id}" class="slds-float_right">
+                                    <lightning:icon iconName="utility:delete" alternativeText="Delete" title="Delete" 
+                                                    size="xx-small"/>
+                                </div>
+                                <div onclick="{!c.editBCM}" id="{!v.member.Id}" class="slds-float_right">
+                                    <lightning:icon iconName="utility:edit_form" alternativeText="Edit" title="Edit" 
+                                                    size="xx-small"/> 
+                                </div>
+                            </lightning:layoutItem>
+                        </aura:if>
+                        
+                        <lightning:layoutItem size="11">
+                            <div class="slds-progress-bar slds-progress-bar_circular slds-m-top_xx-small" 
+                                 aria-valuemin="0" aria-valuemax="100" role="progressbar">
+                                <span aura:id="coverageBar" class="slds-progress-bar__value" 
+                                      style="{!'width:' +v.coverage+'%'}">
+                                    <span class="slds-assistive-text">Progress: {!v.coverage+'%'} </span>
+                                </span>
+                            </div>                             
+                        </lightning:layoutItem>   
+                        
+                        <lightning:layoutItem size="6">
+                            <div style="padding-top:5px;">
+                                <aura:if isTrue="{!v.member.Buying_Role__c != undefined}">{!v.member.Buying_Role__c}</aura:if>
+                            </div>
+                        </lightning:layoutItem>  
+                        <lightning:layoutItem size="6"> 
+                            
+                            <!--Show Icons Options-->
+                            <aura:if isTrue="{!v.showIcons}">
+                                <lightning:buttonGroup >
+                                    <lightning:button label="{!v.role}" disabled="true"/>
+                                    <lightning:button label="{!v.adaptability}" disabled="true"/>
+                                    <lightning:button label="{!v.status}" disabled="true"/>
+                                </lightning:buttonGroup>
+                                <aura:set attribute="else">
+                                    <div style="padding-top:5px;">
+                                        <aura:if isTrue="{!v.showCategory}">
+                                            {!v.member.Category__c}<br/>
+                                        </aura:if>
+                                    </div>
+                                </aura:set>
+                            </aura:if>
+                        </lightning:layoutItem>
+                        
+                    </lightning:layout>                        
+                </lightning:layoutItem>                    
+            </lightning:layout>
+        </div>
+    </div>
+    
+    <!--Modal to edit member-->
+    <aura:if isTrue="{!v.isEdit}">
+        <div class="demo-only">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" 
+                     aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_small">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" title="Close" onclick="{!c.closeEditModal}" 
+                                              class="slds-float_right"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Edit Member</h2>
+                    </header>
+                    
+                    <!-- modal body -->
+                    <div class="slds-modal__content" id="modal-content-id-1">  
+                        <aura:if isTrue="{!!empty(v.ParentType)}">
+                            <lightning:recordEditForm aura:id="recordViewForm" 
+                                                      onload="{!c.onLoad}"
+                                                      onsuccess="{!c.onSuccess}"
+                                                      onerror="{!c.closeEditModal}"
+                                                      recordId="{!v.selectedBCM}" 
+                                                      objectApiName="{!v.ParentType}">
+                                <lightning:messages />
+                                <div class="slds-grid slds-grid_align-space slds-box">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <aura:iteration items="{!v.attributeFields}" var="item" indexVar="key">
+                                            <lightning:inputField fieldName="{!item}" />
+                                            <br/>                                            
+                                        </aura:iteration>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:outputField fieldName="Contact__c"/>
+                                    </div>
+                                </div>                                
+                                <div class="slds-m-top_medium modal-footer slds-modal__footer">
+                                    <lightning:button aura:id="submit" variant="brand" type="submit" name="save" label="Save"/>
+                                </div>
+                            </lightning:recordEditForm>
+                        </aura:if>
+                    </div>
+                    <!--/ modal body -->
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>  
+    </aura:if>
+    <!--End of Modal-->
+    
+    <!--Member Deletion Confirmation-->
+    <aura:if isTrue="{!v.isDelete}">
+        <div class="demo-only">
+            <section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-theme_error slds-theme_alert-texture">
+                        <lightning:buttonIcon iconName="utility:close" title="Close" onclick="{!c.cancelDeleteBCM}" 
+                                              class="slds-float_right" variant="bare"/>
+                        <h2 id="prompt-heading-id" class="slds-text-heading_medium slds-hyphenate">Confirm</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">
+                        <p>{!v.errorMessage}</p>
+                    </div>
+                    <footer class="slds-modal__footer slds-theme_default">
+                        <lightning:button variant="neutral" label="Yes" onclick="{!c.deleteBCM}"/>
+                        <lightning:button variant="neutral" label="No" onclick="{!c.cancelDeleteBCM }"/>                    
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>       
+    <!--End of Member Deletion Confirmation-->
+    
+</aura:component>

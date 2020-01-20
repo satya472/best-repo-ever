@@ -1,0 +1,84 @@
+<aura:component controller="TreeMapController" implements="lightning:availableForFlowScreens,force:appHostable,force:hasRecordId,force:lightningQuickAction,flexipage:availableForAllPageTypes" access="global">
+    <!--Aura Attributes--> 
+    <aura:attribute name="ErrorMessage" type="string"/>   
+    <aura:attribute name="jsonResponseLevel1" type="List"/>
+    <aura:attribute name="jsonResponseLevel2" type="List"/>
+    <aura:attribute name="jsonResponseLevel3" type="List"/>
+    <aura:attribute name="spin" type="boolean" default="false" />
+    
+    <!--Design Attributes-->    
+    <aura:attribute name="CardTitle" type="string"/> 
+    <aura:attribute name="varCardTitleIcon" type="string"/>
+    <aura:attribute name="varLessonId" type="String" />    
+    <aura:attribute name="varControllerName" type="String"/>
+    
+    <!--Aura Handlers--> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+
+    <!--Grid Begins-->  
+    <div class="slds-is-relative">
+    <lightning:card title="{!v.CardTitle}" iconName="{!v.varCardTitleIcon}" class="slds-card_boundary"> 
+        <p class="slds-p-horizontal_small">
+            <aura:if isTrue="{!not(empty(v.ErrorMessage))}">
+                <div class="slds-card__body slds-card__body_inner">{!v.ErrorMessage}</div>
+            </aura:if>    
+            
+            <!--For Parent Details Record-->
+            <lightning:layout multipleRows="true">  
+                <aura:iteration items="{!v.jsonResponseLevel1}" var="item">            
+                    <lightning:layoutitem size="{!item.size}" flexibility="auto,no-shrink" padding="horizontal-small">
+                        <aura:if isTrue="{!item.isSelected}">
+                            <lightning:button aura:id="jsonItem" variant="brand" onclick="{!c.onSelectDelete}" value="{!item}" 
+                                              label="{!item.label}" class="slds-container_fluid custombtn" 
+                                              iconName="utility:check"/>   
+                            <aura:set attribute="else">
+                                <lightning:button aura:id="jsonItem" variant="neutral" onclick="{!c.onSelectCreate}" value="{!item}" 
+                                                  label="{!item.label}" class="slds-container_fluid custombtn"/>                           
+                            </aura:set>
+                        </aura:if>
+                    </lightning:layoutitem>
+                </aura:iteration>
+            </lightning:layout>     
+            
+            
+            <!--For Parent Records-->
+            <lightning:layout multipleRows="true">  
+                <aura:iteration items="{!v.jsonResponseLevel2}" var="item">            
+                    <lightning:layoutitem size="{!item.size}" flexibility="auto,no-shrink" padding="horizontal-small">
+                        <aura:if isTrue="{!item.isSelected}">
+                            <lightning:button aura:id="jsonItem" variant="brand" onclick="{!c.onSelectDelete}" value="{!item}" 
+                                              label="{!item.label}" class="slds-container_fluid custombtn" iconName="utility:check"/>                           
+                            <aura:set attribute="else">
+                                <lightning:button aura:id="jsonItem" variant="neutral" onclick="{!c.onSelectCreate}" value="{!item}" 
+                                                  label="{!item.label}" class="slds-container_fluid custombtn"/>                           
+                            </aura:set>
+                        </aura:if>
+                    </lightning:layoutitem>
+                </aura:iteration>
+            </lightning:layout>
+            
+            <!--For Child Records-->
+            <lightning:layout multipleRows="true">  
+                <aura:iteration items="{!v.jsonResponseLevel3}" var="item">            
+                    <lightning:layoutitem size="{!item.size}" flexibility="auto,no-shrink" padding="horizontal-small">
+                        <aura:if isTrue="{!item.isSelected}">
+                            <lightning:button aura:id="jsonItem" variant="brand" onclick="{!c.onSelectDelete}" value="{!item}" 
+                                              label="{!item.label}" class="slds-container_fluid custombtn" iconName="utility:check"/>                           
+                            <aura:set attribute="else">
+                                <lightning:button aura:id="jsonItem" variant="neutral" onclick="{!c.onSelectCreate}" value="{!item}" 
+                                                  label="{!item.label}" class="slds-container_fluid custombtn"/>                           
+                            </aura:set>
+                        </aura:if>
+                    </lightning:layoutitem>
+                </aura:iteration>
+            </lightning:layout>
+        </p>
+    </lightning:card>
+     
+     <!--spinner -->
+    <lightning:spinner variant="brand" class="{!v.spin?'slds-show':'slds-hide'}" alternativeText = "loading...." />
+
+   </div> 
+    <!--Grid End-->
+</aura:component>

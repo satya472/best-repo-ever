@@ -1,0 +1,111 @@
+<!--
+    Description: This component is used to display single notification item and the user can perform actions on the item
+-->
+<template>
+    <div class="slds-is-relative">
+
+        <div class={cssClass}>
+            <h3 class={headerCss} onclick={handleClick}>
+                <div class="fullStretch">
+
+                    <lightning-layout horizontal-align="space" multiple-rows="true">
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="1">
+                                <lightning-layout horizontal-align="space" multiple-rows="true">
+                                        <lightning-layout-item size="12">
+                                                <div class="slds-text-heading_large">
+                                                        <b>{date}</b>
+                                                </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12">{month}</lightning-layout-item>
+                                        <lightning-layout-item size="12">{year}</lightning-layout-item>
+                                </lightning-layout>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="2">
+                            <!--Asset Name-->
+                            <div>
+                                <b>{assetName}</b>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6">
+                            <!--AssetType and Title-->
+                            <div>
+                                <lightning-layout horizontal-align="space" multiple-rows="true">
+                                    <lightning-layout-item size="12" class="slds-m-bottom_xx-small slds-m-top_small">
+                                        <template for:each={types} for:item="item">
+                                            <span
+                                                class="slds-box slds-box_xx-small slds-m-top_xx-small slds-m-right_xx-small"
+                                                key={item}>
+                                                {item}
+                                            </span>
+                                        </template>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12">
+                                        <b>{notificationRecord.Name}</b>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+
+                        </lightning-layout-item>
+                        <lightning-layout-item size="9" small-device-size="9" medium-device-size="2"
+                            class="marginClass">
+                            <!--Acknowledge button-->
+                            <div if:true={showAckBtn}>
+                                <lightning-button label="Acknowledge" variant="brand" class="slds-m-top_small"
+                                    onclick={acknowledgeClick}>
+                                </lightning-button>
+                            </div>
+                            <div if:false={showAckBtn}>
+                                <lightning-button variant="brand" name="acknowledged" icon-name="utility:check"
+                                    label="Acknowledged" disabled></lightning-button>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="3" small-device-size="3" medium-device-size="1" class="marginClass">
+                            <!--Notification Read or not-->
+                            <div if:true={notificationRecord.read} class="slds-text-align_center">
+                                <lightning-button-icon icon-name="utility:email_open" variant="bare" size="medium" alterantive-text="read"></lightning-button-icon>
+                            </div>
+                            <div if:false={notificationRecord.read} class="slds-text-align_center">
+                                    <lightning-button-icon icon-name="utility:email" variant="bare" size="medium" alterantive-text="notread"></lightning-button-icon>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+
+            </h3>
+            <div aria-hidden="false" class={contentCss}>
+                <lightning-record-form fields={layoutFields} record-id={notificationRecord.Id} mode="readonly"
+                    object-api-name="CEP_AssetNotification__c" columns="2"></lightning-record-form>
+
+                <div class="slds-text-heading_medium slds-m-top_medium">
+                    <b>Related Files</b>
+                </div>
+                <template if:true={filesList}>
+                    <div class="slds-box slds-box_small">
+                        <lightning-layout horizontal-align="space" multiple-rows="true">
+                            <template for:each={filesList} for:item="item">
+                                <lightning-layout-item size="12" small-device-size="6" medium-device-size="3"
+                                    key={item.Id} padding="around-small">
+                                    <c-cep_file-download content-version={item}></c-cep_file-download>
+                                    <!-- <img src={item.link} height="100" width="100" />
+                                    <a href={item.link}>Download</a>-->
+                                </lightning-layout-item>
+                            </template>
+
+                        </lightning-layout>
+                    </div>
+                </template>
+                <template if:false={filesList}>
+                    <div class="slds-box slds-box_small">
+                        No Files attached.
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <template if:true={showSpinner}>
+            <lightning-spinner variant="brand" size="medium" alternative-text="loading.."></lightning-spinner>
+        </template>
+    </div>
+
+</template>

@@ -1,0 +1,9 @@
+.THIS .inputFieldWidth {
+    width:150px;
+}
+
+.THIS .blank_row
+{
+    height: 32px !important; /* overwrites any other rules */
+    background-color: #FFFFFF;
+}

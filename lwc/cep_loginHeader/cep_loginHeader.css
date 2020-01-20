@@ -1,0 +1,50 @@
+li.list-group-item {
+    display: inline;
+    border:none;
+}
+.collapse:not(.show) {
+     display: block; 
+}
+.list-group{
+	display: inherit !important;
+}
+img.logo {
+	zoom: 50%;
+	padding-left: 15px;
+}
+a {
+  color: #FFFFFF;
+}
+@media only screen and (max-width: 600px) {
+	li.list-group-item {
+		display: block;
+	}
+	.custom_button {
+		font-size: 13px;
+	}
+	img.logo {
+		zoom: 30%;
+	}
+	
+}
+@media only screen and (max-width: 359px) {
+	.custom_button {
+		font-size: 13px;
+	}
+	img.logo {
+		zoom: 30%;
+	}
+}
+
+.custom_button {
+    background: #248f8f !important; 
+    color: #FFFFFF !important;
+	border: 0px !important;
+}
+.custom_button:hover {
+	background-color:#00b3b3 !important;
+    color: #FFFFFF !important;	
+}
+.header_buttons {
+	z-index: 1;
+}

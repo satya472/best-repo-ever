@@ -1,0 +1,19 @@
+<design:component >
+    <design:attribute name="CardTitle" label="Card Title" description="Title that needs to be displayed on the Card" />
+    <design:attribute name="editMode" label="Display Related Data in Edit Mode" description="Each related record Will be displayed in Edit Mode" default="false"/>
+    <design:attribute name="createNewRecord" label="Allow New Record Creation" description="Display New Button to create a Record"/>
+    <design:attribute name="object" label="Child Object API Name" description="API Name of the Object to show" required="true"/>
+    <design:attribute name="fieldSetName" label="Field Set Name" description="API Name of the fieldset on the child Object" required="true"/>
+    <design:attribute name="RecordType" label="Record Type" description="API name of record type for which we want to show records"/>
+    <design:attribute name="iconName" label="Icon Name" description="API name of icon to dispaly along card title" required="false"/>
+    <design:attribute name="hyperlinkFieldsName" label="Related List Field Id" description="Id will refer the custom metadata fields" required="false"/>
+    <design:attribute name="ParentObjectRelation" label="Parent Field API Name on Child Object" required="true" description="Parent Field API Name on the Child Object that needs to be displayed"/>
+    <design:attribute name="ParentObjectIdField" label="Parent Field API Name of Current Record" description="Parent Field API Name Of Currently Displayed record"/>
+    <design:attribute name="AdditionalFilter" label="Filter Target Object Records By" description="Filters are similar to SOQL i.e. FieldAPIName = 'Data' AND/OR Filter2"/>
+    <design:attribute name="filterBy" label="Filter By" description="Provide the field API name with which End user Can be able to filter the records Further.Field Type must be of PickList Type" />
+    <design:attribute name="recordDisplayLimit" label="Display Records Limit" description="Number of Records that needs to be Displayed on Screen"/>
+    <design:attribute name="sortedBy" label="Sort By Field API Name" description="API Name of the field to sort the records"/>
+    <design:attribute name="sortedDirection" label="Sort Direction" description="Direction of Sorting i.e. ASC or DESC"/>
+    <design:attribute name="selectable" label="Rows Selectable" default="false" description="This Checkbox Will have Impact only in View Mode" />    
+    
+</design:component>

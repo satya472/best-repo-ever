@@ -1,0 +1,14 @@
+.THIS .sticky {
+    position: fixed;
+    width:100%;
+    background-color:#FFF;
+    color:#FFF;
+    z-index: 1030;
+}
+.THIS .imageDis{
+    padding: 2em;
+    top: 1em;
+    width: 100%;
+    left: 10em;
+    padding-left: 8em;
+}

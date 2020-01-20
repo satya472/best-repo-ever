@@ -1,0 +1,78 @@
+<aura:component controller="CEP_JEPAuthorisationRequestCont">
+    <aura:attribute name="firstName" type="String"/>
+    <aura:attribute name="lastName" type="String"/>
+    <aura:attribute name="customerEmail" type="String"/>
+    <aura:attribute name="accRequest" type="String"/>
+    <aura:attribute name="plantRequest" type="String"/>
+    <aura:attribute name="equipRequest" type="String"/>
+    <aura:attribute name="mailSentStatus" type="Boolean"/>
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    <lightning:layout horizontalalign="space" multiplerows="true">
+        <lightning:layoutItem size="12">
+            <div class="sticky slds-border_bottom">
+               <div class="imageDis">
+                 <img src="{!$Resource.siemensLogo}"/>
+               </div> 
+            </div>
+            <div style="padding-top: 10em; margin-left:10em;max-width:75%;">
+              <lightning:layout class="slds-m-top_small" horizontalAlign="space" multipleRows="true">
+                <lightning:layoutItem class="slds-text-heading_small" size="12">
+                    Please enter following details in order to get access to Joint Energy Portal.
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    
+                    <lightning:layout horizontalAlign="space" multipleRows="true">
+                        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+                          <lightning:input value="{!v.firstName}" type="String" label="First Name"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+                          <lightning:input value="{!v.lastName}" type="String" label="Last Name"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+                          <lightning:input value="{!v.customerEmail}" type="String" label="Email Id"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+                          <lightning:input value="{!v.accRequest}" type="String" label="Account"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+                          <lightning:input value="{!v.plantRequest}" type="String" label="Plant"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+                          <lightning:input value="{!v.equipRequest}" type="String" label="Equipment"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="12" class="slds-text-align_right">
+                            <lightning:button onclick="{!c.closeMessage}" variant="neutral" label="Cancel" />
+                         <lightning:button onclick="{!c.submitDetails}" variant="brand" label="Submit" />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    
+                </lightning:layoutItem>            
+            </lightning:layout>
+            
+           </div> 
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    
+    <aura:if isTrue="{!v.mailSentStatus}">
+        <div role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal--prompt">
+            <lightning:layout class="slds-modal__container">
+                <lightning:layoutItem class="slds-modal__header slds-theme--success slds-theme--alert-texture">
+                    <h2 class="slds-text-heading--medium" id="prompt-heading-id">Mail Status</h2>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-modal__content slds-p-around--medium">
+                    <lightning:layoutItem>
+                        <p>Email Sent successfully to responsible JEP Team.</p>
+                    </lightning:layoutItem>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-modal__footer slds-theme--default">
+                    <lightning:button class="slds-button slds-button--brand" onclick="{!c.closeMessage}" label="Close"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+    <aura:if isTrue="{!v.spinner}">
+            <lightning:spinner variant="brand" aura:id="loadspinner" alternativeText="Loading.."/>
+        </aura:if>  
+</aura:component>

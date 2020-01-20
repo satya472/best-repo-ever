@@ -1,0 +1,114 @@
+<template>
+
+    <div class="slds-p-around_medium lgc-bg">
+        <div class="demo-only">
+            <nav role="navigation" aria-label="Breadcrumbs">
+                <ol class="slds-breadcrumb slds-list_horizontal slds-wrap slds-text-align_center">
+                    <li class="slds-breadcrumb__item"><a href="javascript:void(0);">Parent Entity</a></li>
+                    <li class="slds-breadcrumb__item">
+                        <a href="javascript:void(0);" data-type="plant" onclick={showHidePopup} onblur={hidingOnBlur}> 
+                            {selectedPlant}
+                            <lightning-icon class="slds-m-left_xx-small" icon-name="utility:down" size="xx-small"
+                                alternative-text="dropdown"></lightning-icon>
+                            <template if:true={showHidePlantPopup}>
+                                <section aria-describedby="dialog-body-id-2" aria-label="My Favourites"
+                                    class="slds-popover slds-nubbin_top-left slds-dynamic-menu" role="dialog"
+                                    style="position: absolute;left:0px;top:2em;">
+                                    <div class="slds-popover__body slds-p-horizontal_none" id="dialog-body-id-2">
+                                        <div class="slds-p-vertical_x-small slds-p-horizontal_small">
+                                            <div id="plantBox" role="listbox">
+                                                <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-10"
+                                                    role="group" aria-label="My Favorites">
+                                                    <template for:each={plantsList} for:item="item">
+                                                        <li key={item.Id} role="presentation" class="slds-listbox__item"
+                                                            onclick={handleSelect} data-label={item.Name} data-type="plant"
+                                                            data-val={item.Id}>
+                                                            <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                                role="option">
+                                                                {item.Name}
+                                                            </div>
+                                                        </li>
+                                                    </template>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </template>
+                        </a>
+                    </li>
+                   <template if:true={selectedPlantId}>
+                    <li class="slds-breadcrumb__item">
+                        <a href="javascript:void(0);" data-type="equipment" onclick={showHidePopup} onblur={hidingOnBlur}>
+                            {selectedEquipment}
+                            <lightning-icon class="slds-m-left_xx-small" icon-name="utility:down" size="xx-small"
+                                alternative-text="dropdown"></lightning-icon>
+                            <template if:true={showHideEquipPopup}>
+                                <section aria-describedby="dialog-body-id-2" aria-label="My Favourites"
+                                    class="slds-popover slds-nubbin_top-left slds-dynamic-menu" role="dialog"
+                                    style="position: absolute; left:0px; top:2em;">
+                                    <div class="slds-popover__body slds-p-horizontal_none" id="equipDialog">
+                                        <div class="slds-p-vertical_x-small slds-p-horizontal_small">
+                                            <div id="equipBox" role="listbox">
+                                                <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-10"
+                                                    role="group" aria-label="My Favorites">
+                                                    <template for:each={filteredEquipmentList} for:item="item">
+                                                        <li key={item.Id} role="presentation" class="slds-listbox__item"
+                                                            onclick={handleSelect} data-label={item.Name} data-type="equipment"
+                                                            data-val={item.Id}>
+                                                            <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                                role="option">
+                                                                {item.Name}
+                                                            </div>
+                                                        </li>
+
+                                                    </template>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </template>
+                        </a>
+                    </li>
+                </template> 
+                <template if:true={selectedPlantId}>
+                    <li class="slds-breadcrumb__item">
+                        <a href="javascript:void(0);" data-type="tool" onclick={showHidePopup} onblur={hidingOnBlur}>
+                            {selectedTool}
+                            <lightning-icon class="slds-m-left_xx-small" icon-name="utility:down" size="xx-small"
+                                alternative-text="dropdown"></lightning-icon>
+                            <template if:true={showHideToolPopup}>
+                                <section aria-describedby="dialog-body-id-3" aria-label="My Favourites"
+                                    class="slds-popover slds-nubbin_top-left slds-dynamic-menu" role="dialog"
+                                    style="position: absolute; left:0px; top:2em;">
+                                    <div class="slds-popover__body slds-p-horizontal_none" id="toolsDialog">
+                                        <div class="slds-p-vertical_x-small slds-p-horizontal_small">
+                                            <div id="toolsBox" role="listbox">
+                                                <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-10"
+                                                    role="group" aria-label="My Favorites">
+                                                    <template for:each={displayToolsList} for:item="item">
+                                                        <li key={item} role="presentation" class="slds-listbox__item"
+                                                            onclick={handleSelect} data-label={item} data-type="tool"
+                                                            data-val={item}>
+                                                            <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                                role="option">
+                                                                {item}
+                                                            </div>
+                                                        </li>
+
+                                                    </template>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </template>
+                        </a>
+                    </li>
+                </template> 
+                </ol>
+            </nav>
+        </div>
+    </div>
+</template>

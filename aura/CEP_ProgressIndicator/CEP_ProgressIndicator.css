@@ -1,0 +1,41 @@
+.THIS .slds-progress__marker{
+    border: 2px solid;
+    border-color: inherit;
+    padding: 0.3em;
+}
+.THIS.slds-progress{
+    max-width:85%;
+}
+.THIS .slds-progress__item.slds-is-completed .slds-progress__marker_icon{
+    border-color:inherit;
+    color:inherit;
+}
+.THIS .slds-button__icon{
+    width: 1.2rem;
+    height: 1.2rem
+}
+.THIS .slds-progress-bar{
+   background:#41aaaa;
+}
+.THIS .slds-is-completed{
+   color:#41aaaa;
+}
+.THIS .active{
+    color:orange;
+}
+
+.THIS .statusDetails{
+    position: absolute;
+    top: 3rem;
+    left:-1.2rem;
+    width: 5em;
+}
+.THIS .txtColor{
+    color:slategrey;
+    font-size:small;
+    top: 6rem;
+    left: -0.3rem;
+}
+.THIS .imagePadding{
+    padding:0.8rem;
+}

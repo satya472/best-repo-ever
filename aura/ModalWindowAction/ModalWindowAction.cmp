@@ -1,0 +1,16 @@
+<!--
+ - Created by jens.becker on 27.04.18.
+ -->
+
+<aura:component controller="LoAGetDeviationSelection" description="ModalWindowAction" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId,force:hasSObjectName">
+    <style type="text/css">
+        .slds-modal__container{
+            max-width: 95% !important;
+            width:95% !important;
+        }
+    </style>
+
+        <c:LoAQuestionSelection recordId="{!v.recordId}" sObjectName="{!v.sObjectName}" />
+
+
+</aura:component>

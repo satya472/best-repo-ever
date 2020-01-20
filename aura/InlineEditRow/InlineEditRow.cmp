@@ -1,0 +1,144 @@
+<aura:component controller="ServiceExpEngine">
+    <!-- on component load, fetch picklist values dynamically from apex controller -->   
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!--declare aura attributes-->
+    <aura:attribute name="objectName" type="String" required="true" 
+                    default="Price_Experience__c" description="object information to fetch picklist values"/>
+    <aura:attribute name="PricingListOptions" type="List"/>
+    <aura:attribute name="ConfidenceListOptions" type="List"/>  
+    <aura:attribute name="PricingSource" type="String" required="true" default="CompetitorPricingSource__c"/>
+    <aura:attribute name="ConfidenceLevel" type="String" required="true" default="ConfidenceLevel__c"/>
+    
+     <aura:attribute name="sNo" type="Integer" />
+    <aura:attribute name="wrapperRec" type="object" />
+    <aura:attribute name="showSaveCancelBtn" type="boolean"/>
+    <aura:attribute name="showErrorClass" type="boolean" default="false"/>
+    <aura:attribute name="singleRec" type="sObject" default="{'sobjectType' : 'Price_Experience__c',
+                                                             'Competitor_Account__c' : '',
+                                                             'CompetitorPricingSource__c' : '',
+                                                             'ConfidenceLevel__c' :''
+                                                             }"/>
+    <aura:attribute name="ExpLineRec" type="List" />
+    <aura:attribute name="sourceEditMode" type="boolean" default="false" />
+    <aura:attribute name="confidenceEditMode" type="boolean" default="false" />
+    <aura:attribute name="priceEditMode" type="boolean" default="false" />
+    
+     <aura:attribute name="renderPriceSource" type="boolean" />
+     <aura:attribute name="renderConfidence" type="boolean" />
+     <aura:attribute name="renderExpLine" type="boolean" />
+    <aura:attribute name="renderCompetitor" type="boolean" />
+    
+     <aura:if isTrue="{!v.renderCompetitor}" >
+            <td style="padding-left: 0px;padding-right: 0px;
+                       border-top:0px;text-align: Left; width: 8rem;"  
+                			class="slds-grow slds-cell-wrap">
+                <div class="slds-grow slds-cell-wrap">
+                    <ui:outputRichText value="{!v.wrapperRec.CompetitorName}"/>
+                </div>
+                <!--{!v.wrapperRec.CompetitorName}-->
+            </td>
+    </aura:if>
+    
+    
+     <!--Table Row Start--> 
+     <aura:if isTrue="{!v.renderPriceSource}">    
+        <td ondblclick="{!c.inlineEditSource}" class="slds-cell-edit" 
+            style="text-align:Left;width:416px;padding-left:0.5rem;padding-top: 0px;border-top:none;
+                                                                            padding-bottom: 0px;
+                                                                            padding-right: 0px;
+                                                                            height: 36px;" >
+            <span class="slds-grid slds-grid_align-spread">
+                <!-- show input and output section based on boolean flag --> 
+                <aura:if isTrue="{!v.sourceEditMode == false}">
+                    <div class="slds-grow slds-cell-wrap">
+                    	<span class=" inputFieldWidth " >
+                            <ui:outputRichText value="{!v.singleRec.CompetitorPricingSource__c}"/>
+                        </span>
+                	</div>
+                    <button onclick="{!c.inlineEditSource}" class="slds-button slds-button_icon 
+                                                                   slds-cell-edit__button 
+                                                                   slds-m-left_x-small" 
+                            tabindex="0" title="Edit Source">
+                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                    </button>
+                    
+                    <!-- Inline Edit Section in else case-->  
+                    <aura:set attribute="else">
+                        <div class="slds-popover__body" role="dialog">
+                            <div class="slds-form-element slds-grid slds-wrap">
+                                <div class="slds-form-element__control" 
+                                     style="padding-left: 0px;padding-right: 0px;">
+                                    <ui:inputSelect aura:id="priceSource"
+                                                    class="inputFieldWidth"
+                                                    blur="{!c.closeSourceBox}"
+                                                    change="{!c.onSourceChange}"
+                                                    value="{!v.singleRec.CompetitorPricingSource__c}"
+                                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <span id="form-end" tabindex="0"></span>                        
+                    </aura:set>  
+                </aura:if> 
+            </span>
+        </td> 
+    
+    </aura:if>
+    
+    
+ 	<aura:if isTrue="{!v.renderConfidence}">    
+        <td ondblclick="{!c.inlineEditConfidence}" class="slds-cell-edit" 
+            style="text-align:Left;width:416px;padding-left:0.5rem;padding-top: 0px;border-top:none;
+                                                                            padding-bottom: 0px;
+                                                                            padding-right: 0px;
+                                                                            height: 36px;" >
+            <span class="slds-grid slds-grid_align-spread">
+                <!-- show input and output section based on boolean flag --> 
+                <aura:if isTrue="{!v.confidenceEditMode == false}">
+                    <div class="slds-grow slds-cell-wrap">
+                    	<span class=" inputFieldWidth " >
+                            <ui:outputRichText value="{!v.singleRec.ConfidenceLevel__c}"/>
+                        </span>
+                	</div>
+                    <button onclick="{!c.inlineEditConfidence}" class="slds-button slds-button_icon 
+                                                                   slds-cell-edit__button 
+                                                                   slds-m-left_x-small" 
+                            tabindex="0" title="Edit Source">
+                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                    </button>
+                    
+                    <!-- Inline Edit Section in else case-->  
+                    <aura:set attribute="else">
+                        <div class="slds-popover__body" role="dialog">
+                            <div class="slds-form-element slds-grid slds-wrap">
+                                <div class="slds-form-element__control" 
+                                     style="padding-left: 0px;padding-right: 0px;">
+                                    <ui:inputSelect aura:id="priceConfidence"
+                                                    class="inputFieldWidth"
+                                                    blur="{!c.closeConfidenceBox}"
+                                                    change="{!c.onConfidenceChange}"
+                                                    value="{!v.singleRec.ConfidenceLevel__c}"
+                                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <span id="form-end" tabindex="0"></span>                        
+                    </aura:set>  
+                </aura:if> 
+            </span>
+        </td> 
+    
+    </aura:if>
+ 
+    <aura:if isTrue="{!v.renderExpLine}">
+        	<aura:iteration items="{!v.ExpLineRec}" var="productLine" indexVar="index">
+            <tr>
+    	        <c:InlineEditExpLine ExpLineRec="{!productLine.NewProductLine}" 
+                                     ProductPrice = "{!productLine.NewProductLine.ProductPrice__c}"
+                                     showSaveCancelBtn="{!v.showSaveCancelBtn}"/> 
+                
+            </tr>
+        	</aura:iteration>
+    </aura:if>
+</aura:component>

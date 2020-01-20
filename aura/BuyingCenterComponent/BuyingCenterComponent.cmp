@@ -1,0 +1,192 @@
+<aura:component controller="BuyingCenterController" access="global" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction">
+    
+    <!--Aura Attributes--> 
+    <aura:attribute name="opportunityId" type="string" />
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    <aura:attribute name="OpptyRecord" type="Object" description="A simplified view record object to be displayed"/>
+    <aura:attribute name="BuyingCenterRelationList" type="List"/>
+    <aura:attribute name="BuyingCenterDetailsList" type="List"/>
+    <aura:attribute name="BuyingCenterListSize" type="Integer"/>
+    <aura:attribute name="fieldSetName" type="String"/>
+    <aura:attribute name="addMemberType" type="String" default="BCM"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="ModalTitle" type="String"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    <!--Move member up/down-->
+    <aura:attribute name="positionBCMMap" type="Map"/>    
+    <aura:attribute name="positionSCMMap" type="Map"/>   
+    
+    <!--Design Attributes--> 
+    <aura:attribute name="CardTitle" type="string" default="Buying Table"/> 
+    <aura:attribute name="objectAPI" type="string" />
+    <aura:attribute name="fieldAPI" type="string" />
+    
+    <!--Aura Handlers--> 
+    <ltng:require scripts="{!join(',',
+                           $Resource.ConnectHtmlElementsPlugin + '/jquery.min.js',
+                           $Resource.ConnectHtmlElementsPlugin + '/jquery-ui.min.js',
+                           $Resource.ConnectHtmlElementsPlugin + '/jsplumb.js')}" afterScriptsLoaded="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />    
+    
+    
+    <force:recordData aura:id="forceRecord"
+                      layoutType="FULL"
+                      recordId="{!v.opportunityId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.OpptyRecord }"
+                      mode="VIEW"/>
+    
+    <!--loading spinner start... style=Brand Medium-->
+    <aura:if isTrue="{!v.Spinner}">
+        <lightning:spinner alternativeText="Loading" size="medium" />
+    </aura:if>
+    <!-- Loading spinner end--> 
+    
+    <lightning:card title="{!v.CardTitle}" iconName="standard:relationship">
+        <div class="slds-box">
+            <div class="slds-align--absolute-center">
+                <lightning:buttonGroup >
+                    <lightning:button aura:id="connectBtn" label="Connect" onclick="{!c.connectMembers}"/>
+                    <lightning:button aura:id="disconnectBtn" label="Disconnect" onclick="{!c.disconnectMembers}"/>
+                </lightning:buttonGroup>
+            </div>
+            
+            <!--Table begins-->
+            <div id="diagramContainer">
+                
+                <!--Title-->
+                <div class="slds-grid slds-grid--align-center">
+                    <div class="slds-size_1-of-4">
+                        <div class="slds-text-title_caps" style="margin-left:3rem;font-weight:bold">BUYING CENTER MEMBERS</div>
+                    </div>
+                    <div class="slds-size_2-of-4"><br/></div>
+                    <div class="slds-size_1-of-4">
+                        <div class="slds-text-title_caps" style="margin-left:3rem;font-weight:bold">SELLING CENTER MEMBERS</div> 
+                    </div>
+                </div> <br/>
+                
+                <!--Add new members-->
+                <div class="slds-grid slds-grid--align-center">
+                    <div class="slds-size_1-of-4">
+                        <lightning:buttonIcon iconName="utility:adduser" variant="bare" size="large" class="customPadding" 
+                                              title="Add New Buying Center Member" onclick="{!c.openBCMModal}"/>
+                    </div>                
+                    <div class="slds-size_2-of-4 slds-box customBoxStart"><br/></div>
+                    <div class="slds-size_1-of-4">
+                        <lightning:buttonIcon iconName="utility:adduser" variant="bare" size="large" class="customPadding" 
+                                              title="Add New Selling Center Member" onclick="{!c.openSCMModal}"/>
+                    </div>
+                </div>        
+                
+                <!--Relations-->
+                <lightning:layout multipleRows="true">       
+                    <aura:iteration items="{!v.BuyingCenterDetailsList}" var="item" indexVar="key">
+                        <lightning:layoutItem flexibility="auto,no-shrink" class="slds-container_fluid">
+                            <div class="slds-grid">
+                                
+                                <!--Buying Center Member-->
+                                <aura:if isTrue="{!item.buyingCenterMember != null}"> 
+                                    <!--buttons to move up and down-->
+                                    <div class="slds-size_1">
+                                        <lightning:buttonIcon iconName="utility:up" variant="bare" alternativeText="Move Up" 
+                                                              class="moveUpIcon" onclick="{!c.moveMemberUp}" value="{!item.buyingCenterMember}"/>
+                                        <lightning:buttonIcon iconName="utility:down" variant="bare" alternativeText="Move Down"
+                                                              class="moveDownIcon" onclick="{!c.moveMemberDown}" value="{!item.buyingCenterMember}"/>
+                                    </div>
+                                    
+                                    <div class="slds-size_1-of-3 slds-box slds-box_xx-small slds-text-align_center item" 
+                                         id="{!item.buyingCenterMember.Id}"
+                                         onclick="{!c.changeStyle}" data-type="bcm">
+                                        <c:DisplayVisualCard recordId="{!item.buyingCenterMember.Id}" 
+                                                             objName="Buying Center Member"/>                                    
+                                    </div>
+                                    <aura:set attribute="else">
+                                        <div class="slds-size_1-of-4"></div>                                    
+                                        <div class="slds-size_1-of-8 slds-box customBoxFiller"></div>
+                                    </aura:set>
+                                </aura:if>
+                                
+                                <!--table-->
+                                <div class="slds-size_1-of-4 slds-box customInnerBoxBody"></div>
+                                
+                                <!--Selling Center Member-->
+                                <aura:if isTrue="{!item.sellingCenterMember != null}">
+                                    <div class="slds-size_1-of-3 slds-box slds-box_xx-small slds-text-align_center item" 
+                                         id="{!item.sellingCenterMember.Id}"
+                                         onclick="{!c.changeStyle}" data-type="scm">
+                                        <c:DisplayVisualCard recordId="{!item.sellingCenterMember.Id}" 
+                                                             objName="Buying Center Member"/>                                    
+                                    </div>
+                                    
+                                    <!--buttons to move up and down-->
+                                    <div class="slds-size_1">
+                                        <lightning:buttonIcon class="moveUpSCMIcon" iconName="utility:up" variant="bare" 
+                                                              alternativeText="Move Up" onclick="{!c.moveMemberUp}" 
+                                                              value="{!item.sellingCenterMember}"/>
+                                        <lightning:buttonIcon iconName="utility:down" variant="bare" alternativeText="Move Down"
+                                                              class= "moveDownIcon" onclick="{!c.moveMemberDown}" 
+                                                              value="{!item.sellingCenterMember}"/>
+                                    </div>
+                                    <aura:set attribute="else">
+                                        <div class="slds-size_1-of-8 slds-box customBoxFiller2"></div>
+                                    </aura:set>
+                                </aura:if>
+                            </div>                    
+                            <div class="slds-grid slds-grid--align-center">
+                                <div class="slds-size_2-of-4 slds-box customBoxBody"></div>
+                            </div>                             
+                        </lightning:layoutItem>                
+                    </aura:iteration>
+                </lightning:layout>
+                
+                <!--add new members-->
+                <div class="slds-grid slds-grid--align-center">
+                    <div class="slds-size_1-of-4">
+                        <lightning:buttonIcon iconName="utility:adduser" variant="bare" size="large" class="customPadding" 
+                                              title="Add New Buying Center Member" onclick="{!c.openBCMModal}"/>
+                    </div>
+                    <div class="slds-size_2-of-4 slds-box customBoxEnd"></div>
+                    <div class="slds-size_1-of-4">
+                        <lightning:buttonIcon iconName="utility:adduser" variant="bare" size="large" class="customPadding" 
+                                              title="Add New Selling Center Member" onclick="{!c.openSCMModal}"/>
+                    </div>
+                </div> 
+            </div>
+            <!--Table Ends-->
+            <br/>
+            <div class="slds-align--absolute-center">
+                <lightning:buttonGroup >
+                    <lightning:button aura:id="connectBtn" label="Connect" onclick="{!c.connectMembers}"/>
+                    <lightning:button aura:id="disconnectBtn" label="Disconnect" onclick="{!c.disconnectMembers}"/>
+                </lightning:buttonGroup>
+            </div> <br/>
+            
+            <!--Status Legend-->
+            <br/>        
+            <div class="slds-align--absolute-center">
+                <legend>Status:</legend>
+                <div class="proLine">Pro</div>|
+                <div class="antiLine">Anti</div>|
+                <div class="unknownLine">Unknown</div>
+            </div>
+        </div>
+        
+        <!--Modal for creation of new member-->
+        <aura:if isTrue="{!v.isOpen}">
+            <aura:if isTrue="{!v.addMemberType != 'SCM'}" >
+                <c:GenericRecordSelector isOpen="{!v.isOpen}" controllerName="BuyingCenterController" modalName="BCM"  
+                                         record="{!v.OpptyRecord}"/>  
+                <aura:set attribute="else"> 
+                <c:GenericRecordSelector isOpen="{!v.isOpen}" controllerName="BuyingCenterController" modalName="SCM"  
+                                         record="{!v.OpptyRecord}"/>  
+                </aura:set>
+            </aura:if>
+            
+        </aura:if>
+        <!--End of Modal-->
+        
+    </lightning:card>
+</aura:component>

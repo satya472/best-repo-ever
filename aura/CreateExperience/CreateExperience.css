@@ -1,0 +1,9 @@
+.THIS button[name="cancel"]{
+  display:none;
+}
+.THIS .legend{
+  font-weight: bold;
+}
+.THIS .quoteLineBtn{
+   width:100%;
+}

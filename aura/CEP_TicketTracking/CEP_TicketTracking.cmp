@@ -1,0 +1,201 @@
+<!--
+ Created By: Phaniram Upalapati
+ Description: The component is used For Ticker Tracking i.e. Creating new Tickets and displaying the Tickets raised
+-->
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+
+
+    <!--Attribute for storing the fetched list of records -->
+    <aura:attribute name="fullList" type="list" />
+    <aura:attribute name="filteredList" type="list" />
+    <aura:attribute name="typeList" type="list" />
+    <aura:attribute name="statusList" type="list" />
+    <aura:attribute name="filterPillList" type="list" />
+    <aura:attribute name="displayDetails" type="boolean" />
+    <aura:attribute name="selectedTicket" type="map" />
+
+    <!--handler for Component Initiation -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:attribute name="spinner" type="boolean" default="false" />
+
+    <div>
+        <div class="slds-text-heading_large">Support</div>
+        <div>
+            <lightning:icon class="slds-p-right_x-small slds-p-bottom_xx-small slds-p-top_small" iconName='utility:filterList'
+                variant="inverse" size="x-small" alternativeText="filter Image" />
+            <span>Narrow your results</span>
+        </div>
+
+        <div class="slds-m-top_small slds-m-bottom_small  slds-p-bottom_large slds-border_bottom">
+            <lightning:layout horizontalAlign="spread">
+                <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="3">
+                    <lightning:select aura:id="ticketType" name="type" variant="label-hidden" label="Type" value=""
+                        onchange="{!c.filterChange}">
+                        <option value="" text="Filter tickets by type" />
+                        <aura:iteration items="{!v.typeList}" var="item">
+                            <option text="{!item.label}" value="{!item.value}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="3">
+                    <lightning:select aura:id="status" name="status" variant="label-hidden" label="Status" value=""
+                        onchange="{!c.filterChange}">
+                        <option value="" text="Filter tickets by status" />
+                        <aura:iteration items="{!v.statusList}" var="item">
+                            <option text="{!item.label}" value="{!item.value}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="4">
+                    <lightning:input aura:id="searchTxt" type="search" name="searchText" placeholder="Search Name, Created Date, Unit"
+                        onchange="{!c.filterChange}" />
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                    <lightning:button class="slds-m-top_medium" variant="brand" label="Create Ticket" title="Create Ticket" />
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+
+        <aura:if isTrue="{!!empty(v.filterPillList)}">
+            <lightning:pillContainer items="{!v.filterPillList}" onitemremove="{!c.removeFilter}"></lightning:pillContainer>
+        </aura:if>
+
+        <div class="slds-m-top_medium slds-is-relative">
+            <!--Header Details -->
+            <div style="padding: .25rem;">
+                <lightning:layout horizontalAlign="spread">
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="1">
+                        <div class="hoverclass" onclick="{!c.sortRecords}" data-name="CustomerPONumber__c">
+                            <b>Ticket Number</b>
+                            <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                                variant="inverse" size="xx-small" alternativeText="View More" />
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                        <div class="hoverclass" onclick="{!c.sortRecords}" data-name="SalesOrderNumber__c">
+                            <b>Account Name</b>
+                            <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                                variant="inverse" size="xx-small" alternativeText="View More" />
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                        <div class="hoverclass" onclick="{!c.sortRecords}" data-name="SalesOrderNumber__c">
+                            <b>Contact Name</b>
+                            <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                                variant="inverse" size="xx-small" alternativeText="View More" />
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                        <div class="hoverclass" onclick="{!c.sortRecords}" data-name="SalesOrderNumber__c">
+                            <b>Subject</b>
+                            <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                                variant="inverse" size="xx-small" alternativeText="View More" />
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="1">
+                        <div class="hoverclass" onclick="{!c.sortRecords}" data-name="CurrentStatusOrder__c">
+                            <b>Status</b>
+                            <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                                variant="inverse" size="xx-small" alternativeText="View More" />
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="1">
+                        <div class="hoverclass" onclick="{!c.sortRecords}" data-name="CurrentStatusOrder__c">
+                            <b>Ticket Type</b>
+                            <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                                variant="inverse" size="xx-small" alternativeText="View More" />
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                        <div class="hoverclass" onclick="{!c.sortRecords}" data-name="CurrentStatusOrder__c">
+                            <b>Related Unit</b>
+                            <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                                variant="inverse" size="xx-small" alternativeText="View More" />
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="1">
+                        <div class="hoverclass" onclick="{!c.sortRecords}" data-name="LastConfirmedDeliveryDate__c">
+                            <b> Created Date</b>
+                            <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                                variant="inverse" size="xx-small" alternativeText="View More" />
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+            <aura:if isTrue="{!!empty(v.filteredList)}">
+                <!-- Data in accordion Format-->
+                <aura:iteration items="{!v.filteredList}" var="ticket" indexVar="key">
+                    <div class="slds-box slds-box_xx-small slds-m-top_small ticketList" data-id="{!ticket.Id}" onclick="{!c.showDetails}">
+                        <lightning:layout horizontalAlign="spread" multipleRows="true">
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12"
+                                smallDeviceSize="1">
+                                {!ticket.ticketNumber}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12"
+                                smallDeviceSize="2">
+                                {!ticket.AccountName}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12"
+                                smallDeviceSize="2">
+                                {!ticket.contactName}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12"
+                                smallDeviceSize="2">
+                                {!ticket.subject}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12"
+                                smallDeviceSize="1">
+                                {!ticket.status}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12"
+                                smallDeviceSize="1">
+                                {!ticket.ticketType}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12"
+                                smallDeviceSize="2">
+                                {!ticket.relatedUnit}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12"
+                                smallDeviceSize="1">
+                                {!ticket.createdDate}
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </aura:iteration>
+
+                <!--Below details will be displayed if there is no data available for display -->
+                <aura:set attribute="else">
+                    <div class="slds-box slds-theme_shade">
+                        No Records Available to Display
+                    </div>
+                </aura:set>
+            </aura:if>
+            <aura:if isTrue="{!v.spinner}">
+                <lightning:spinner alternativeText="Loading" size="medium" variant="brand" />
+            </aura:if>
+        </div>
+
+        <!--Modal Window Display Seelcted Ticket Details -->
+        <aura:if isTrue="{!v.displayDetails}">
+            <div class="slds-modal slds-fade-in-open slds-modal_large" role="dialog">
+                <div class='slds-modal__container'>
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" variant="bare" size="large" onclick="{!c.close}"
+                            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />
+                        <h2 class="slds-text-heading_medium slds-hyphenate">Ticket Details</h2>
+                    </header>
+                    <div class="scrollableModal slds-modal__content slds-p-around_large slds-scrollable_y">
+
+                        <c:CEP_TicketDetailsComponent ticket="{!v.selectedTicket}" />
+                        <!--<c:cep_ticketDetails ticket="{!v.selectedTicket}">
+                        </c:cep_ticketDetails>-->
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+</aura:component>

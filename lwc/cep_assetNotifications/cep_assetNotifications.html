@@ -1,0 +1,35 @@
+<!--
+    Description: The component is used to display the Notifications to the user.
+-->
+<template>
+
+    <div class="mainCls">
+     <div class="secondaryCls slds-p-around_medium">
+    <!--Header Details -->
+    <div style="padding: .25rem;">
+            <lightning-layout horizontal-align="end" multiple-rows="true">
+                 <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+
+                    <lightning-input type="search" placeholder="Enter Search Term" onchange={handleSearch}></lightning-input>
+
+                 </lightning-layout-item>
+            </lightning-layout>
+    </div>
+    <template if:true={sortedNotificationList}>
+        
+        <template for:each={sortedNotificationList} for:item="item">
+            <div key={item.Id}>
+                <!--Child Component: Each Notification Record-->
+                <c-cep_notification-item selected-notification-id={selectedId} record={item} contact-id={contactId} onrecordupdated={refreshData}></c-cep_notification-item>
+            </div>
+        </template>
+    </template>
+    <!--The below template will be displayed when the user searches and no records are matched with the Search Criteria-->
+    <template if:false={sortedNotificationList}>
+        <div class="slds-box slds-box_small slds-text-align_center">
+            No Records to Display
+        </div>
+    </template>
+</div>
+</div>
+</template>

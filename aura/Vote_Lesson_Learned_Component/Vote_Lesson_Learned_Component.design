@@ -1,0 +1,5 @@
+<design:component >
+    <design:attribute name="cmpLabel" label="Title" description="Label of the component."/>
+    <design:attribute name="voteText" label="Vote Text" description="Show text when voting is possible."/>
+    <design:attribute name="votedText" label="Voted Text" description="Show text when user has already voted."/>
+</design:component>

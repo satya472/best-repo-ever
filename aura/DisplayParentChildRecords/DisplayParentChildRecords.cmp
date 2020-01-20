@@ -1,0 +1,41 @@
+<aura:component controller="DisplayParentChildRecords_Cont" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+	
+    <!-- Design Attributes -->
+    <aura:attribute name="parentObj" type="String" />
+    <aura:attribute name="childObj" type="String" />
+    <aura:attribute name="parentFilter" type="String" />
+    <aura:attribute name="childFilter" type="String" />
+    <aura:attribute name="parentChildRelField" type="String" />
+    <aura:attribute name="fieldSetName" type="String" />
+    
+    <aura:attribute name="parentChildRec" type="list" />
+    <aura:attribute name="relatedSpinner" type="boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+   <div class="slds-is-relative"> 
+    <lightning:card title="{!v.childObj}">
+       
+         <lightning:accordion >
+             
+             <aura:iteration items="{!v.parentChildRec}" var="rec">
+                 
+                 <lightning:accordionSection name="{!rec.parentRecId}" label="{!rec.parentRecName}">
+
+                     <lightning:datatable data="{!rec.childRecordsDetails.tableRecord}" columns="{!rec.childRecordsDetails.tableColumn}" hideCheckboxColumn="false" keyField="Id"/>
+                     
+                 </lightning:accordionSection>
+
+             </aura:iteration>
+
+         </lightning:accordion> 
+
+    </lightning:card>
+       
+     <!-- Spinner -->
+        <aura:if isTrue="{!v.relatedSpinner}">
+            <lightning:spinner variant="brand" class="slds-hide" alternativeText="Loading.."/>
+        </aura:if>  
+       
+   </div> 
+</aura:component>

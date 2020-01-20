@@ -1,0 +1,56 @@
+<aura:component controller="ServiceExpEngine">
+    <!-- on component load, fetch picklist values dynamically from apex controller -->   
+    
+    
+    <!--declare aura attributes-->
+    <aura:attribute name="sNo" type="Integer" />
+    <aura:attribute name="showSaveCancelBtn" type="boolean"/>
+    <aura:attribute name="showErrorClass" type="boolean" default="false"/>
+    <aura:attribute name="ExpLineRec" type="sObject" default="{'sobjectType' : 'PriceExperienceLine__c',
+                                                             'ProductName__c' : '',
+                                                             'ProductPrice__c' : ''
+                                                             }"/>
+    <aura:attribute name="ProductPrice" type="string" />
+    <aura:attribute name="priceEditMode" type="boolean" default="false" />
+       
+    
+    <!--Table Row Start-->
+        <td ondblclick="{!c.inlineEditPrice}" class="slds-cell-edit" style="text-align:Left;
+                                                                            width:426px;
+                                                                            padding-top: 0px;
+                                                                            padding-bottom: 0px;
+                                                                            padding-right: 0px;
+                                                                            padding-left: 20px;
+                                                                            height:45px;
+                                                                            ">
+            <span class="slds-grid slds-grid_align-spread">
+                <!-- show input and output section based on boolean flag --> 
+                <aura:if isTrue="{!v.priceEditMode == false}">
+                    <span class="slds-truncate " title="Product Price" >{!v.ExpLineRec.ProductPrice__c}</span>
+                    <button onclick="{!c.inlineEditPrice}" class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small" tabindex="0" title="Edit Source" data-row-index="{!index}">
+                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                    </button>
+                    
+                    
+                    <!-- Inline Edit Section in else case--> 
+                    <aura:set attribute="else">
+                            <div class="slds-popover__body" style="width:200px;">
+                                <div class="slds-form-element slds-grid slds-wrap">
+                                    <div class="slds-form-element__control " >
+                                        <label class="slds-form-element__label"></label>
+                                         <ui:inputText class="slds-input"
+                                                          labelClass="slds-form-element__label slds-form-element__label_edit slds-no-flex"
+                                                          aura:id="inputId"
+                                                          blur="{!c.closePriceBox}"
+                                                          change="{!c.onPriceChange}"
+                                                          value="{!v.ExpLineRec.ProductPrice__c}"
+                                                       />
+                                    </div>
+                                </div>
+                            </div>
+                            <span id="form-end" tabindex="0"></span>
+                    </aura:set>
+                </aura:if> 
+            </span>
+        </td>
+</aura:component>

@@ -1,0 +1,15 @@
+.THIS.container{
+
+    border:2px solid #41aaaa;
+    border-radius: 1em;
+}
+.THIS .slds-text-heading_large{
+    font-weight: bold;
+}
+.THIS .slds-border_bottom{
+    border-width: 1.5px;
+    border-color: #41aaaa;
+}
+.THIS .slds-text-link_reset{
+  font-weight: bold;
+}

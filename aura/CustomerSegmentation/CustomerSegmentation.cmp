@@ -1,0 +1,39 @@
+<!--
+  Created By: Phaniram Upalapati
+  Description : Component Displays the details of the Segmentation Attribute Value records based on the Selected Category 
+                and Corresponding record i.e. Account,Contact,Product2
+
+-->
+
+<aura:component controller="CustomerSegmentation_Cont" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <!-- Design Attributes -->
+    <aura:attribute name="segCategory" type="String" />
+    <aura:attribute name="recordId" type="String" />
+    
+    <aura:attribute name="records" type="list" />
+    <aura:attribute name="categoryName" type="string" />
+    
+    <aura:attribute name="load" type="boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <lightning:card title="{!'Category Name: '+v.categoryName}">
+        <aura:set attribute="actions">
+              <lightning:button variant="brand" label="Save" onclick="{!c.saveData}"  disabled="{!and(v.sObjectName == 'Product2',!v.records[0].productSegmentationEditable)?'true':'false'}"/>
+        </aura:set>
+        <div class="c-container slds-is-relative"> 
+            <lightning:layout horizontalAlign="space" multipleRows="true">
+                <aura:iteration items="{!v.records}" var="rec">
+                    <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"> 
+                        <c:CustomerSegmentationAttributes attributeRec="{!rec}" objName="{!v.sObjectName}"/>
+                    </lightning:layoutItem>
+                </aura:iteration>
+            </lightning:layout>
+            
+            <!-- Spinner -->
+            <aura:if isTrue="{!v.load}">
+                <lightning:spinner aura:id="segSpinner" variant="brand" alternativeText="Loading..."/>
+            </aura:if>
+        </div>
+    </lightning:card>    
+</aura:component>

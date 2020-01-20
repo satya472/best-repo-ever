@@ -1,0 +1,7 @@
+<design:component >
+    <design:attribute name="cardTitle" label="Card Title" />	
+    <design:attribute name="buttonTitle" label="Button Title" />	
+    <design:attribute name="fileTypes" label="File Types" required="true" description="Select which file types are allowed: .jpg, .png" />
+    <design:attribute name="fieldName" label="Field API Name" required="true" description="API Name of the field on the record to store the Uploaded file Document Details inorder to
+                                                                            use the same in another component/Object" />
+</design:component>

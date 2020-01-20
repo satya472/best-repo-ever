@@ -1,0 +1,9 @@
+.hoverclass{
+    cursor: pointer;
+}
+
+.ticketList:hover{
+    background-color: #23527c;
+    color:#FFF;
+    cursor: pointer;
+}

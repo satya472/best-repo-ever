@@ -1,0 +1,51 @@
+<!--Created By: Ankur Gupta
+	Description: It is used on lesson learned detail page to give user vote facility against lesson learned
+-->
+<aura:component controller="VoteLessonLearnedController" implements="force:lightningQuickAction,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	
+    <!-- Design Attributes -->
+    <aura:attribute name="cmpLabel" type="String" default="Vote Section"/>  
+    <aura:attribute name="voteText" type="String"/> 
+    <aura:attribute name="votedText" type="String"/>
+    
+    <!-- Data Attributes -->
+    <aura:attribute name="lessonLearned" type="Object"/>
+    <aura:attribute name="simpleLesson" type="Object"/>
+    <aura:attribute name="lessonError" type="String"/>
+    <aura:attribute name="bestPracticeId" type="String"/>
+    <aura:attribute name="voteType" type="String"/>
+    <aura:attribute name="showLike" type="Boolean" default="false"/>
+    <aura:attribute name="showDisLike" type="Boolean" default="false"/>
+    <aura:attribute name="showSimpleIcon" type="Boolean" default="true"/>
+    
+    <!-- Force:Data record load component -->
+    <force:recordData aura:id="lessonLearnedLoader"
+        recordId="{!v.recordId}"
+        layoutType="FULL"
+        targetRecord="{!v.lessonLearned}"
+        targetFields="{!v.simpleLesson}"
+        targetError="{!v.lessonError}"
+        recordUpdated="{!c.handleLessonLearned}"
+    />
+    
+<lightning:card title="{!v.cmpLabel}">
+    <div class="slds-is-relative">                                       
+<div class="slds-text-align_center">    
+    <aura:if isTrue="{!v.showSimpleIcon}"> 
+        <b><ui:outputText value="{!v.voteText}" /></b>&nbsp;&nbsp;
+        <lightning:buttonIcon aura:id="like" name="like" iconName="utility:like" iconClass="dark" onclick="{!c.like}"/>&nbsp;
+        <lightning:buttonIcon aura:id="dislike" name="dislike" iconName="utility:dislike" iconClass="dark" onclick="{!c.disLike}"/>            
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showLike}"> 
+        <ui:outputText value="{!v.votedText}" />&nbsp;&nbsp;
+    	<lightning:buttonIcon aura:id="like" name="like" iconName="utility:like" class="likeClass"/>&nbsp;
+    </aura:if>
+    <aura:if isTrue="{!v.showDisLike}"> 
+        <b><ui:outputText value="{!v.votedText}" /></b>&nbsp;&nbsp;
+    	<lightning:buttonIcon aura:id="dislike" name="dislike" iconName="utility:dislike" class="disLikeClass"/>            
+    </aura:if>
+        </div>
+</div>
+    </lightning:card>
+</aura:component>

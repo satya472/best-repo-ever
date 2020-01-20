@@ -1,0 +1,4 @@
+<design:component >
+    <design:attribute name="ReminderTitle" label="Title" description="Title for the Reminder"/>
+    <design:attribute name="ReminderInputText" label="Text" description="message for user"/>
+</design:component>

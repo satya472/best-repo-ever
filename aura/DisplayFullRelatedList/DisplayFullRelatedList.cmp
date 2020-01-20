@@ -1,0 +1,27 @@
+<!--
+ Created By : Rupinder kaur
+ Description : Component used to display full list of any child records related to the Parent of the currently Displayed record
+              -->
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:appHostable" access="global" >
+    <aura:attribute name="objectApiName" type="String"/>
+    <aura:attribute name="fieldsList" type="list"/>
+    <aura:attribute name="recordsList" type="String" />
+    <aura:attribute name="parentId" type="String" />
+    <lightning:navigation aura:id="navService" />
+    <aura:attribute name="iconName" type="string"/>
+    
+    
+    <div >
+        <lightning:card title="{!v.objectApiName}" class="slds-background" iconName="{!v.iconName}">
+            <div class="count">{!v.recordsList.length} items</div>
+            <aura:set attribute="actions" >
+                <lightning:button label="Back" onclick="{!c.goBack}"/>
+            </aura:set>
+            <lightning:datatable objectApiName="{!v.objectApiName}" 
+                                 data="{!v.recordsList}" showRowNumberColumn="true"
+                                 columns="{!v.fieldsList}" rowNumberOffset="0"
+                                 hideCheckboxColumn="{!!v.selectable}"
+                                 keyField="Id"/>        
+        </lightning:card>  
+    </div>
+</aura:component>

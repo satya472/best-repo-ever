@@ -1,0 +1,79 @@
+<!--
+  Created By: Naveen Kumar Gadicherla
+  Description : Component Displays the opportunity Product History 
+
+-->
+
+<aura:component controller="CreateOppProductHistory_Cont" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickAction" access="global" >
+    <ltng:require styles="{!$Resource.ModalWindowExpand}" />
+    <aura:attribute name="recList" type="list" />
+    <aura:attribute name="mydata" type="object" />
+    <aura:attribute name="mycolumn" type="object" />
+    <aura:attribute name="optionsLst" type="list" />
+    <aura:attribute name="recObject" type="object" />
+    <aura:attribute name="selectedLst" type="list" />
+    <aura:attribute name="compFilters" type="string" />
+    <aura:attribute name="statusFilter" type="string" />
+    <aura:attribute name="wonLossFilter" type="string" />
+
+    <!-- Attribute for displaying the Loading spinner -->
+    <aura:attribute name="load" type="boolean" default="false" />
+    <aura:attribute name="recCreateSpinner" type="boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <lightning:card title="Opportunity Product History Records" >  
+      <div class="slds-is-relative">
+          <div class="c-container" name="test">
+              <lightning:layout horizontalAlign="space" multipleRows="true">
+                  <lightning:layoutItem flexibility="auto" size="9" padding="around-small">
+                          <lightning:layout horizontalAlign="end" multipleRows="true">
+                              <aura:iteration items="{!v.optionsLst}" var="item"> 
+                                  <lightning:layoutItem flexibility="auto" size="4" smallDeviceSize="2" mediumDeviceSize="2" largeDeviceSize="2" padding="around-small"> 
+                                      {!item.columnName}
+                                  </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" size="4" smallDeviceSize="4" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small"> 
+                                        <aura:if  isTrue="{!item.fieldType == 'PICKLIST'}">                                 
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-select_container">
+                                                    <select id="{!item.apiName}" class="slds-select" name="selectList" onchange="{!c.stageValue}">
+                                                     <option value="All">All</option>
+                                                        <aura:iteration items="{!item.fieldByFieldPickList}" var="pickItem">
+                                                            <option text="{!pickItem.label}" value="{!pickItem.value}" />
+                                                        </aura:iteration>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </aura:if>
+                                        <aura:if  isTrue="{!item.fieldType == 'MULTIPICKLIST'}">
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-select_container">
+                                                    <lightning:dualListbox name="{!item.apiName}"  
+                                                           sourceLabel="Available" 
+                                                           selectedLabel="Selected" 
+                                                           fieldLevelHelp="This is a dual listbox" 
+                                                           options="{!item.fieldByFieldPickList}" 
+                                                           onchange="{! c.multiSelectValues }"/>
+                                                </div>
+                                            </div>                       
+                                        </aura:if>
+                                    </lightning:layoutItem> 
+                                </aura:iteration> 
+                                
+                             
+                            </lightning:layout>     
+                  </lightning:layoutItem>    
+                  <lightning:layoutItem flexibility="auto" size="3" padding="around-small">
+                      <aura:if isTrue="{!v.mydata.length > 0}" > 
+                          <lightning:button variant="brand" label="Apply" iconPosition="Right" onclick="{! c.handleClick }" />
+                      </aura:if>
+                  </lightning:layoutItem>                     
+              </lightning:layout>
+          </div>   
+      </div>  
+        </lightning:card>
+          <!-- Spinner -->
+          <lightning:spinner aura:id="relatedSpinner" variant="brand" class="slds-hide"/>
+      
+      <lightning:datatable data="{!v.mydata}" columns="{!v.mycolumn}"  
+                                 onrowselection="{!c.editRecord}" keyField="Id" />
+            <lightning:spinner class="{!v.recCreateSpinner?'slds-show':'slds-hide'}" variant="brand" alternativeText="Loading.." />
+</aura:component>

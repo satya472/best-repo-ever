@@ -1,0 +1,24 @@
+.lgc-bg {
+    background-color:lightgray;
+    border:1px solid #f2f2f2;
+    font-weight: bolder;
+    border-radius: 30px;
+}
+
+.lgc-bg-inverse {
+    background-color: rgb(22, 50, 92);
+}
+
+.slds-breadcrumb .slds-list__item>a, .slds-breadcrumb__item>a {
+    font-size: 1.5em;
+    text-decoration:none;
+    padding:0 1rem;
+    color: rgb(86, 106, 124);
+}
+
+.slds-breadcrumb .slds-list__item::before, .slds-breadcrumb__item::before{
+
+    font-size: 1.6em;
+    color:#a5979fba;
+
+}

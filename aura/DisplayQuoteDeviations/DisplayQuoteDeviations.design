@@ -1,0 +1,18 @@
+<design:component >
+    <design:attribute name="CardTitle" label="Card Title" description="Title that needs to be displayed on the Card" />
+    <design:attribute name="object" label="Source Object API Name" description="API Name of the Object to show" required="true"/>
+    <design:attribute name="fieldSetName" label="Field Set Name" description="API Name of the fieldset on the child Object" required="true"/>
+    <design:attribute name="AdditionalFilter" label="Additional Filter values on Source Object" description="Filters are similar to SOQL i.e. Status = 'Active' OR Filter2"/>
+    <design:attribute name="RecordFilters" label="Record Filters " description="Specify the fields of the record page on which component is sitting to filter our source records(API names on both object should be similar)" />
+    <design:attribute name="filterBy" label="End User Filter Fields" description="Provide field api name with which end user can apply additional filters on page. Field type must be of picklist only" />
+    <design:attribute name="filterById" label="Custom Metadata API Name" description="Enter Metadata name which has Source and Target Fields Mapping" />
+    <design:attribute name="TargetParentField" label="Target Parent Field Name on Source" description="API Name of lookup field on Source object which is a lookup to Target Object" />
+    <design:attribute name="TargetReportField" label="Target Parent Report Field Name" description="API name of lookup field on Target object which is a lookup to record object on which component is sitting" />
+    <design:attribute name="TargetFieldId" label="Target object API Name" description="Specify the API name of the Target object for which records to be created" />
+    <design:attribute name="SuccessMessage" label="Success Message" description="Enter Success message to be displayed after successfull creation of Target records" />
+    <design:attribute name="DisplayList" label="Display source record if target record created(true/false)" description="IF True,  we  display the section that has source records which has target records already created" />
+    <design:attribute name="WithOutTargetRecords" label="Title for section with out target records" description="Title to be show on section which doesnt have target records created" />
+    <design:attribute name="WithTargetRecords" label="Title for section with target records" description="Title to be show on section which has target records created" />
+    <design:attribute name="ButtonLabel" label="Button Label" description="Label to be shown on the target record creation button" />
+    <design:attribute name="QueryString" label="SOQL Query(optional)" description="SOQL query(with out any filters) if we dont want to specify fieldset" />
+</design:component>

@@ -1,0 +1,13 @@
+.THIS .slds-icon{
+    fill:rgba(0, 0, 0, 0.8);
+}
+
+.THIS .hoverclass{
+    cursor: pointer;
+}
+
+.THIS .ticketList:hover{
+    background-color: #23527c;
+    color:#FFF;
+    cursor: pointer;
+}

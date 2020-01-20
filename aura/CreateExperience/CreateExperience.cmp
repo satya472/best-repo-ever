@@ -1,0 +1,227 @@
+<!--
+    Created By: Phaniram Upalapati
+    Description: The Component Provides options for creating/Updating Different kinds of Experiences.
+-->
+
+<aura:component controller="TreeMapController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickActionWithoutHeader"
+    access="global">
+
+  <!--Condition to load CSS inorder to increase the width of the Lightning Quick Action Popup -->
+  <aura:if isTrue="{!!v.hideNxtScreen}">
+
+        <ltng:require styles="{!$Resource.ModalWindowExpand}" />
+
+  </aura:if>
+    
+    <!-- Aura attribute for storing the details-->
+    <aura:attribute name="recordId" type="string" />
+    <aura:attribute name="sObjectName" type="string" />
+    <aura:attribute name="captureDetails" type="list" />
+    <aura:attribute name="applyDetails" type="list" />
+    <aura:attribute name="autoPopList" type="list" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- Attribute for Displaying the TreeMap Component after New CustomerIntelligence record Creation Screen-->
+    <aura:attribute name="displayNewRec" type="boolean" default="false" />
+    <aura:attribute name="newIntelligenceRec" type="Object" />
+    <!--Set the attribute after clicking Next button on the Price QuoteLine Selection  Screen -->
+    <aura:attribute name="afterPrice" type="boolean" default="false"/>
+    <aura:attribute name="spin" type="boolean" default="false" />
+
+    <!-- Attribute to store Radio Button Selected value -->
+    <aura:attribute name="value" type="String" default="" />
+    <aura:attribute name="hideNxtScreen" type="boolean" default="true" />
+    <aura:attribute name="header" type="string" default="Add Experience" />
+    <aura:Attribute name="recordData" type="object" />
+    <aura:attribute name="quoteLineList" type="list" />
+    <aura:attribute name="selectedQuoteLine" type="string" access="private"/>
+
+    <!--If the Component is invoked from Add Experience on Experiece Report Record -->
+    <aura:if isTrue="{!v.sObjectName == 'Experience_Report__c'}">
+     <force:recordData aura:id="loadData"
+                    layoutType="FULL"
+                    recordId = "{!v.recordId}"
+                    mode="VIEW"
+                    targetFields="{!v.recordData}" 
+                    recordUpdated="{!c.handleRecordUpdated}"
+                    />
+    </aura:if>                
+
+    <!-- Cancel button on the component in Mobile So that onclick of that Cancel button it will re-direct
+             to record on which it is invoked -->
+    <aura:if isTrue="{! or($Browser.isPhone,$Browser.isTablet)}">
+        <lightning:navigation aura:id="navService" />
+        <lightning:button label="Cancel" onclick="{!c.navigateToSObject}" />
+    </aura:if>
+
+    <!--header-->
+    <div class="slds-text-align_center slds-m-bottom_medium slds-text-heading_large">
+       {!v.header}
+    </div>
+    <div class="slds-border_bottom"></div>
+  
+    <aura:if isTrue="{!v.hideNxtScreen}">
+       <div style="margin-top:4rem;">
+        <!-- Radio Button Display-->
+        <div class="slds-align_absolute-center slds-m-top_large">
+
+              <!--radio buttons display so that user can select the options he wants to work with -->
+              <div class="c-container">
+                 <lightning:layout verticalAlign="start" multipleRows="true">
+                                    
+                                        <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="4" class="slds-text-align_right">
+                                                 <div class="legend">Capture </div>
+                                        </lightning:layoutItem>
+                                        <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="8">
+                                            <aura:iteration items="{!v.captureDetails}" var="item">
+                                                <div class="slds-m-bottom_medium">
+                                                    <lightning:input type="radio" label="{!item.label}" name="options" value="{!item.value}" onclick="{!c.radioValuChange}"/>
+                                                </div>
+                                            </aura:iteration>
+                                        </lightning:layoutItem>
+
+                                        <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="4" class="slds-text-align_right">
+                                                    <div class="legend">Apply Lessons Learned</div>
+                                        </lightning:layoutItem>
+                                        <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="8">
+                                            <aura:iteration items="{!v.applyDetails}" var="item">
+                                                <div class="slds-m-bottom_medium">
+                                                    <lightning:input type="radio" label="{!item.label}" name="options" value="{!item.value}" onclick="{!c.radioValuChange}"/>
+                                                </div>
+                                            </aura:iteration>
+                                        </lightning:layoutItem>
+
+                                    </lightning:layout> 
+    
+             </div>
+        </div>
+       
+        <div class="slds-align_absolute-center slds-m-top_large">
+            <lightning:button name="Next" label="Next" variant="brand" disabled="{!empty(v.value)}" onclick="{!c.next}" /> 
+        </div>
+    </div>  
+    </aura:if>
+
+    <!-- Based on the Selected Radio Button display its corresponding components-->
+    <aura:if isTrue="{!!v.hideNxtScreen}">
+        <div class="slds-m-top_large slds-is-relative">
+            <aura:if isTrue="{!v.value == 'Create new Intelligence'}">
+                <aura:if isTrue="{!!v.displayNewRec}">
+                    <div class="slds-align_absolute-center slds-m-around_small">
+                        <!--New record Creation Component -->
+                        <c:CreateNewRecord sObjectName="Intelligence__c" fields="{!$Label.c.CustomerIntelligenceRecordCreationFields}" saved="{!v.displayNewRec}"
+                            newRecord="{!v.newIntelligenceRec}" autoPopulate="{!v.autoPopList}" column="{! or($Browser.isPhone,$Browser.isTablet)?'1':'2'}"/>
+                    </div>
+                    <aura:set attribute="else">
+                     <!-- Displaying TreeMap related Component for Customer and War Room Topic intelligence Types and display the same
+                          for price intelligence once Next button is clicked on SBQQ Quote Selection Screen-->
+                      <aura:if isTrue="{!or(or(v.newIntelligenceRec.fields.IntelligenceType__c.value == 'Customer Intelligence',v.newIntelligenceRec.fields.IntelligenceType__c.value == 'Product Intelligence'),or(v.newIntelligenceRec.fields.IntelligenceType__c.value == 'CompetitorMarket Intelligence', v.afterPrice))}">
+                        {!$Label.c.TreeMap}
+                        <c:TreeMapGenericComponent CardTitle="{!$Label.c.TreeMapOpportunityCompCardTitle}" varLessonId="{!v.newIntelligenceRec.id}"
+                            varCardTitleIcon="standard:opportunity" varControllerName="{!$Label.c.TreeMapOpportunityCompHelper}"
+                        />
+                        <c:TreeMapGenericComponent CardTitle="{!$Label.c.TreeMapAccountCardTitle}" varLessonId="{!v.newIntelligenceRec.id}" varCardTitleIcon="standard:account"
+                            varControllerName="{!$Label.c.TreeMapAccountHelper}" />
+                        <c:TreeMapGenericComponent CardTitle="{!$Label.c.TreeMapAssetCardTitle}" varLessonId="{!v.newIntelligenceRec.id}" varCardTitleIcon="standard:asset_relationship"
+                            varControllerName="{!$Label.c.TreeMapAssetHelper}" />
+
+                        <!-- onClick of this button Either Popup will be closed or record Updation will happens based on the Selections-->
+                        <div class="slds-text-align_right slds-m-top_large">
+                            <lightning:button name="finish" label="Finish" variant="brand" onclick="{!c.closePopup}"/>
+                        </div> 
+                      </aura:if>
+
+                      <!--Displaying SBQQ Quote Lines Selection Selection screen for Price Intelligence Type -->
+                      <aura:if isTrue="{!and(v.newIntelligenceRec.fields.IntelligenceType__c.value == 'Price Intelligence',v.afterPrice == false)}">
+ 
+                              <!-- Displaying the message-->
+                              <aura:if isTrue="{!empty(v.quoteLineList)}">
+
+                                 <h3>No Quote Line Items are available</h3>
+
+                                 <aura:set attribute="else">
+                                     <h3>{!$Label.c.CreateExperienceQuoteLineMessage} </h3>
+                                 </aura:set>
+
+                               </aura:if>
+
+                        <div class="slds-scrollable_y" style="height:30em;">       
+                            <!-- Displaying the list of SBQQ Quote Line items So that user can select 1 record only at any time-->
+                            <aura:iteration items="{!v.quoteLineList}" var="item">
+                                <div class="slds-align_absolute-center slds-m-top_xx-small">
+                                    <lightning:button class="quoteLineBtn" value="{!item.Id}" variant="{!v.selectedQuoteLine == item.Id?'brand':'neutral'}" onclick="{!c.onSelectQuote}">
+                                        <lightning:layout multipleRows="true" >  
+                                            <lightning:layoutItem flexibility="auto" size="12" smallDeviceSize="1" >
+                                                <aura:if isTrue="{!v.selectedQuoteLine == item.Id}">
+                                                  <div class="slds-m-top_small">
+                                                    <lightning:icon iconName="{!v.selectedQuoteLine == item.Id?'utility:check':''}" size="small" variant="inverse" alternativeText="Check mark image"/>
+                                                  </div>
+                                                </aura:if>  
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem flexibility="auto"  size="12" smallDeviceSize="2">
+                                                    <dl class="slds-list_stacked">
+                                                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">Quote Id</dt>
+                                                        <dd class="slds-item_detail slds-truncate" title="{!item.Name}">{!item.Name}</dd>
+                                                    </dl>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem flexibility="auto"  size="12" smallDeviceSize="3">
+                                                    <dl class="slds-list_stacked">
+                                                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">Product Name</dt>
+                                                        <dd class="slds-item_detail slds-truncate" title="{!item.SBQQ__ProductName__c}">{!item.SBQQ__ProductName__c}</dd>
+                                                    </dl>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem flexibility="auto"  size="12" smallDeviceSize="3">
+                                                    <dl class="slds-list_stacked">
+                                                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">Asset Name</dt>
+                                                        <dd class="slds-item_detail slds-truncate" title="{!item.Service_Asset__r.Name}">{!item.Service_Asset__r.Name}</dd>
+                                                    </dl>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem flexibility="auto" size="12" smallDeviceSize="3">
+                                                <dl class="slds-list_stacked">
+                                                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">Net Price</dt>
+                                                        <dd class="slds-item_detail slds-truncate" title="{!item.SBQQ__NetPrice__c}">{!item.SBQQ__NetPrice__c}</dd>
+                                                    </dl>
+                                            </lightning:layoutItem>
+                                        </lightning:layout>
+                                    </lightning:button>
+                                </div> 
+                            </aura:iteration>
+                            </div> 
+
+                        <!-- onClick of this button Either Popup will be closed or record Updation will happens based on the Selections-->
+                        <div class="slds-text-align_right slds-m-top_large">
+                                <lightning:button name="priceNext" label="Next" variant="brand" onclick="{!c.closePopup}"/>
+                        </div> 
+ 
+                      </aura:if>
+
+                    </aura:set>
+                </aura:if>
+                       
+            </aura:if>
+            <aura:if isTrue="{!v.value == 'Existing Intelligence'}">
+
+                <c:DisplayQuoteDeviations
+                        CardTitle = "Lessons Learned for this Opportunity"
+                        object = "LessonsLearned__c"
+                        fieldSetName = "LessonsLearned"
+                        AdditionalFilter = "Stage__c='Released'"
+                        filterById = "LessonsLearnedToExperience"
+                        filterBy = "Class__c,MainCategory__c"
+                        TargetParentField = "Id"
+                        TargetReportField = "Opportunity__c"
+                        TargetFieldId = "Intelligence__c"
+                        DisplayList = "false"
+                        SuccessMessage = "The Intelligence(s) were created. You can check them in the related items."
+                        ButtonLabel = "Apply Intelligence(s)"
+                        recordId = "{!v.recordId}"
+                        sObjectName = "{!v.sObjectName}"/>
+
+            </aura:if>
+
+          <lightning:spinner name="spinner" class="{!v.spin?'slds-show':'slds-hide'}" alternativeText="loading" />
+
+        </div>
+    </aura:if>
+</aura:component>

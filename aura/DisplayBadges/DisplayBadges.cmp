@@ -1,0 +1,42 @@
+<!--
+  Created By : Phaniram Upalapati
+  Description : Component is used to display the badges earned by the user.
+-->
+<aura:component controller="DisplayBadges_Cont" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" access="global" >
+    
+    <aura:attribute name="spinner" type="boolean" default="false" access="private"/>
+    
+    <aura:attribute name="imageLst" type="list" />
+    <aura:attribute name="msg" type="string" />
+    
+    <!--handler method -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-is-relative"> 
+        
+        <lightning:card title="Badges Received" >
+            
+            <aura:if isTrue="{!!empty(v.msg)}">
+               {!v.msg}
+            </aura:if>
+            <div class="c-container">
+                <lightning:layout horizontalAlign="spread" multipleRows="true" >
+                  <aura:iteration items="{!v.imageLst}" var="item">
+                    <lightning:layoutItem flexibility="auto" padding="around-small"  size="6" class="slds-align_absolute-center">
+                        <div>
+                           <lightning:avatar class="{!(item.status == $Label.c.Util_Inactive?'imageBlur':'')}" src="{!($Label.c.DisplayUploadedImageURL+item.contentVersionId)}" alternativeText="{!item.title}" variant="empty" size="large"/>
+                        </div>
+                    </lightning:layoutItem>
+                  </aura:iteration> 
+                </lightning:layout>
+            </div>    
+            
+        </lightning:card>
+        
+        <!-- Spinner -->   
+        <aura:if isTrue="{!v.spinner}">
+            <lightning:spinner variant="brand" aura:id="loadspinner" alternativeText="Loading.."/>
+        </aura:if>  
+        
+    </div>
+</aura:component>

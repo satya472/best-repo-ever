@@ -1,0 +1,20 @@
+<aura:component>
+
+    <aura:attribute name="linkTo" type="string" description="URL to the external sites" />
+    <aura:attribute name="imageName" type="string" description="image Name in the static resources" />
+    <aura:attribute name="linkName" type="string" description="Name that needs to be displayed on to UI" />
+  
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <div class="slds-card" >
+     <a href="{!v.linkTo}">
+       <lightning:layout horizontalAlign="spread" multipleRows="true">
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6">
+                    <img class="cardClass" src="{!$Resource.CEPImages+'/images/'+v.imageName}" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6">
+                   <div class="slds-align_absolute-center slds-text-heading_small slds-m-around_large">{!v.linkName}</div>
+            </lightning:layoutItem> 
+       </lightning:layout>                     
+    </a>
+ </div>
+</aura:component>

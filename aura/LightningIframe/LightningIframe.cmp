@@ -1,0 +1,12 @@
+<!--
+ - Created by jens.becker on 11.09.18.
+ -->
+
+
+<aura:component description="IFrame for BP CDD tool" implements="force:hasRecordId" >
+    <aura:attribute type="String" default="https://salesforce.com" name="url" />
+    <aura:attribute name="BPRecord" type="ThirdPartyInvolved__c" />
+
+
+    <iframe  src="{!v.BPRecord.BPCDDURL__c}" />
+</aura:component>

@@ -1,0 +1,71 @@
+<!-- <template>
+    <template if:true={notificationList}>
+        <template if:false={showToastMsgs}>
+            <div class="slds-notify_container slds-is-relative" >
+                <div class="slds-notify slds-notify_toast slds-theme_warning" role="status" onclick={displayHideNotificationList}>
+                    <span class="slds-assistive-text">warning</span>
+                    <span
+                        class="slds-icon_container slds-icon-utility-warning slds-m-right_small slds-no-flex slds-align-top"
+                        title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!" variant="warning"
+                            size="small">
+                        </lightning-icon>
+                    </span>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small ">
+                            <a href="javascript:void(0);">There are Urgent Notifications Published Please check
+                                them.</a>
+                        </h2>
+                    </div>
+                    <div class="slds-notify__close">
+                        <button class="slds-button slds-button_icon slds-button_icon-inverse" title="Close"
+                            onclick={hideNotificationClick}>
+                            <lightning-icon icon-name="utility:close" alternative-text="Close" variant="warning"
+                                size="small">
+                            </lightning-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template if:true={showToastMsgs}>
+            <div class="notificationOverlay" >
+                <div class="slds-text-align_center">
+                  <lightning-button-icon icon-name="utility:close" icon-class="slds-m-around_large" size="large" variant="bare-inverse"  alternative-text="Close window" onclick={displayHideNotificationList}></lightning-button-icon>
+                </div>
+                <template for:each={notificationList} for:item='notification'>
+                    <p key={notification.Id}>
+                        <c-cep_notification-toast notification={notification}></c-cep_notification-toast>
+                    </p>
+                </template>
+            </div>
+        </template>
+
+    </template>
+</template> -->
+<template>
+    <div class="container alert_container" if:false={showToastMsgs}>
+      <div class="alerts">
+        <template for:each={toastNotification} for:item='toastMsg'>
+          <div class="alert alert-warning alert-dismissible fade show first" key={toastMsg.id}>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="">
+                  <img src={warningIcon} width="30" height="30" />
+                </div>
+                <div class="col-10">
+                  {toastMsg.Name}
+                </div>
+                <div class="">
+                  <button type="button" class="btn btn-warning btn-circle close" data-dismiss="alert" 
+                        onclick={displayHideNotificationList}>
+                  <i class="fa fa-times" style="color: #ff9900"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>  
+     </div>
+    </div>
+</template>

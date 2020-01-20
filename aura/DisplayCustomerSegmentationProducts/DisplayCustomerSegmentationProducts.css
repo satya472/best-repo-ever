@@ -1,0 +1,22 @@
+@media (max-width: 48em){
+    .THIS .slds-max-medium-table_stacked th, 
+    .THIS .slds-max-medium-table_stacked td, 
+    .THIS .slds-max-medium-table--stacked th,
+    .THIS .slds-max-medium-table--stacked td {
+      overflow:visible;
+    }
+    .THIS .slds-table_header-fixed tbody tr:first-child td, 
+    .THIS .slds-table_header-fixed tbody tr:first-child th, 
+    .THIS .slds-table--header-fixed tbody tr:first-child td, 
+    .THIS .slds-table--header-fixed tbody tr:first-child th {
+      border-top: 1px solid rgb(221, 219, 218);
+    }
+}
+
+.THIS .slds-button_neutral, .THIS .slds-button--neutral{
+  display:none;
+}
+
+.THIS .slds-button_neutral, .THIS .slds-button--neutral{
+  display:none;
+}

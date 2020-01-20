@@ -1,0 +1,8 @@
+table{
+	font-size: 14px !important;
+}
+table thead th {
+    color: #fff;
+    background-color: #107070;
+    border-color: #107070;
+}

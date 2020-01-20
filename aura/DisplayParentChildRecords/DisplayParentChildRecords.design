@@ -1,0 +1,8 @@
+<design:component >
+    <design:attribute name="parentObj" Label="Parent Object API Name" description="Parent Object Api Name to fetch the records" required="true" />
+    <design:attribute name="childObj" Label="Child Object API Name" description="Child Object Api Name to fetch the records" required="true" />
+    <design:attribute name="fieldSetName" label="Child FieldSetName"  description="API Name of the field set containg the field details that needs to be displayed for child records"/>
+    <design:attribute name="parentChildRelField" Label="Child to Parent Related Field API Name" description="API Name of the field on Child Object through which we can Identify the parent record" required="true" />
+    <design:attribute name="parentFilter" Label="Filter Parent Records" description="SOQL Filtering format must be given i.e. FieldAPIName = 'Value' and/OR Fielter2" />
+    <design:attribute name="childFilter" Label="Filter Child Records" description="SOQL Filtering format must be given i.e. FieldAPIName = 'Value' and/OR Fielter2" />
+</design:component>

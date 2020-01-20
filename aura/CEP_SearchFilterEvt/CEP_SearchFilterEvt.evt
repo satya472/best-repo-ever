@@ -1,0 +1,6 @@
+<aura:event type="COMPONENT" description="Search Filter Data">
+  <aura:attribute name="startDate" type="string" />
+  <aura:attribute name="endDate" type="string" />
+  <aura:attribute name="viewBy" type="string" />
+  <aura:attribute name="searchText" type="string" />
+</aura:event>

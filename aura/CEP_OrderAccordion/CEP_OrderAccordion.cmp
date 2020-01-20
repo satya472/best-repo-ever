@@ -1,0 +1,91 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+  <aura:attribute name="index" type="String" />
+  <aura:attribute name="accordIndex" type="String" />
+  <aura:attribute name="order" type="object" />
+
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+
+  <li class="slds-accordion__list-item slds-card slds-m-top_xx-small">
+                <section id="accordionSec" class="{!v.accordIndex == v.index?'slds-accordion__section slds-is-open': 'slds-accordion__section'}">
+                    <div class="slds-accordion__summary" onclick="{!c.expandCollapse}" data-val="{!v.index}" >
+                        <h3 class="slds-accordion__summary-heading">
+                            <lightning:layout horizontalAlign="center"  multipleRows="true" class="headerWidth">
+                                <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="2" >
+                                    {!v.order.CustomerPONumber__c}
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="2" >
+                                    {!v.order.SalesOrderNumber__c}
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="2" >
+                                  Closed
+                                </lightning:layoutItem> 
+                                <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="2" >
+                                  A
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="2" >
+                                  {!v.order.CurrentStatusOrder__c}
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="2" >
+                                  {!v.order.LastConfirmedDeliveryDate__c}
+                                </lightning:layoutItem> 
+                            </lightning:layout>
+                            <lightning:buttonIcon iconName="{!v.accordIndex != v.index?'utility:chevrondown':'utility:chevronup'}" variant="bare" class="slds-p-around_small" alternativeText="Settings"  />
+                            
+                        </h3>
+                    </div>
+                    <div aria-hidden="false" class="slds-accordion__content contentSize" id="accordion-details-01">
+                        
+                       <!-- <div class="slds-box slds-box_x-small slds-theme_shade">
+                            <h3>Partial 1</h3>
+                        </div>-->
+                        <lightning:layout horizontalAlign="center" multipleRows="true">
+                            
+                            <lightning:layoutItem flexibility="auto" padding="around-small" size="12" smallDeviceSize="3">
+                                <lightning:layout horizontalAlign="center" multipleRows="true">
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                        <h3>Item No:</h3>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                        {!v.order.OrderLineItemNo__c}
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                        <h3> Part:</h3>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                       {!v.order.PartNumber__c}
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                        <h3> Description:</h3>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                        {!v.order.PartDescription__c}
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                        <h3> Quantity:</h3>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                        {!v.order.OrderQuantity__c}
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                        <h3> Unit:</h3>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                       {!v.order.ItemUnit__c}
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                       <h3> Customer Requested Date:</h3>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+                                        {!v.order.CustomerRequestedDate__c}
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </lightning:layoutItem>
+                            
+                        </lightning:layout>
+                    </div>
+                </section>
+            </li>
+
+
+</aura:component>

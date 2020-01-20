@@ -1,0 +1,198 @@
+<aura:component controller="DisplayContactTableController" access="global"
+                implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction"  >
+    
+    <!--Aura Attributes-->   
+    <aura:attribute name="isOpen" type="boolean"/>
+    <aura:attribute name="primaryRecordId" type="String"/>
+    <aura:attribute name="sObjectName" type="String"/>
+    <aura:attribute name="parentFieldName" type="String"/>
+    <aura:attribute name="tempParentFieldName" type="String"/>
+    <aura:attribute name="parentRecordId" type="String"/>
+    <aura:attribute name="addMemberType" type="String"/>    
+    
+    <aura:attribute name="selectedCount" type="integer" default="0"/>
+    <aura:attribute name="createBCMList" type="Buying_Center_Member__c[]"/>
+    <aura:attribute name="newBCM" type="Buying_Center_Member__c" default="{ 'sobjectType': 'Buying_Center_Member__c' }"/>
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="createContact" type="boolean" default="false"/>    
+    
+    <aura:attribute name="fieldSetName" type="String"/>
+    <aura:attribute name="fieldSetValues" type="List"/> 
+    <aura:attribute name="tableData" type="List"/> 
+    <aura:attribute name="tableRecords" type="List"/>   
+    <aura:attribute name="searchKey" type="String"/> 
+    <aura:attribute name="contactFields" type="List" default="['Name', 'AccountId', 'Phone', 'Title', 'Email']" />    
+    <aura:attribute name="BCMContactSearchValue" type="String" default="accountContacts"/>
+    <aura:attribute name="BCMContactSearchOptions" type="List" default="[{'label': 'Account Contacts', 'value': 'accountContacts'},
+                                                                        {'label': 'All Contacts', 'value': 'allContacts'}]"/>    
+    <aura:attribute name="SCMContactSearchValue" type="String" default="otmContacts"/>
+    <aura:attribute name="SCMContactSearchOptions" type="List" default="[{'label': 'Opportunity Team Members', 'value': 'otmContacts'},
+                                                                        {'label': 'All Salesforce Users', 'value': 'allSFUsers'},
+                                                                        {'label': 'All Contacts', 'value': 'allContacts'}]"/>    
+    
+    <!-- Pagination -->
+    <aura:attribute name="currentPageNumber" type="integer" default="1"/>
+    <aura:attribute name="maxPageNumber" type="Integer" />
+    <aura:attribute name="currentList" type="List" />
+    <aura:attribute name="recordsPerPage" type="Integer" default="5"/>
+    <aura:attribute name="resultSize" type="Integer" default="0"/>
+    
+    <!--Move member up/down-->
+    <aura:attribute name="positionBCMMap" type="Integer"/>    
+    <aura:attribute name="positionSCMMap" type="Integer"/>
+
+    <!--Aura Handlers--> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:SearchKeyChange" action="{!c.searchKeyChange}"/>  
+    <aura:handler name="pageChange" event="c:PaginationEvent" action="{!c.handlePageChange}" />
+    
+    <!--loading spinner start... style=Brand Medium-->
+    <aura:if isTrue="{!v.Spinner}">
+        <lightning:spinner alternativeText="Loading" size="medium" />
+    </aura:if>
+    <!-- Loading spinner end--> 
+    
+    <div class="slds">
+        <!--search begins-->
+        <div style="border:1px ridge;" class="slds-align--absolute-center"><br/>
+            <input aura:id="searchBoxText" type="text" value="" class="form-control" onkeyup="{!c.searchKeyChangeInput}" 
+                   placeholder="Search">
+			</input>   
+            
+            <!--BCM Search Options-->
+            <aura:if isTrue="{!v.addMemberType != 'SCM'}" >
+                <lightning:radioGroup aura:id="radioGrp"
+                                      name="contactSearchGroup"                                    
+                                      class="slds-float_right customPadding"
+                                      options="{!v.BCMContactSearchOptions }" 
+                                      value="{!v.BCMContactSearchValue }"
+                                      onchange="{!c.doInit }" />
+                <div class="slds-grid slds-grid--align-end customPadding">                     
+                    <lightning:button variant="brand" label="Add New Buying Center Member" onclick="{! c.createSelectedMember }"/>
+                    <aura:if isTrue="{!v.BCMContactSearchValue == 'allContacts'}">
+                    <lightning:button variant="brand" label="Create New Contact" onclick="{! c.openNewContactModal}"/>
+                    </aura:if>
+                </div> 
+                
+                <!--SCM Search Options-->
+                <aura:set attribute="else">
+                    <lightning:radioGroup aura:id="radioGrp"
+                                          name="contactSearchGroup"                                    
+                                          class="slds-float_right customPadding"
+                                          options="{!v.SCMContactSearchOptions }" 
+                                          value="{!v.SCMContactSearchValue }"
+                                          onchange="{!c.doInit }" />
+                    <div class="slds-grid slds-grid--align-end customPadding">                     
+                        <lightning:button variant="brand" label="Add New Selling Center Member" onclick="{! c.createSelectedMember }"/>
+                        <aura:if isTrue="{!v.SCMContactSearchValue == 'allContacts'}">
+                        <lightning:button variant="brand" label="Create New Contact" onclick="{! c.openNewContactModal}"/>                    
+                        </aura:if>
+                    </div>
+                </aura:set>
+            </aura:if>
+            
+        </div>
+        <!--search ends-->
+        
+        <!--Table begins-->
+        <div class="slds-grid slds-grid_align-spread slds-m-vertical_small">
+            <div class="slds-col">
+        		<span class="slds-badge">Selected Contact: {!v.selectedCount}</span>
+            </div>
+        <div style="width:15%;" class="slds-col">
+            <lightning:select aura:id="recPerPage" name="perPage" value="{!v.recordsPerPage}" label="Records Per Page" onchange="{!c.recordsPerPageChange}">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>          
+                <option value="30">30</option>
+            </lightning:select>
+        </div>
+        </div>
+        
+        <aura:if isTrue="{!v.currentList.length == 0}"> 
+            <br/>
+            <div style="color:red;">No records available!</div>            
+        </aura:if>
+        
+        <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+            <thead>
+                <tr class="slds-text-title--caps">
+                    <th style="width:3.25rem;" class="slds-text-align--right">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label class="slds-checkbox">
+                                    <!--header checkbox for select all-->
+                                    <ui:inputCheckbox aura:id="box3" change="{!c.selectAll}"/>
+                                    <span class="slds-checkbox--faux"></span>
+                                    <span class="slds-form-element__label text"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </th>
+                    <aura:iteration items="{!v.fieldSetValues}" var="field">
+                        <th> {!field.label}</th>
+                    </aura:iteration></tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.currentList}" var="con">
+                    <tr id="{!con.Id}">
+                        <td scope="row" class="slds-text-align--right" style="width:3.25rem;">
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <label class="slds-checkbox">
+                                        <ui:inputCheckbox text="{!con.Id}" aura:id="boxPack" value="{!con.check}" 
+                                                          change="{!c.checkboxSelect}"/>
+                                        <span class="slds-checkbox--faux"></span>
+                                        <span class="slds-form-element__label text"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                        <aura:iteration items="{!v.fieldSetValues}" var="field">
+                            <td scope="row">
+                                <c:DisplayCell record="{!con}" field="{!field}"/>
+                            </td>
+                        </aura:iteration>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+        <!--Table ends-->   
+        
+        <br/>
+        <!--Pagination-->
+        <aura:if isTrue="{!!empty(v.currentList)}">
+            <span class="slds-badge">Results: {!v.resultSize}</span>
+            <c:PaginationComponent currentPageNumber="{!v.currentPageNumber}" maxPageNumber="{!v.maxPageNumber}" />
+        </aura:if>
+        
+    </div>
+    
+    
+    <!--Create new Contact Form-->
+    <aura:if isTrue="{!v.createContact}">
+        <div class="demo-only">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" 
+                     aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" title="Close" onclick="{!c.closeNewContactModal}" 
+                                              class="slds-float_right"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create New Contact</h2>
+                    </header>
+                    <div class="modal-con slds-modal__content slds-p-around_medium" id="modal-content-id-con">                            
+                        <lightning:recordForm 
+                                              objectApiName="Contact"
+                                              mode="edit"
+                                              fields="{!v.contactFields}"
+                                              onload="{!c.handleLoad}"
+                                              onsubmit="{!c.handleSubmit}"
+                                              onsuccess="{!c.createNeWContactRec}" />                           
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>        
+    </aura:if>
+</aura:component>

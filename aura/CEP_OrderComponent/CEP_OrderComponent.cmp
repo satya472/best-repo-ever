@@ -1,0 +1,298 @@
+<!--
+ Created By: Phaniram Upalapati
+ Description: The component is used on Track&Trace Page in Community. It Displays all the Order details related to
+            the logged in User
+-->
+<aura:component controller="CEPTrackAndTraceOrder_Cont" implements="forceCommunity:availableForAllPageTypes">
+
+    <!--Attribute for tracking the accordion index i.e. which is clicked -->
+    <aura:attribute name="accordIndex" type="Integer" default="0" />
+
+    <!--Attribute for storing the fetched list of records -->
+    <aura:attribute name="orderList" type="list" />
+    <aura:attribute name="filteredList" type="list" />
+    <aura:attribute name="partiallyDeliveredMsg" type="string" />
+    <aura:attribute name="sortField" type="string" />
+    <aura:attribute name="sortOrder" type="string" default="Asc" />
+    <aura:attribute name="sortedBy" type="String" />
+    <aura:attribute name="sortedDirection" type="string" default="asc" />
+
+    <aura:attribute name="ifaNumber" type="string" />
+
+    <!--Search Event handler -->
+    <aura:handler name="cepSearchEvt" event="c:CEP_SearchFilterEvt" action="{!c.filterRecords}" />
+
+    <!--handler for Component Initiation -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:attribute name="spinner" type="boolean" default="false" />
+    <aura:attribute name="showDetailsRecId" type="string" />
+    <aura:attribute name="showDetails" type="boolean" />
+    <aura:attribute name="order" type="object" />
+
+    <aura:attribute name="columns" type="list" />
+    <aura:attribute name="data" type="list" />
+
+    <div class="trackTraceInfo slds-is-relative">
+        <div class="slds-p-left_medium slds-text-heading_medium slds-border_bottom slds-p-bottom_medium"><b>Order Track
+                &amp; Trace</b></div>
+
+        <aura:if isTrue="{!!v.showDetails}">
+            <div class="slds-border_bottom slds-p-bottom_medium">
+                <c:SearchBarContainerComp />
+            </div>
+
+            <div class="slds-m-top_medium">
+                <aura:if isTrue="{!!empty(v.filteredList)}">
+
+                    <aura:iteration items="{!v.filteredList}" var="order">
+
+                        <div class="order slds-border_bottom slds-p-left_small slds-p-right_small slds-p-bottom_medium">
+                            <lightning:layout multipleRows="true" horizontalAlign="space">
+
+                                <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="12"
+                                    mediumDeviceSize="12" largeDeviceSize="2">
+
+                                    <lightning:layout multipleRows="true" horizontalAlign="space" class="slds-p-bottom_small">
+                                        <lightning:layoutItem class="slds-p-bottom_small" size="12" smallDeviceSize="12">
+                                            <b>Client PO No. {!order.CustomerPONumber__c}</b>
+                                        </lightning:layoutItem>
+                                        <lightning:layoutItem class="slds-p-bottom_small" size="12" smallDeviceSize="12">
+                                            <span class="displayFields">Sales Order No. <span>{!order.SalesOrderNumber__c}</span></span>
+                                        </lightning:layoutItem>
+                                        <aura:if isTrue="{!order.Type__c == 'Repair'}">
+                                            <lightning:layoutItem class="slds-p-bottom_small" size="12" smallDeviceSize="12">
+                                                <span class="displayFields">Project No. <span>{!order.ProjectNumber__c}</span></span>
+                                            </lightning:layoutItem>
+                                        </aura:if>
+                                        <lightning:layoutItem class="slds-p-bottom_small" size="12" smallDeviceSize="12">
+                                            <span class="displayFields">Type: <span>{!order.Type__c}</span></span>
+                                        </lightning:layoutItem>
+                                        <aura:if isTrue="{!order.Type__c == 'Spare Parts'}">
+                                                <lightning:layoutItem class="slds-p-bottom_small" size="12" smallDeviceSize="12">
+                                                    <span class="displayFields"></span>
+                                                </lightning:layoutItem>
+                                        </aura:if>
+                                    </lightning:layout>
+
+                                </lightning:layoutItem>
+
+                                <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="12"
+                                    mediumDeviceSize="12" largeDeviceSize="8">
+
+                                    <c:CEP_ProgressIndicator order="{!order}" currentStatus="{!order.CurrentStatusOrder__c}" />
+
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="12" largeDeviceSize="2" padding="around-small">
+                                    <aura:if isTrue="{!order.CurrentStatusOrder__c != 'Order Entry'}">
+                                        <div class="slds-text-align_center slds-p-top_xx-large">
+                                            <a onclick="{!c.showDetails}" data-details="{!order.CustomerPONumber__c}">View Details</a>
+                                        </div>
+                                    </aura:if>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </aura:iteration>
+
+                    <!--Below details will be displayed if there is no data available for display -->
+                    <aura:set attribute="else">
+                        <div class="slds-box slds-theme_shade">
+                            No Records Available to Display
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </div>
+            <aura:set attribute="else">
+                    <lightning:layout multipleRows="true" horizontalAlign="space">
+                            <lightning:layoutItem padding="around-small" size="12">
+                                <div class="btnBack" onclick="{!c.goBack}">
+                                    <lightning:buttonIcon iconName="utility:reply" variant="bare" alternativeText="back" />
+                                    <span class="slds-p-left_xx-small">Back</span>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small" size="12">
+                                <p>
+                                    Client PO No. <b>{!v.order.CustomerPONumber__c}</b>
+                                    <span class="slds-box slds-box_xx-small slds-theme_shade slds-m-left_medium">{!v.order.Type__c}</span>
+                                </p>
+                                <div>
+                                    Sales Order No. <b>{!v.order.SalesOrderNumber__c}</b>
+                                </div>
+                                <div>
+                                    Incoterm: <b>{!v.order.IncotermSO__c}</b>
+                                </div>
+                                <div>
+                                    Incoterm Named Place: <b>{!v.order.IncotermNamedPlace__c}</b>
+                                </div>
+                                <aura:if isTrue="{!!empty(v.partiallyDeliveredMsg)}">
+                                    <div>
+                                        <b>{!v.partiallyDeliveredMsg}</b>
+                                    </div>
+                                </aura:if>
+        
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small" size="12">
+                                <div class="detailsClass">
+                                    <lightning:layout multipleRows="true" horizontalAlign="space">
+                                        <lightning:layoutItem class="slds-m-bottom_xx-large slds-p-bottom_large" size="12">
+                                            <c:CEP_ProgressIndicator order="{!v.order}" currentStatus="{!v.order.CurrentStatusOrder__c}" />
+                                        </lightning:layoutItem>
+                                    </lightning:layout>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small" size="12">
+                                <div class="slds-border_bottom"></div>
+                            </lightning:layoutItem>
+                            <aura:if isTrue="{!v.order.Type__c == 'Repair'}">
+                                <lightning:layoutItem class="slds-m-left_xx-large" size="12">
+                                    <b>
+                                        PO Details
+                                    </b>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem padding="around-small" size="12">
+                                    <div class="detailsClass slds-p-around_small">
+                                        <lightning:layout multipleRows="true" horizontalAlign="space">
+        
+                                            <lightning:layoutItem padding="around-small" size="12">
+                                                <b>Client</b>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Client Name: <span>{!v.order.Client__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Client PO: <span>{!v.order.ClientTagNumber__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Proposal Number: <span>{!v.order.ProposalNumber__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Scope Summary: <span>{!v.order.ScopeSummary__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Project Manager: <span>{!v.order.ProjectManager__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Client Manager: <span>{!v.order.ClientManager__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Serial: <span>{!v.order.EquipmentSN__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Client Tag: <span>{!v.order.ClientTagNumber__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Equipment Model: <span>{!v.order.EquipmentModel__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Quoted By: <span>{!v.order.QuotedBy__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+        
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+        
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem padding="around-small" size="12">
+                                                <div class="slds-border_bottom"></div>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem padding="around-small" size="12">
+                                                <b>Site</b>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Site Name: <span>{!v.order.Site__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">FPS Status: <span>{!v.order.ProjectStatus__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">PO Received Date: <span>{!v.order.POReceived__c}</span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Approximate Start Date: <span>
+                                                        <lightning:formattedDateTime value="{!v.order.ApproximateStartDate__c}"
+                                                            year="numeric" day="2-digit" month="short" /></span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Equipment Received Date: <span>
+                                                        <lightning:formattedDateTime value="{!v.order.EquipmentReceivedDate__c}"
+                                                            year="numeric" day="2-digit" month="short" /></span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Quoted Ship Date: <span>
+                                                        <lightning:formattedDateTime value="{!v.order.QuotedShipDate__c}" year="numeric"
+                                                            day="2-digit" month="short" /></span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Actual Ship Date: <span>
+                                                        <lightning:formattedDateTime value="{!v.order.ActualShipDate__c}" year="numeric"
+                                                            day="2-digit" month="short" /></span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Latest Milestone Achieved: <span>
+                                                        <lightning:formattedDateTime value="{!v.order.LatestMilestoneAchieved__c}"
+                                                            year="numeric" day="2-digit" month="short" /></span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+                                                <span class="displayFields">Final Report Submit date: <span>
+                                                        <lightning:formattedDateTime value="{!v.order.FinalReportSubmitDate__c}"
+                                                            year="numeric" day="2-digit" month="short" /></span></span>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+        
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+        
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem size="12" padding="around-small" smallDeviceSize="6"
+                                                mediumDeviceSize="4" largeDeviceSize="3">
+        
+                                            </lightning:layoutItem>
+        
+                                        </lightning:layout>
+                                    </div>
+                                </lightning:layoutItem>
+                            </aura:if>
+        
+                        </lightning:layout>
+                        <aura:if isTrue="{!and(v.order.Type__c == 'Spare Parts',!empty(v.data))}">
+                            <div class="slds-text-heading_medium slds-p-around_small"><b>Item Order List</b></div>
+                            <div style="height: 300px" class="slds-p-around_small">
+                                <lightning:datatable class="slds-max-medium-table_stacked" keyField="Id" data="{! v.data }"
+                                    columns="{! v.columns }" hideCheckboxColumn="true" sortedBy="{! v.sortedBy }"
+                                    sortedDirection="{! v.sortedDirection }" onsort="{!c.columnSorting}" />
+                            </div>
+                        </aura:if>
+        
+        
+            </aura:set>
+        </aura:if>
+
+        <aura:if isTrue="{!v.spinner}">
+            <lightning:spinner alternativeText="Loading" size="medium" variant="brand" />
+        </aura:if>
+
+    </div>
+</aura:component>

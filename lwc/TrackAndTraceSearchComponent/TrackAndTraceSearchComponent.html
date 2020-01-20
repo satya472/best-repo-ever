@@ -1,0 +1,24 @@
+<template>
+    <div onkeyup={filterData}>
+        <lightning-layout horizontal-align="spread" multiple-rows="true">
+            <lightning-layout-Item padding="around-small" size="12" small-device-size="5" medium-device-size="2">
+                <!--<lightning:input aura:id="start" type="date" name="startDate" label="Start Date" placeholder="Start Date.."/>-->
+            </lightning-layout-Item>
+            <lightning-layout-Item padding="around-small" size="12" small-device-size="5" medium-device-size="2">
+                <!--<lightning:input aura:id="end" type="date" name="endDate" label="End Date" placeholder="End Date.."/>-->
+            </lightning-layout-Item>
+            <lightning-layout-Item padding="around-small" size="12" small-device-size="2" medium-device-size="1">
+                
+            </lightning-layout-Item>
+            <lightning-layout-Item padding="around-small" size="12" small-device-size="9" medium-device-size="5">
+                <lightning-input
+                    name="searchPlaceholder"
+                    label="Enter Search Term"
+                    type="search"></lightning-input>
+            </lightning-layout-Item>
+            <lightning-layout-Item padding="around-small" size="12" small-device-size="3" medium-device-size="2">
+                <lightning-button variant="brand" label="Brand action" title="Brand action" onclick={filterData} class="slds-m-left_x-small"></lightning-button>
+            </lightning-layout-Item>
+        </lightning-layout>
+    </div>
+</template>

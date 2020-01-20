@@ -1,0 +1,9 @@
+<design:component >
+    <design:attribute name="segCategory" label="Segmentation Category" datasource="apex://CustomerSegmentation_Cont"/>
+    <design:attribute name="recordId" label="Record Id" />
+     <sfdc:objects >
+        <sfdc:object >Account</sfdc:object>
+        <sfdc:object >Contact</sfdc:object>
+        <sfdc:object >Asset</sfdc:object>
+    </sfdc:objects>
+</design:component>

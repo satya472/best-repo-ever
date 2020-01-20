@@ -1,0 +1,39 @@
+.THIS {
+}
+.THIS.table{
+	font-size: 14px !important;
+}
+.THIS.table .thead-dark th {
+    color: #fff;
+    background-color: #107070;
+    border-color: #107070;
+}
+.THIS.table td a {
+	color: #000 !important;
+    margin-right: 7px;
+} 
+.THIS.overlay{
+	position: fixed;
+    width: 100%; 
+    height: 100%;
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2; 
+    cursor: pointer;
+}
+.THIS.conent{
+	z-index: -1 !important;
+}
+.THIS table thead th:nth-child(1),
+.THIS table thead th:nth-child(2){
+    width:8%;
+}
+.THIS table thead th:nth-child(3){
+    width: 20%;
+}
+.THIS table thead th:nth-child(5){
+    width: 20%;
+}

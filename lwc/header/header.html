@@ -1,0 +1,104 @@
+<template>
+  <header  class="fixed-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-6">
+            <img src={logo} alt="Logo Thing main logo">
+          </div>
+          <div class="col-6 justify-content-center align-self-center">
+            <div class="row">
+              <div class="col">
+                <div class="dropdown text-right">
+                  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" 
+                     onclick={showNotification}>
+                  <span class="bell fa fa-bell"></span>
+                  <span class="num">{notificationCount}</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right w-auto notification">
+                    <div class="card">
+                      <div class="card-header d-flex justify-content-between">
+                      <span>Notifications</span>
+                      <span onclick={showNotification} class="ponitor"><i class="fa fa-times" aria-hidden="true"></i></span> 
+                    </div>
+                    <div class="card-body scroll_notification">
+                    <template for:each={notificationList} for:item="notification">  
+                      <a class="dropdown-item" style="display: table;" key={notification.Id}>
+                          <div class="day">
+                            <i class={notification.class}></i>
+                            <p>1 Day</p>
+                          </div>
+                          <div class="con">
+                            <b>{notification.Name}</b>
+                            <p>Failure of the safety function while using failsafe digital input module.</p>
+                          </div>
+                      </a>
+                    </template>
+                  </div>
+                    <div class="card-footer text-center">
+                      <a href="notifications" class="all_notification">
+                        All Notifications
+                      </a>
+                    </div>
+                   </div> 
+                  </div>
+                </div>
+              </div>  
+
+                <div class="col">
+                  <div class="dropdown">
+                    <a class="d-none d-lg-inline-block dropdown-toggle text-green" href="#" data-toggle="dropdown" role="button"
+                        onclick={displayUserProfile}>
+                    <img src={profile} width="20px" height="20px" alt="User Profile" class="user_profile">{userName}
+                    </a>
+                    <a class="navbar-brand-two mx-auto d-lg-none d-inline-block dropdown-toggle text-green" href="#" data-toggle="dropdown" role="button" onclick={displayUserProfile}>
+                    <img src={profile} width="20px" height="20px" alt="User Profile" class="user_profile">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-setting">
+                      <a class="dropdown-item" href="#" onclick={navigateToRecordViewPage}>My Profile</a>
+                      <a class="dropdown-item" href="#">Community Workspaces</a>
+                      <a class="dropdown-item" href="#">Logout</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    
+    <nav class="navbar navbar-expand-sm navbar-light bg-light bg-green">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar" onclick={displayMenuItems}>
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="container">
+        <div class="collapse navbar-collapse justify-content-md-center" id="collapsibleNavbar">
+          <ul class="navbar-nav nav-fill w-100">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Home</a>
+            </li>
+            <template for:each={navigationArr} for:item="menu">
+                <template if:true={menu.children}>
+                    <li class="nav-item dropdown" key={menu.Id}>
+                       <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"  onclick={displaySubMenuItems}>
+                        {menu.Label}<i class="fa fa-caret-down" style="color:#fff" key={menu.Id}></i>
+                      </a>
+                      <div class="dropdown-menu sub-menu">
+                          <template for:each={menu.children} for:item="subMenu">
+                              <a class="dropdown-item" href="#" key={subMenu.id} data-target={menu.Target} data-type={menu.Type} onclick={navigateToPage}>{subMenu.Label}</a>
+                          </template>    
+                      </div>
+                    </li>
+                </template>
+                <template if:false={menu.children}>    
+                    <li class="nav-item" key={menu.Id}>
+                        <a class="nav-link" href="#" data-target={menu.Target} data-type={menu.Type}
+                           onclick={navigateToPage}>{menu.Label}</a>
+                    </li>
+                </template>
+            </template>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>  
+  <c-cep_notification-toast-list></c-cep_notification-toast-list>
+</template>

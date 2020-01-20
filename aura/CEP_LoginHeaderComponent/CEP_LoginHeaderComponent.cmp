@@ -1,0 +1,21 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="url_support" type="String" default="https://siemens.force.com/cep/CEP_ProblemsLoggingIn" access="global" />
+    <aura:attribute name="url_access" type="String" default="https://siemens.force.com/cep/CEP_NewtonRegisterRequestAccess" access="global" />
+    <div class="slds-clearfix">
+    <div class="slds-float_right slds-m-right_xx-large slds-m-top_x-large">
+        <a class="slds-button slds-button_success slds-m-right_small" href="{!v.url_support}">Request Support</a>
+        <a class="slds-button slds-button_success" href="{!v.url_access}">Request Access</a>
+        
+		<!--
+        <a href="{!v.url_support}" class="slds-m-right_small">
+        	<lightning:icon class="slds-icon-text-default" iconName="standard:rtc_presence" title="Request Support" size="medium" alternativeText="Request Support" />
+        </a>
+        
+        <a href="{!v.url_access}">
+        	<lightning:icon class="slds-icon-text-default" iconName="standard:report" title="Request Access" size="medium" alternativeText="Request Access" />
+        </a>
+        -->
+        
+    </div>    
+  </div>
+</aura:component>

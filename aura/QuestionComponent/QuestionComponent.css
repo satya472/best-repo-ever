@@ -1,0 +1,29 @@
+.THIS .block{
+    display: inline-block;
+}
+
+.THIS .Red{
+    padding: 0.5rem;
+    color: white;
+    background-color: RED;
+}
+
+.THIS .Green{
+    padding: 0.5rem;
+    color: white;
+    background-color: GREEN;
+}
+
+.THIS .Yellow{
+    padding: 0.5rem;
+    background-color: YELLOW;
+}
+
+.THIS .Default-Option{
+    padding: 0.5rem;
+    background: rgb(237, 239, 241);
+}
+
+.THIS button[name="cancel"]{
+    display:none;
+}

@@ -1,0 +1,51 @@
+<!--
+   Created By : Phaniram Upalapati
+   Description : Component helps in Creating New Record.
+-->
+<aura:component implements="lightning:availableForFlowScreens,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!-- Design attributes -->
+    
+    <aura:attribute name="sObjectName" type="string"/>
+    <aura:attribute name="layoutType" type="string" />
+    <aura:attribute name="fields" type="string" />
+    <aura:attribute name="recordTypeId" type="String" />
+    <aura:attribute name="column" type="Integer" default="1" />
+    
+    <aura:attribute name="fieldsLst" type="list" access="private"/>
+    <aura:attribute name="msg" type="string" />
+    <aura:attribute name="saved" type="boolean" default="false" />
+    <aura:attribute name="editSpinner" type="boolean" default="false" />
+    <aura:attribute name="newRecord" type="Object" />
+    <aura:attribute name="showToast" type="boolean" default="false"/>
+    <!-- Close Quick Action-->
+    <aura:attribute name="closePopup" type="boolean" default="false"/>
+    <!-- Close Modal popup-->
+    <aura:attribute name="closeModalPopup" type="boolean" default="false"/>
+
+    <aura:attribute name="autoPopulate" type="list" description="[fieldApIName-value]" />
+        
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  
+    <div class="slds-is-relative">   
+    <aura:if isTrue="{!!v.saved}">    
+            <lightning:recordForm aura:id="recCreate"
+                objectApiName="{!v.sObjectName}" 
+                recordTypeId="{!v.recordTypeId}"
+                layoutType="{!v.layoutType}" 
+                fields="{!v.fieldsLst}"
+                columns="{!v.column}"
+                mode="edit"
+                onload = "{!c.load}"
+                onsuccess = "{!c.success}" 
+                onsubmit = "{!c.submit}"
+                onerror="{!c.error}"/>
+
+    <aura:set attribute = "else">
+        <div class="slds-box slds-theme_success">{!v.msg}</div>
+    </aura:set>
+  </aura:if>  
+
+  <lightning:spinner variant="brand" aura:id="loadspinner" class="{!v.editSpinner?'slds-show':'slds-hide'}" alternativeText="Loading.."/>
+ </div> 
+</aura:component>

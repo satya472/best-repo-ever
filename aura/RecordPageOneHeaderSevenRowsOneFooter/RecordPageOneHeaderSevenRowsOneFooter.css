@@ -1,0 +1,13 @@
+.THIS .ItemClass{
+    background: rgb(255, 255, 255);
+    height:25em;
+}
+
+.THIS .ItemClass .slds-card{
+    border: 0;
+    box-shadow: none;
+}
+.THIS .slds_subTittle{
+    margin-top:0px;
+    margin-bottom:0px;
+}

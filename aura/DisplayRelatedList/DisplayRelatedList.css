@@ -1,0 +1,27 @@
+.THIS .slds_subTittle{
+    font-family: 'Salesforce Sans',Arial;
+    font-weight: 700;
+    margin-top: -15px;
+    margin-bottom: -15px;
+}
+.THIS .slds_button{
+    font-weight: 400;
+}
+.THIS .slds_tables{
+    margin-left: -14px !important; 
+    margin-right: -14px !important;
+}
+.THIS .slds-font{
+    font-family: 'Salesforce Sans',Arial;
+    font-weight: 500;
+}
+.THIS .slds-button_icon-bare{
+    display: none;
+}
+.THIS .slds-checkbox_faux{
+    display: none; 
+}
+.THIS .slds-card__footer{
+    margin-left: -14px !important; 
+    margin-right: -14px !important;
+}

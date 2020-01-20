@@ -1,0 +1,130 @@
+<template>
+    <div class="overlay"> 
+        <div class="modal" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Case ID: {ticketNo}</h4>
+                        <button type="button" class="close" data-dismiss="modal" onclick={closeModalBox}>&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div id="spinner_class" class="spinner_class" if:true={showInnerSpinner}>
+                            <div class="demo-only slds-is-relative" style="height: 6rem;">
+                                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-bordered">
+                            <tbody>
+                                <template for:each={caseDetailArr} for:item="caseDetail">
+                                    <tr key={getKey}>
+                                        <td>Ticket Number</td>
+                                        <td>{caseDetail.euid}</td>
+                                    </tr>
+                                    <tr key={getKey}>
+                                        <td>Opened Date</td>
+                                        <td>{caseDetail.submittedbat}</td>
+                                    </tr>
+                                    <tr key={getKey}>
+                                        <td>System</td>
+                                        <td>{caseDetail.system}</td>
+                                    </tr>
+                                    <tr key={getKey}>
+                                        <td>Product</td>
+                                        <td>{caseDetail.product}</td>
+                                    </tr>
+                                    <tr key={getKey}>
+                                        <td>Title</td>
+                                        <td>{caseDetail.mrtitle}</td>
+                                    </tr>
+                                    <tr key={getKey}>
+                                        <td>Source</td>
+                                        <td>{caseDetail.source}</td>
+                                    </tr>
+                                    <tr key={getKey}>
+                                        <td>Worked Start</td>
+                                        <td>{caseDetail.workStart}</td>
+                                    </tr>
+                                    <tr key={getKey}>
+                                        <td>Status</td>
+                                        <td>{caseDetail.mrstatus}</td>
+                                    </tr> 
+                                    <tr key={getKey}>
+                                        <td>Problem Description</td>
+                                        <td>
+                                            <lightning-formatted-rich-text value={caseDetail.description}>
+                                            </lightning-formatted-rich-text>
+                                        </td>
+                                    </tr> 
+                                    <tr key={getKey}>
+                                        <td>Comments</td>
+                                        <td>
+                                            <lightning-formatted-rich-text value={caseDetail.mralldescriptions}>
+                                            </lightning-formatted-rich-text>
+                                        </td> 
+                                    </tr>
+                                </template>
+                                <tr>
+                                    <td colspan="2" if:true={displayFileUpload}>
+                                        <lightning-layout-item padding="around-small" size="12">
+                                            <lightning-file-upload
+                                                    class="hotlineFileUpload"
+                                                    label="Attach Files"
+                                                    name="fileUploader"
+                                                    accept={acceptedFormats}
+                                                    record-id="5001l000001ysxSAAQ"
+                                                    onuploadfinished={handleFileChange}
+                                                    multiple>
+                                            </lightning-file-upload>
+                                        </lightning-layout-item>
+                                    </td>
+                                </tr>
+                                
+                                <template for:each={fileData} for:item="singleFile">
+                                    <tr key={getKey} >
+                                        <td colspan="2">
+                                            <lightning-layout-item padding="around-small"  size="12">
+                                                    <div class="slds-float_left" style="margin-bottom: 12px;">
+                                                        <lightning-button 
+                                                                data-value={singleFile.documentId} 
+                                                                onclick={removeFile} 
+                                                                class="slds-p-around_x-small" 
+                                                                name="cancel" 
+                                                                label="Remove File"
+                                                                variant="neutral" >
+                                                        </lightning-button>
+                                                        <div style="padding-left: 12px;">
+                                                                <div>File Name: {singleFile.fileName}</div>
+                                                                <div>File Size: {singleFile.fileSize} KB</div>
+                                                        </div>
+                                                    </div>
+                                            </lightning-layout-item>
+                                        </td>
+                                    </tr>
+                                </template>
+                                    
+                                <tr>
+                                    <td colspan="2">
+                                        <lightning-textarea value={comment} name="title" label="Add Comment" onchange={handleChange} ></lightning-textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="vertical-align:bottom;text-align: center;">
+                                        <div class="slds-m-bottom_x-small">
+                                            <lightning-button class="saveButton" variant="brand" onclick={saveComment} label="Update Case"></lightning-button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- Modal body -->
+                </div><!-- Modal content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->
+    </div> <!-- overlay -->
+</template>

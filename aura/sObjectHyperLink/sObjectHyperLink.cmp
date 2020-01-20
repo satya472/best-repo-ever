@@ -1,0 +1,13 @@
+<!--
+   Created By : Jens Becker, Phaniram Upalapati
+   Description : Component will Display HyperLink to navigate to the record
+
+-->  
+<aura:component >
+	<aura:attribute name="sObjectId" type="Id" />
+    <aura:attribute name="hyperlinkLabel" type="String" /> 
+    <!--<aura:attribute name="viewBody" type="object[]" />-->
+    
+	<a href="javascript:void(0);" onclick="{!c.navigateToSObject}">{!v.hyperlinkLabel}</a>
+    <!--{!v.viewBody}-->
+</aura:component>

@@ -1,0 +1,115 @@
+<!--
+    Created By: Phaniram Upalapati
+    Description: The component is used to display the details of a Ticket.
+                It includes the ticked details, Files and Comments associated to the ticket.
+                User can Create a New Comment and he can upload a new file to the ticket
+-->
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+
+    <!--Attribute for storing the selected Ticket Details-->
+    <aura:attribute name="ticket" type="map" />
+
+    <!-- Header and Details of the selected ticket-->
+    <div style="padding: .25rem;">
+        <lightning:layout horizontalAlign="spread">
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                <div class="hoverclass" data-name="ticketNumber">
+                    <b>Ticket Number</b>
+                    <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                        variant="inverse" size="xx-small" alternativeText="View More" />
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                <div class="hoverclass" data-name="ticketType">
+                    <b>Ticket Type</b>
+                    <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                        variant="inverse" size="xx-small" alternativeText="View More" />
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                <div class="hoverclass" data-name="relatedUnit">
+                    <b>Unit</b>
+                    <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                        variant="inverse" size="xx-small" alternativeText="View More" />
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                <div class="hoverclass" data-name="subject">
+                    <b>Subject</b>
+                    <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                        variant="inverse" size="xx-small" alternativeText="View More" />
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                <div class="hoverclass" data-name="status">
+                    <b>Status</b>
+                    <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                        variant="inverse" size="xx-small" alternativeText="View More" />
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                <div class="hoverclass" data-name="createdDate">
+                    <b> Created Date</b>
+                    <lightning:icon class="slds-p-left_xx-small slds-p-bottom_xx-small" iconName='utility:chevrondown'
+                        variant="inverse" size="xx-small" alternativeText="View More" />
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+
+    <div class="slds-box slds-box_xx-small slds-m-top_small bgclass">
+        <lightning:layout horizontalAlign="spread" multipleRows="true">
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                {!v.ticket.ticketNumber}
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                {!v.ticket.ticketType}
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                {!v.ticket.relatedUnit}
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                {!v.ticket.subject}
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                {!v.ticket.status}
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="horizontal-small" size="12" smallDeviceSize="2">
+                {!v.ticket.createdDate}
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+
+    <!-- description  related to the Ticket-->
+    <div style="padding: .25rem;" class="slds-m-top_small">
+        <b>Description</b>
+    </div>
+    <div class="slds-box slds-box_small">
+
+        {!v.ticket.description}
+
+    </div>
+
+    <div style="padding: .25rem;" class="slds-m-top_small">
+        <lightning:layout horizontalAlign="spread">
+
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+
+                <div class="slds-p-around_small">
+                    <c:cep_ticketComments recordId="5000E000007PQ6mQAG" />
+                </div>
+
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+
+                <!--<b>Ticket Attachments</b>-->
+                <c:cep_GenericFileUploader recordId="5001l000001NVyQAAW" />
+
+            </lightning:layoutItem>
+
+        </lightning:layout>
+    </div>
+
+
+
+</aura:component>

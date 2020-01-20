@@ -1,0 +1,21 @@
+.THIS.container{
+
+    border:2px solid #41aaaa;
+    border-radius: 1em;
+}
+.THIS .slds-text-heading_large{
+    font-weight: bold;
+}
+.THIS .slds-button{
+    width: 40%;
+    height: 4em;
+    border-radius: 40px;
+    font-size: 1rem;
+    box-shadow:0px 2px 5px 3px #ececec;
+}
+
+@media screen and (max-width:480px){
+    .THIS .slds-button{
+         width: 100%;
+    }
+}

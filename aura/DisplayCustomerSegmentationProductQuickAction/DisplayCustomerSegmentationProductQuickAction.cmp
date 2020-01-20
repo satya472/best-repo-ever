@@ -1,0 +1,16 @@
+<!--
+  Created By: Naveen Kumar Gadicherla
+  Date: 27-09-2018
+  Description : ReusableWrapper Component for CustomerSegmentation component in QuickActions So that this
+                Component can be shown on Mobile.
+-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	<!-- For Expanding the modal window and displaying (overriding existing quickaction window size) -->
+    <ltng:require styles="{!$Resource.ModalWindowExpand}" />
+    
+    
+    
+   <c:DisplayCustomerSegmentationProducts segCategory = "{!$Label.c.TI_Driver}"
+                                           recordId = "{!v.recordId}"/> 
+        
+</aura:component>

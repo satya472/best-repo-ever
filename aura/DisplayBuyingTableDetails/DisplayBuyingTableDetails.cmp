@@ -1,0 +1,18 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	
+    <aura:attribute name="teammem" type="Object" default="{}"/>
+    <aura:attribute name="childBody" type="object[]" />
+    <aura:attribute name="recordFields" type="Object" access="private"/>
+    <aura:attribute name="errorObj" type="string" access="private"/>
+    <aura:attribute name="recId" type="string"/>
+    <force:recordData aura:id="teamMemData"
+                      recordId="{!v.recId}"
+                      fields="Id,Name,Buying_Role__c,Adaptability__c,Our_Status__c,Contact_Coverage__c"
+                      targetRecord="{!v.teammem}"
+                      targetFields="{!v.recordFields}"
+                      targetError="{!v.errorObj}"
+                      mode="VIEW"
+                      recordUpdated="{!c.readData}"
+    />
+    {!v.childBody}
+</aura:component>

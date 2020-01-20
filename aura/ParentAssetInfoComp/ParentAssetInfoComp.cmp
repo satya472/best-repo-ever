@@ -1,0 +1,17 @@
+<aura:component implements="flexipage:availableForAllPageTypes" controller="CEP_AccountAssetRelatedDetails">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:registerEvent name="childAssetRecords" type="c:ChildAssetRecordEvent"/>
+    <aura:attribute name="plantList" type="List"/>
+    <aura:attribute name="value" type="List"/>
+    <aura:attribute name="accountId" type="String"/>
+    <lightning:layout >
+        <lightning:layoutItem class="slds-page-header" size="12">
+            <lightning:checkboxGroup name="RelatedAssets"
+                                     label="Related Assets"
+                                     options="{! v.plantList }"
+                                     value="{! v.value }"
+                                     onchange="{! c.handleAssetChange }"/>
+        </lightning:layoutItem>        
+        
+    </lightning:layout>
+</aura:component>

@@ -1,0 +1,58 @@
+<!--
+@name   SMN_QuestionnaireBaseCmp
+@author Sara elalaoui (selalaoui@salesforce.com)
+@since  02/07/2018  
+@desc   Used to display the component foro the questionnaires on the LOA project record page.
+  
+@history
+-->
+<aura:component controller="Questionnaire_Cont" implements="flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader,force:appHostable" description="QuestionnaireComponentBase">
+        
+    <!--attributes-->
+    <aura:attribute name="currentRecord" type="sObject"></aura:attribute>
+    <aura:attribute name="currentStage" type="string"></aura:attribute>
+    <aura:attribute name="isdisplayQuestionnaire" type="boolean" default="false" ></aura:attribute>
+    <aura:attribute name="Questionnaires" type="List"  />
+    <aura:attribute name="Questionnaire" type="sObject" />
+    <aura:attribute name="RiskClassRecordId" type="String" />
+    <aura:attribute name="isLoading" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="force:refreshView" action="{!c.questionnairesHelper}" />
+    <aura:dependency resource="markup://force:editRecord" type="EVENT" />
+
+<div class="slds-is-relative">
+    <!--recordData-->
+    <force:recordData aura:id="questionnaireLoader"
+                      fields="Id,Stage__c,AMLRiskModule__c,AntiCorruptionRiskModule__c,HRRiskModule__c"
+                      layoutType="FULL"
+                      mode="EDIT"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.currentRecord}"
+                      recordUpdated="{!c.questionnairesHelper}"/>
+    
+    <!--Body-->
+    <lightning:card  title="QUESTIONNAIRE/S">
+
+        <p class="slds-p-horizontal_small">
+            <lightning:buttonGroup>
+            <aura:iteration items="{!v.Questionnaires}" var="q" indexVar="i" >
+                <!--Questionnaire button-->
+                <lightning:button class="slds-m-right_xx-small" iconName="utility:new_window" iconPosition="right" variant="{!q.DefaultStatus__c == 'Mandatory'? 'brand':'neutral'}" title="{!q.ProcessDescription__c}"   value="{!q.Name}" label="{!q.Name+' '}"  name="{!q.Id}" onclick="{! c.handleClick }"/>
+                <aura:if isTrue="{!$Browser.isPhone}" >
+                    <br/>
+                </aura:if>
+            </aura:iteration>
+            </lightning:buttonGroup>
+        </p>
+        
+    </lightning:card>
+    
+    <!--Questionnaire modal-->
+    <aura:if isTrue="{!v.isdisplayQuestionnaire}">        
+        <c:QuestionnaireCmp recordId="{!v.recordId}" currentRecord="{!v.currentRecord}" Questionnaire="{!v.Questionnaire}" RiskClassId="{!v.RiskClassRecordId}"  isdisplayQuestionnaire="{!v.isdisplayQuestionnaire}" ></c:QuestionnaireCmp>
+    </aura:if>
+    
+    <lightning:spinner variant="brand" class="{!v.isLoading?'slds-show':'slds-hide'}" alternativeTex="Loading..."/>
+    
+ </div>  
+</aura:component>

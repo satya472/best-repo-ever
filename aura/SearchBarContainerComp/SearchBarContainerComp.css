@@ -1,0 +1,24 @@
+.THIS .searchButton{
+    margin-top:1.4rem;
+}
+.THIS .slds-form-element__label{
+    font-weight: bold;
+}
+/*
+.THIS .slds-checkbox [type=checkbox]:checked+.slds-checkbox_faux:after, 
+.THIS .slds-checkbox [type=checkbox]:checked+.slds-checkbox--faux:after, 
+.THIS .slds-checkbox [type=checkbox]:checked~.slds-checkbox_faux:after, 
+.THIS .slds-checkbox [type=checkbox]:checked~.slds-checkbox--faux:after,
+.THIS .slds-checkbox [type=checkbox]:checked+.slds-checkbox__label .slds-checkbox_faux:after, 
+.THIS .slds-checkbox [type=checkbox]:checked+.slds-checkbox__label .slds-checkbox--faux:after {
+    border-bottom: 2px solid rgb(0, 112, 210);
+    border-left: 2px solid rgb(0, 112, 210);
+}*/
+
+
+@media screen and (max-width: 480px) {
+    .THIS .searchButton{
+        margin-top:0;
+        width:100%;
+    }
+}

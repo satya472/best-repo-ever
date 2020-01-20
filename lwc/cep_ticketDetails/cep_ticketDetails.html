@@ -1,0 +1,77 @@
+<template>
+
+    <!-- Header and Details of the selected ticket-->
+    <div style="padding: .25rem;">
+        <lightning-layout horizontal-align="spread" multiple-rows="true">
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                    <b>Ticket Number</b>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                     <b>Ticket Type</b>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                    <b>Unit</b>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                    <b>Subject</b>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                    <b>Status</b>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                     <b> Created Date</b>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+    <div class="slds-box slds-box_xx-small slds-m-top_small bgclass">
+        <lightning-layout horizontal-align="spread" multiple-rows="true">
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                {ticket.ticketNumber}
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                {ticket.ticketType}
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                {ticket.relatedUnit}
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                {ticket.subject}
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                {ticket.status}
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small" size="12" small-device-size="2">
+                {ticket.createdDate}
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+    <!-- description  related to the Ticket-->
+    <div style="padding: .25rem;" class="slds-m-top_small">
+        <b>Description</b>
+    </div>
+    <div class="slds-box slds-box_small">
+
+        {ticket.description}
+
+    </div>
+
+    <div style="padding: .25rem;" class="slds-m-top_small">
+        <lightning-layout horizontal-align="spread">
+
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6">
+
+                <c-cep_ticket-comments record-id="5000E000007PQ6mQAG"></c-cep_ticket-comments>
+
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6">
+
+
+
+            </lightning-layout-item>
+
+        </lightning-layout>
+    </div>
+
+</template>

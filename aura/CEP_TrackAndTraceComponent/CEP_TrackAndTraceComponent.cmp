@@ -1,0 +1,35 @@
+<!--
+ Created By : Phaniram Upalapati
+ Description : Component for Displaying Track and Trace related details
+-->
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+
+    <div class="container">
+     <lightning:layout horizontalAlign="center" multipleRows="true">
+        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+            <!--Left Column-->
+            <lightning:layout horizontalAlign="space" multipleRows="true">
+                <lightning:layoutItem padding="around-small" size="12" >
+                    <lightning:icon iconName="utility:location" alternativeText="trackTraceIcon" size="large"/>
+                    <div class="slds-text-heading_large">
+                      Track &amp; Trace Order
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="12">
+                    <div class="slds-text-heading_small">
+                        Your order History and the Current Status of your latest Orders
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="12">
+                    <div class="slds-m-top_large">
+                        <lightning:button variant="brand" label="Track &amp; Trace" title="trackTrace" onclick="{! c.handleClick }" />
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-medium" size="12" smallDeviceSize="6">
+            <!--right column-->
+        </lightning:layoutItem>
+     </lightning:layout>
+    </div>
+</aura:component>

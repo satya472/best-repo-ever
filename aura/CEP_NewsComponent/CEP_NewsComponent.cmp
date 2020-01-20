@@ -1,0 +1,47 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="newsList" type="list" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+            <lightning:layout horizontalAlign="space" multipleRows="true">
+                <lightning:layoutItem padding="around-small" size="12" >
+                    <div class="slds-text-heading_large">
+                      Product, Solutions &amp; Service Announcements
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="12">
+                    <div class="slds-text-heading_small">
+                        New Products, Successfull Solutions, people portraits, the last news frsh from the press, and lot more
+                        that you find interesting
+                    </div>
+                </lightning:layoutItem>
+                <aura:iteration items="{!v.newsList}" var="item" indexVar="index">
+                  <aura:if isTrue="{!index &lt; 2}">
+                        <lightning:layoutItem padding="around-small" size="12"> 
+                            <lightning:card>
+                                    <aura:set attribute="title">
+                                        <img class="imageClass" src="{!$Resource.CEPImages+'/images/'+item.image}" />
+                                    </aura:set>
+                                    <div class="slds-p-left_xx-large slds-p-right_xx-large slds-p-top_small slds-p-bottom_small">
+                                        <div class="slds-text-heading_large slds-p-bottom_small contentColor">
+                                            {!item.title}
+                                        </div> 
+                                        <div class="slds-text-heading_small slds-p-bottom_small">
+                                            {!item.description}
+                                        </div>                            
+                                    </div>
+                                    <div class="slds-text-align_right slds-p-right_x-small">
+                                        <a class="slds-text-heading_small contentColor slds-border_bottom slds-text-link_reset" href="">Continue Reading >> </a>
+                                    </div>
+                            </lightning:card>
+                        </lightning:layoutItem>
+                   </aura:if> 
+                </aura:iteration>
+                <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12">
+                        <div class="slds-text-align_right slds-p-right_x-small">
+                             <a class="slds-text-heading_medium contentColor slds-border_bottom slds-text-link_reset" href="">View Full Coverage >> </a>
+                        </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+</aura:component>

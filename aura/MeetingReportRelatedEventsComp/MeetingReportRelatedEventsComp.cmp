@@ -1,0 +1,34 @@
+<aura:component controller="MeetingReportRelatedEvents_Cont" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,force:lightningQuickAction" access="global" >
+
+    <aura:if isTrue="{!$Browser.formFactor != 'PHONE'}">
+        <ltng:require styles="{!$Resource.ModalWindowExpand}" /> 
+    </aura:if>
+    
+    
+    <!--Aura Attributes--> 
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    
+    <aura:attribute name="fieldSetName" type="String"/>
+    <aura:attribute name="addMemberType" type="String" default="BCM"/>
+    <aura:attribute name="isOpen" type="boolean" default="true"/>
+    <aura:attribute name="ModalTitle" type="String"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="eventRecord" type="Object" description="A simplified view record object to be displayed"/>
+    
+    <force:recordData aura:id="forceRecord"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.eventRecord}"
+                      mode="VIEW"/>
+    
+    
+        <aura:if isTrue="{!v.isOpen}">
+                <c:GenericRecordSelector isOpen="{!v.isOpen}" controllerName="MeetingReportRelatedEvents_Cont"   
+                                         record="{!v.eventRecord}" ModalTitle="Add Events"/>  
+            
+        </aura:if>
+        
+
+</aura:component>

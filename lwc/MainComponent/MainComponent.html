@@ -1,0 +1,16 @@
+<template>
+    
+   {item}
+
+   
+
+   <lightning-button title="testing" label="parent Click" onclick={handleClick}></lightning-button>
+   <div onnotify={handleDiv2}>
+
+   </div> 
+   <div onnotify={handleDiv}>
+        <c-test-component test-var="testing var" item-name={item} onnotify={handleNotify}></c-test-component>
+
+   </div> 
+    
+</template>

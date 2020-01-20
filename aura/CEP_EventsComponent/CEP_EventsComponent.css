@@ -1,0 +1,19 @@
+.THIS .slds-card{
+    box-shadow:0px 2px 5px 3px #ececec;
+    border-radius: 0.7em;
+}
+
+.THIS .contentColor{
+   color:#41aaaa;
+}
+.THIS .circle{
+    border:1px solid grey;
+    border-radius: 100%;
+    padding:2em;
+}
+
+@media screen and (max-width:480px){
+    .THIS .slds-card{
+        text-align: center;
+    }
+}

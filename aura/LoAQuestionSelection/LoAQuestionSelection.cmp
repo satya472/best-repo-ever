@@ -1,0 +1,113 @@
+<!--
+ - Created by jens.becker on 25.04.18.
+ -->
+
+<aura:component controller="LoAGetDeviationSelection"  description="LoAQuestionSelection" implements="force:hasSObjectName,flexipage:availableForRecordHome,force:hasRecordId">
+
+    <aura:attribute type="LOABusinessRule__c[]" name="QuestionSelectionList" description="List of Business Rules, we want to iterate over" />
+    <aura:attribute name="DeviationToApprovalTopics" type="Map" default="{}" />
+    <aura:attribute name="DeviationToApprovalTopicsList" type="List" />
+    <aura:attribute name="optionsType" type="List"/>
+    <aura:attribute name="optionsL1" type="List" />
+    <aura:attribute name="deviationsOptions" type="Map" default="{}" />
+    <aura:attribute name="filterMap" type="Map" default="{}"/>
+    <aura:attribute name="recordObject" type="Object" />
+    <aura:attribute name="recordFields" type="Object" />
+
+    <aura:attribute name="typeFilter" type="String" default="Financial" />
+    <aura:attribute name="levelFilter" type="String"  />
+    <aura:attribute name="recordId" type="string" />
+    <aura:attribute name="sObjectName" type="String" />
+    
+    <aura:attribute name="spin" type="boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <force:recordData recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetFields="{!v.recordFields}"
+                      targetRecord="{!v.recordObject}"
+                      />
+
+
+
+     <div class="slds-is-relative">
+
+            <lightning:layout horizontalAlign="space" multipleRows="true" class="slds-page-header">
+                RecId: {!v.recordFields.QuoteId__c}
+                <lightning:layoutItem flexibility="auto" size="6" smallDeviceSize="3" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small">
+                    <div class="slds-form-element__control">
+                        <lightning:select label="Type of Baseline" value="{!v.typeFilter}" aura:id="filterSelect1" name="filterSelect" onchange="{!c.typeChanged}"  >
+                            <aura:iteration items="{!v.optionsType}" var="item">
+                                <option text="{!item.label}" value="{!item.value}" />
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" size="6" smallDeviceSize="3" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small">
+                    <div class="slds-form-element__control">
+                        <lightning:select label="Level 1" value="{!v.levelFilter}" aura:id="filterSelect2" name="filterSelect2" onchange="{!c.levelChanged}" >
+
+                            <aura:iteration items="{!v.optionsL1}" var="item">
+                                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}" />
+                            </aura:iteration>
+
+                        </lightning:select>
+
+                    </div>
+                </lightning:layoutItem>
+                <div class="slds-col modal-header slds-modal__header">
+
+                    <lightning:button variant="brand" label="Create Approval Topics" onclick="{! c.saveClick }" />
+                </div>
+            </lightning:layout>
+     </div>
+
+
+    <div class="slds-scrollable">
+
+
+    <aura:iteration items="{!v.QuestionSelectionList}" var="question" indexVar="key"  >
+        <aura:if isTrue="{! question.Deviations__r!=null}">
+        <div class="slds-box ">
+
+            <lightning:card variant="base" title="{!question.Name}" >
+
+                <!--
+                <ui:outputText value="{!question.SectionNumberLevel1__c}"    />
+                <ui:outputText value="{!question.Description__c}"/>
+                <ui:outputText value="{!question.BusinessSpecificComments__c}"/>
+                -->
+                <lightning:recordViewForm recordId="{!question.Id}" objectApiName="LOABusinessRule__c" >
+                    <div class="slds-box slds-theme_default">
+                            <lightning:outputField fieldName="SectionNumberLevel1__c" />
+                             <!--<lightning:outputField fieldName="SectionNumberLevel2__c" />
+                            <lightning:outputField fieldName="SectionNumberLevel3__c" />-->
+                            <lightning:outputField fieldName="Description__c" />
+                    <aura:if isTrue="{! question.BusinessSpecificComments__c!=''}" >
+                            <lightning:outputField fieldName="BusinessSpecificComments__c" />
+                    </aura:if>
+                    </div>
+                </lightning:recordViewForm>
+
+            </lightning:card>
+
+
+            <div class="slds-box">
+                    <fieldset  >
+                            <lightning:input onchange="{!c.handleRadioClick}" value="none" name="{!question.Id}" type="radio" label="No Approval required" />
+                            <aura:iteration items="{!question.Deviations__r}" var="dev" indexVar="key"  >
+                                <lightning:input onchange="{!c.handleRadioClick}" value="{!dev}" name="{!question.Id}" type="radio" label="{!dev.LOAApprovalGateId__r.Name +': '+ dev.DescriptionOfDeviation__c}" />
+                            </aura:iteration>
+                    </fieldset>
+            </div>
+        </div>
+    </aura:if>
+    </aura:iteration>
+      <aura:if isTrue="{!v.spin}">
+        <lightning:spinner aura:id="relatedSpinner" variant="brand" alternativeText="Please wait, while getting your data"/>
+      </aura:if>  
+        
+    </div>
+
+</aura:component>
